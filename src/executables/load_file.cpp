@@ -26,16 +26,24 @@ int main(int argc, char* argv[])
 {
     if (argc < 2)
     {
-        std::cerr << "Usage: rosrun abb_librws load_file <controller_file_name> [task_name]" << std::endl;
+        std::cerr << "Usage: rosrun abb_librws load_file <controller_file_name> [task_name] [file_path]" << std::endl;
         return 1;
     }
 
     std::string task_name = "T_ROB1";  // Default task name
+    // default file path for rapid programs
+    std::string original_file_path = "/root/catkin_ws/src/abb_wrapper/abb_librws/src/executables/rapid_programs/";
     
     if (argc >= 3)
     {
       task_name = argv[2];  // Override if provided
     }
+
+    if (argc >= 4)
+    {
+      original_file_path = argv[3];
+    }
+
     
     std::string controller_file_name = argv[1];
 
@@ -43,8 +51,6 @@ int main(int argc, char* argv[])
     std::string ip = "192.168.15.81";
     std::string username = "Admin";
     std::string password = "robotics";
-    // TODO: make filepaths parameters
-    std::string original_file_path = "/root/catkin_ws/src/abb_wrapper/abb_librws/src/executables/rapid_programs/";
     std::string controller_file_path = "Home/Programs/Wizard";
 
     // Create Poco SSL context with no verification (self-signed certs likely)
@@ -74,7 +80,6 @@ int main(int argc, char* argv[])
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 
-    // TODO: loadFileToRapid only loads to ROB_1 currently
     // unload rapid task
     std::cout << "unload task file: " << rws_interface.unloadFileFromRapid(task_name) << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
