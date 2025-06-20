@@ -1,6 +1,8 @@
 /***********************************************************************************************************************
  *
- * Copyright (c) 2015, ABB Schweiz AG
+ * Copyright (c) 
+ * 2015, ABB Schweiz AG
+ * 2021, JOiiNT LAB, Fondazione Istituto Italiano di Tecnologia, Intellimech Consorzio per la Meccatronica.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with
@@ -31,6 +33,13 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
+ ***********************************************************************************************************************
+ * 
+ * Authors: Gianluca Lentini, Ugo Alberto Simioni
+ * Date:18/01/2022
+ * Version 1.0
+ * Description: this package provides a ROS node that communicates with the controller using Robot Web Services 2.0, original code can be retrieved at https://github.com/ros-industrial/abb_librws
+ * 
  ***********************************************************************************************************************
  */
 
@@ -147,7 +156,7 @@ void RAPIDAtomic<RAPID_STRING>::parseString(const std::string& value_string)
  * Primary methods
  */
 
-RAPIDRecord::RAPIDRecord(const std::string& record_type_name)
+RAPIDRecord::RAPIDRecord(const std::string record_type_name)
 :
 record_type_name_(record_type_name)
 {}
@@ -238,7 +247,7 @@ unsigned int RAPIDRecord::countCharInString(std::string input, const char charac
   return count;
 }
 
-std::vector<std::string> RAPIDRecord::extractDelimitedSubstrings(const std::string& input)
+std::vector<std::string> RAPIDRecord::extractDelimitedSubstrings(const std::string input)
 {
   // Prepare the input by removing any starting and ending '[' respective ']'
   std::string temp_0(input);

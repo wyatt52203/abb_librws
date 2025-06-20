@@ -1,6 +1,8 @@
 /***********************************************************************************************************************
  *
- * Copyright (c) 2015, ABB Schweiz AG
+ * Copyright (c) 
+ * 2015, ABB Schweiz AG
+ * 2021, JOiiNT LAB, Fondazione Istituto Italiano di Tecnologia, Intellimech Consorzio per la Meccatronica.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with
@@ -32,19 +34,23 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ***********************************************************************************************************************
+ * 
+ * Authors: Gianluca Lentini, Ugo Alberto Simioni
+ * Date:18/01/2022
+ * Version 1.0
+ * Description: this package provides a ROS node that communicates with the controller using Robot Web Services 2.0, original code can be retrieved at https://github.com/ros-industrial/abb_librws
+ * 
+ ***********************************************************************************************************************
  */
 
 #ifndef RWS_COMMON_H
 #define RWS_COMMON_H
 
-#include <ostream>
 #include <string>
 #include <vector>
 
 #include "Poco/DOM/AutoPtr.h"
 #include "Poco/DOM/Document.h"
-
-#include "abb_librws_export.h"
 
 namespace abb
 {
@@ -59,20 +65,20 @@ struct XMLAttribute
    * \brief A default constructor.
    */
   XMLAttribute() {}
-
+  
   /**
    * \brief A constructor.
-   *
+   * 
    * \param name for the attribute's name.
    * \param value for the attribute's value.
    */
-  XMLAttribute(const std::string& name, const std::string& value) : name(name), value(value) {}
-
+  XMLAttribute(std::string name, std::string value) : name(name), value(value) {}
+  
   /**
    * \brief The name of the attribute.
    */
   std::string name;
-
+  
   /**
    * \brief The value of the attribute.
    */
@@ -80,92 +86,61 @@ struct XMLAttribute
 };
 
 /**
- * \brief Returns all children of the given node that have the specifed attribute (name and value).
- *
- * \param p_root for the root node to search.
- * \param attribute specifying the XML attribute (name and value) that the children should have.
- *
- * \return std::vector<Poco::XML::Node*> with the children (empty if none are found, or if the root node is nullptr).
- */
-std::vector<Poco::XML::Node*> xmlFindNodes(Poco::XML::Node* p_root, const XMLAttribute& attribute);
-
-/**
- * \brief A function for finding all nodes in an XML document that has the specifed attribute (name and value).
- *
+ * \brief A method for finding all nodes in a XML document that has the specifed attribute (name and value).
+ * 
  * \param p_xml_document for the XML document to search.
  * \param attribute specifying the XML attribute (name and value) that the XML node should have.
  *
  * \return std::vector<Poco::XML::Node*> containing the found nodes.
  */
 std::vector<Poco::XML::Node*> xmlFindNodes(Poco::AutoPtr<Poco::XML::Document> p_xml_document,
-                                           const XMLAttribute& attribute);
+                                           const XMLAttribute attribute);
 
 /**
- * \brief A function for finding the text content of an XML node in an XML document. It stops after the first hit.
- *
+ * \brief A method for finding the text content of a XML node in a XML document. It stops after the first hit.
+ * 
  * \param p_xml_document for the XML document to search.
  * \param attribute specifying the XML attribute (name and value) that the XML text node should have.
  *
  * \return std::string containing the text content. Empty if none were found.
  */
-std::string xmlFindTextContent(Poco::AutoPtr<Poco::XML::Document> p_xml_document, const XMLAttribute& attribute);
+std::string xmlFindTextContent(Poco::AutoPtr<Poco::XML::Document> p_xml_document, const XMLAttribute attribute);
 
 /**
- * \brief A function for finding the text content of an XML node. If not found, then it checks the node's children.
- *
+ * \brief A method for finding the text content of a XML node. If not found, then it checks the node's children as well.
+ * 
  * \param p_node for the XML node to search.
  * \param attribute specifying the XML attribute (name and value) that the XML text node (child) should have.
  *
  * \return std::string containing the text content. Empty if none were found.
  */
-std::string xmlFindTextContent(const Poco::XML::Node* p_node, const XMLAttribute& attribute);
+std::string xmlFindTextContent(const Poco::XML::Node* p_node, const XMLAttribute attribute);
 
 /**
- * \brief A function for getting an XML node's attribute value.
- *
- * \param p_node for the XML node to process.
- * \param name specifying the XML attribute's name to get the value of.
- *
- * \return std::string with the attribute's value. Empty if the attribute was not found.
- */
-std::string xmlNodeGetAttributeValue(const Poco::XML::Node* p_node, const std::string& name);
-
-/**
- * \brief A function for checking if an XML node has the specified attribute.
- *
+ * \brief A method for checking if a XML node has the specified attribute.
+ * 
  * \param p_node for the XML node to check.
  * \param attribute specifying the XML attribute (name and value) to check for.
  *
  * \return bool indicating if the attribute was found or not.
  */
-bool xmlNodeHasAttribute(const Poco::XML::Node* p_node, const XMLAttribute& attribute);
-
-/**
- * \brief A function for checking if an XML node has the specified attribute.
- *
- * \param p_node for the XML node to check.
- * \param name specifying the attribute's name.
- * \param value specifying the attribute's value.
- *
- * \return bool indicating if the attribute was found or not.
- */
-bool xmlNodeHasAttribute(const Poco::XML::Node* p_node, const std::string& name, const std::string& value);
+bool xmlNodeHasAttribute(const Poco::XML::Node* p_node, const XMLAttribute attribute);
 
 /**
  * \brief Struct containing various constant values defined by default robot controller systems.
  */
 struct SystemConstants
-{
+{ 
   /**
    * \brief Controller states related constants.
    */
-  struct ABB_LIBRWS_EXPORT ContollerStates
+  struct ContollerStates
   {
     /**
      * \brief Robot controller motor on.
      */
     static const std::string CONTROLLER_MOTOR_ON;
-
+    
     /**
      * \brief Robot controller motor off.
      */
@@ -181,17 +156,17 @@ struct SystemConstants
      */
     static const std::string RAPID_EXECUTION_RUNNING;
   };
-
+  
   /**
    * \brief General constants.
    */
-  struct ABB_LIBRWS_EXPORT General
+  struct General
   {
     /**
      * \brief Default name of an application using RWS.
      */
     static const std::string EXTERNAL_APPLICATION;
-
+    
     /**
      * \brief Default location of an application using RWS.
      */
@@ -201,7 +176,7 @@ struct SystemConstants
      * \brief Default port number for RWS communication.
      */
     static const unsigned short DEFAULT_PORT_NUMBER;
-
+    
     /**
      * \brief Default password (for unconfigured robot controller systems).
      */
@@ -221,105 +196,85 @@ struct SystemConstants
      * \brief Mechanical unit name for ROB_1.
      */
     static const std::string MECHANICAL_UNIT_ROB_1;
-
+    
     /**
      * \brief Mechanical unit name for ROB_2.
      */
     static const std::string MECHANICAL_UNIT_ROB_2;
-
+    
     /**
      * \brief Mechanical unit name for ROB_3.
      */
     static const std::string MECHANICAL_UNIT_ROB_3;
-
+    
     /**
      * \brief Mechanical unit name for ROB_4.
      */
     static const std::string MECHANICAL_UNIT_ROB_4;
-
+    
     /**
      * \brief Mechanical unit name for ROB_L.
      */
     static const std::string MECHANICAL_UNIT_ROB_L;
-
+    
     /**
      * \brief Mechanical unit name for ROB_R.
      */
     static const std::string MECHANICAL_UNIT_ROB_R;
-
+    
     /**
      * \brief Remote user.
      */
     static const std::string REMOTE;
-
-    /**
-     * \brief Base coordinate system.
-     */
-    static const std::string COORDINATE_BASE;
-
-    /**
-     * \brief World coordinate system.
-     */
-    static const std::string COORDINATE_WORLD;
-
-    /**
-     * \brief Tool coordinate system.
-     */
-    static const std::string COORDINATE_TOOL;
-
-    /**
-     * \brief Work object (wobj) coordinate system.
-     */
-    static const std::string COORDINATE_WOBJ;
   };
 
   /**
    * \brief IO signal related constants.
    */
-  struct ABB_LIBRWS_EXPORT IOSignals
-  {
+  struct IOSignals
+  { 
     /**
      * \brief Name of defined IO signal for smart gripper left position.
      *
      * Note: Requires the Smart Gripper product.
      */
     static const std::string HAND_ACTUAL_POSITION_L;
-
+        
     /**
      * \brief Name of defined IO signal for smart gripper right position.
      *
      * Note: Requires the Smart Gripper product.
      */
     static const std::string HAND_ACTUAL_POSITION_R;
-
+        
     /**
      * \brief Name of defined IO signal for smart gripper left speed.
      *
      * Note: Requires the Smart Gripper product.
      */
     static const std::string HAND_ACTUAL_SPEED_L;
-
+        
     /**
      * \brief Name of defined IO signal for smart gripper right speed.
      *
      * Note: Requires the Smart Gripper product.
      */
     static const std::string HAND_ACTUAL_SPEED_R;
-
+        
     /**
      * \brief Name of defined IO signal for smart gripper left calibration status.
      *
      * Note: Requires the Smart Gripper product.
      */
     static const std::string HAND_STATUS_CALIBRATED_L;
-
+        
     /**
      * \brief Name of defined IO signal for smart gripper right calibration status.
      *
      * Note: Requires the Smart Gripper product.
      */
     static const std::string HAND_STATUS_CALIBRATED_R;
-
+    
     /**
      * \brief High digital IO signal.
      */
@@ -330,11 +285,11 @@ struct SystemConstants
      */
     static const std::string LOW;
   };
-
+    
   /**
    * \brief RAPID related constants.
    */
-  struct ABB_LIBRWS_EXPORT RAPID
+  struct RAPID
   {
     /**
      * \brief RAPID boolean false.
@@ -345,7 +300,7 @@ struct SystemConstants
      * \brief RAPID boolean true.
      */
     static const std::string RAPID_TRUE;
-
+    
     /**
      * \brief Default name for the first robot RAPID motion task.
      */
@@ -370,27 +325,27 @@ struct SystemConstants
      * \brief Default name for the IRB14000 (a.k.a YuMi) left arm robot RAPID motion task.
      */
     static const std::string TASK_ROB_L;
-
+        
     /**
      * \brief Default name for the IRB14000 (a.k.a YuMi) right arm robot RAPID motion task.
      */
     static const std::string TASK_ROB_R;
-
+    
     /**
      * \brief RAPID data type bool.
      */
     static const std::string TYPE_BOOL;
-
+    
     /**
      * \brief RAPID data type dnum.
      */
     static const std::string TYPE_DNUM;
-
+    
     /**
      * \brief RAPID data type num.
      */
     static const std::string TYPE_NUM;
-
+    
     /**
      * \brief RAPID data type string.
      */
@@ -405,27 +360,12 @@ struct SystemConstants
     /**
      * \brief XML attributes specifying names with corresponding values.
      */
-    struct ABB_LIBRWS_EXPORT XMLAttributes
+    struct XMLAttributes
     {
-      /**
-       * \brief Class & active type.
-       */
-      static const XMLAttribute CLASS_ACTIVE;
-
-      /**
-       * \brief Class & cfg-dt-instance-li.
-       */
-      static const XMLAttribute CLASS_CFG_DT_INSTANCE_LI;
-
       /**
        * \brief Class & cfg-ia-t-li.
        */
       static const XMLAttribute CLASS_CFG_IA_T_LI;
-
-      /**
-       * \brief Class & controller type.
-       */
-      static const XMLAttribute CLASS_CTRL_TYPE;
 
       /**
        * \brief Class & controller execution state.
@@ -436,17 +376,12 @@ struct SystemConstants
        * \brief Class & controller state.
        */
       static const XMLAttribute CLASS_CTRLSTATE;
-
+      
       /**
        * \brief Class & data type.
        */
       static const XMLAttribute CLASS_DATTYP;
-
-      /**
-       * \brief Class & excstate type.
-       */
-      static const XMLAttribute CLASS_EXCSTATE;
-
+      
       /**
        * \brief Class & ios-signal.
        */
@@ -456,12 +391,12 @@ struct SystemConstants
        * \brief Class & lvalue.
        */
       static const XMLAttribute CLASS_LVALUE;
-
+      
       /**
        * \brief Class & motiontask.
        */
       static const XMLAttribute CLASS_MOTIONTASK;
-
+      
       /**
        * \brief Class & name.
        */
@@ -471,7 +406,7 @@ struct SystemConstants
        * \brief Class & operation mode.
        */
       static const XMLAttribute CLASS_OPMODE;
-
+      
       /**
        * \brief Class & rap-module-info-li.
        */
@@ -491,12 +426,7 @@ struct SystemConstants
        * \brief Class & state.
        */
       static const XMLAttribute CLASS_STATE;
-
-      /**
-       * \brief Class & sys-option-li.
-       */
-      static const XMLAttribute CLASS_SYS_OPTION_LI;
-
+      
       /**
        * \brief Class & sys-system-li.
        */
@@ -511,37 +441,17 @@ struct SystemConstants
        * \brief Class & value.
        */
       static const XMLAttribute CLASS_VALUE;
-
-      /**
-       * \brief Class & option.
-       */
-      static const XMLAttribute CLASS_OPTION;
     };
-
+    
     /**
      * \brief Identifiers in different RWS messages. E.g. XML attribute names/values.
      */
-    struct ABB_LIBRWS_EXPORT Identifiers
+    struct Identifiers
     {
-      /**
-       * \brief Active type.
-       */
-      static const std::string ACTIVE;
-
-      /**
-       * \brief Configuration motion domain type: arm.
-       */
-      static const std::string ARM;
-
       /**
        * \brief XML attribute name: class.
        */
       static const std::string CLASS;
-
-      /**
-       * \brief Configuration instance list item.
-       */
-      static const std::string CFG_DT_INSTANCE_LI;
 
       /**
        * \brief Configuration list item.
@@ -549,65 +459,40 @@ struct SystemConstants
       static const std::string CFG_IA_T_LI;
 
       /**
-       * \brief Controller type.
-       */
-      static const std::string CTRL_TYPE;
-
-      /**
        * \brief Controller execution state.
        */
       static const std::string CTRLEXECSTATE;
-
+      
       /**
        * \brief Controller state.
        */
       static const std::string CTRLSTATE;
-
+      
       /**
        * \brief Data type.
        */
       static const std::string DATTYP;
 
       /**
-       * \brief Execution state type.
-       */
-      static const std::string EXCSTATE;
-
-      /**
        * \brief Home directory.
        */
       static const std::string HOME_DIRECTORY;
-
+      
       /**
        * \brief IO signal.
        */
       static const std::string IOS_SIGNAL;
 
       /**
-       * \brief Mechanical unit.
-       */
-      static const std::string MECHANICAL_UNIT;
-
-      /**
-       * \brief Mechanical unit group.
-       */
-      static const std::string MECHANICAL_UNIT_GROUP;
-
-      /**
-       * \brief Motion topic in the system configurations (abbreviated as moc).
-       */
-      static const std::string MOC;
-
-      /**
        * \brief Motion task.
        */
       static const std::string MOTIONTASK;
-
+      
       /**
        * \brief Name.
        */
       static const std::string NAME;
-
+      
       /**
        * \brief Lvalue.
        */
@@ -632,22 +517,12 @@ struct SystemConstants
        * \brief RAPID task list item.
        */
       static const std::string RAP_TASK_LI;
-
-      /**
-       * \brief Robot.
-       */
-      static const std::string ROBOT;
-
+      
       /**
        * \brief RobotWare version name.
        */
       static const std::string RW_VERSION_NAME;
-
-      /**
-       * \brief Single.
-       */
-      static const std::string SINGLE;
-
+      
       /**
        * \brief State.
        */
@@ -657,21 +532,11 @@ struct SystemConstants
        * \brief Controller topic in the system configurations (abbreviated as sys).
        */
       static const std::string SYS;
-
-      /**
-       * \brief Sys option list item.
-       */
-      static const std::string SYS_OPTION_LI;
-
+      
       /**
        * \brief Sys system list item.
        */
       static const std::string SYS_SYSTEM_LI;
-
-      /**
-       * \brief Title.
-       */
-      static const std::string TITLE;
 
       /**
        * \brief Type.
@@ -682,28 +547,23 @@ struct SystemConstants
        * \brief Value.
        */
       static const std::string VALUE;
-
-      /**
-       * \brief Option.
-       */
-      static const std::string OPTION;
     };
 
     /**
      * \brief RWS queries.
      */
-    struct ABB_LIBRWS_EXPORT Queries
+    struct Queries
     {
       /**
        * \brief Release action query.
        */
       static const std::string ACTION_RELEASE;
-
+      
       /**
        * \brief Request action query.
        */
       static const std::string ACTION_REQUEST;
-
+      
       /**
        * \brief Reset program pointer action query.
        */
@@ -713,7 +573,7 @@ struct SystemConstants
        * \brief Set action query.
        */
       static const std::string ACTION_SET;
-
+      
       /**
        * \brief Set controller state action query.
        */
@@ -728,7 +588,7 @@ struct SystemConstants
        * \brief Start action query.
        */
       static const std::string ACTION_START;
-
+      
       /**
        * \brief Stop action query.
        */
@@ -743,7 +603,7 @@ struct SystemConstants
     /**
      * \brief RWS resources and queries.
      */
-    struct ABB_LIBRWS_EXPORT Resources
+    struct Resources
     {
       /**
        * \brief Instances.
@@ -754,7 +614,7 @@ struct SystemConstants
        * \brief Jointtarget.
        */
       static const std::string JOINTTARGET;
-
+      
       /**
        * \brief Logout.
        */
@@ -764,6 +624,16 @@ struct SystemConstants
        * \brief Robtarget.
        */
       static const std::string ROBTARGET;
+
+      /**
+       * \brief Lead Through.
+       */
+      static const std::string LEADTHROUGH;
+
+      /**
+       * \brief Modules.
+       */
+      static const std::string MODULES;
 
       /**
        * \brief Configurations.
@@ -779,6 +649,11 @@ struct SystemConstants
        * \brief Mastership.
        */
       static const std::string RW_MASTERSHIP;
+      
+      /**
+       * \brief Mastership.
+       */
+      static const std::string RW_MASTERSHIP_MOTION;
 
       /**
        * \brief Mechanical units.
@@ -809,7 +684,7 @@ struct SystemConstants
        * \brief RAPID symbol data.
        */
       static const std::string RW_RAPID_SYMBOL_DATA_RAPID;
-
+      
       /**
        * \brief RAPID symbol properties.
        */
@@ -825,11 +700,11 @@ struct SystemConstants
        */
       static const std::string RW_SYSTEM;
     };
-
+    
     /**
      * \brief RWS services.
      */
-    struct ABB_LIBRWS_EXPORT Services
+    struct Services
     {
       /**
        * \brief Controller service.
@@ -891,6 +766,25 @@ public:
    * \param value for the initial true or false value.
    */
   TriBool(const bool initial_value) : value(initial_value ? TRUE_VALUE : FALSE_VALUE) {}
+
+  /**
+   * \brief Operator for copy assignment.
+   *
+   * \param rhs for right hand side value.
+   *
+   * \return TriBool& self.
+   */
+  TriBool& operator=(const TriBool& other)
+  {
+    if (&other == this)
+    {
+      return *this;
+    }
+
+    value = other.value;
+
+    return *this;
+  }
 
   /**
    * \brief Operator for assignment.

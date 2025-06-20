@@ -1,30 +1,15 @@
 # abb_librws
 
-[![Build Status: Ubuntu Bionic (Actions)](https://github.com/ros-industrial/abb_librws/workflows/CI%20-%20Ubuntu%20Bionic/badge.svg?branch=master)](https://github.com/ros-industrial/abb_librws/actions?query=workflow%3A%22CI+-+Ubuntu+Bionic%22)
-[![Build Status: Ubuntu Focal (Actions)](https://github.com/ros-industrial/abb_librws/workflows/CI%20-%20Ubuntu%20Focal/badge.svg?branch=master)](https://github.com/ros-industrial/abb_librws/actions?query=workflow%3A%22CI+-+Ubuntu+Focal%22)
-[![Github Issues](https://img.shields.io/github/issues/ros-industrial/abb_librws.svg)](http://github.com/ros-industrial/abb_librws/issues)
-
-[![license - bsd 3 clause](https://img.shields.io/:license-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-
-[![support level: community](https://img.shields.io/badge/support%20level-community-lightgray.svg)](http://rosindustrial.org/news/2016/10/7/better-supporting-a-growing-ros-industrial-software-platform)
-
 ## Important Notes
 
-RobotWare versions `7.0` and higher are currently incompatible with *abb_librws* (due to RWS `1.0` being replaced by RWS `2.0`). See [this](http://developercenter.robotstudio.com/webservice) for more information about the different RWS versions.
+RobotWare versions `6.x` are currently incompatible with *abb_librws* (due to RWS `1.0` being replaced by RWS `2.0`). Check [this release note](https://robotapps.blob.core.windows.net/apps/ReleaseNotesRWS2019.3.zip) for more information about the different RWS versions.
 
-Pull request [abb_librws#69](https://github.com/ros-industrial/abb_librws/pull/69) turned this package from a Catkin package into a plain CMake package. ROS users may use any of the following build tools to build the library:
-
-* ROS 1: `catkin_make_isolated` or [catkin_tools](https://catkin-tools.readthedocs.io/en/latest/index.html).
-* ROS 2: [colcon](https://colcon.readthedocs.io/en/released/).
+Please note that this package has not been productized, it is provided "as-is" and only limited support can be expected.
 
 ## Overview
 
-A C++ library for interfacing with ABB robot controllers supporting *Robot Web Services* (RWS) `1.0`. See the online [documentation](http://developercenter.robotstudio.com/webservice/api_reference) for a detailed description of what RWS `1.0` is and how to use it.
-
-* See [abb_libegm](https://github.com/ros-industrial/abb_libegm) for a companion library that interfaces with *Externally Guided Motion* (EGM).
-* See StateMachine Add-In ([1.0](https://robotapps.robotstudio.com/#/viewApp/7fa7065f-457f-47ce-98d7-c04882e703ee) or [1.1](https://robotapps.robotstudio.com/#/viewApp/c163de01-792e-4892-a290-37dbe050b6e1)) for an optional *RobotWare Add-In* that can be useful when configuring an ABB robot controller for use with this library.
-
-Please note that this package has not been productized, it is provided "as-is" and only limited support can be expected.
+A C++ library for interfacing with ABB robot controllers supporting *Robot Web Services* (RWS). 
+See the online [documentation](https://developercenter.robotstudio.com/api/RWS) for a detailed description of what RWS is and how to use it.
 
 ### Sketch
 
@@ -34,7 +19,7 @@ The following is a conceptual sketch of how this RWS library can be viewed, in r
 
 ### Requirements
 
-* RobotWare version `6.0` or higher (less than `7.0`, which uses RWS `2.0`).
+* RobotWare version `7.x`.
 
 ### Dependencies
 
@@ -47,18 +32,20 @@ RWS provides access to several services and resources in the robot controller, a
 * Reading/writing of IO-signals.
 * Reading/writing of RAPID data.
 * Reading of RAPID data properties.
-* Starting/stopping/resetting the RAPID program.
-* Subscriptions (i.e. receiving notifications when resources are updated).
-* Uploading/downloading/removing files.
-* Checking controller state (e.g. motors on/off, auto/manual mode and RAPID execution running/stopped).
-* Reading the joint/Cartesian values of a mechanical unit.
-* Register as a local/remote user (e.g. for interaction during manual mode).
-* Turning the motors on/off.
-* Reading of current RobotWare version and available tasks in the robot system.
+*	Starting/stopping/resetting the RAPID program.
+*	Subscriptions (i.e. receiving notifications when resources are updated).
+*	Uploading/downloading/removing files.
+*	Checking controller state (e.g. motors on/off, auto/manual mode and RAPID execution running/stopped).
+*	Reading the Joint/Cartesian values of a mechanical unit.
+*	Register as a local/remote user (e.g. for interaction during manual mode).
+*	Turning the motors on/off.
+*	Reading of current RobotWare version and available tasks in the robot system.
+*	Enable/disable lead-through.
+*	Access to SmartGripper functionality.
 
 ### Recommendations
 
-* This library has been verified to work with RobotWare `6.08.00.01`. Other versions are expected to work, but this cannot be guaranteed at the moment.
+* This library has been verified to work with RobotWare `7.3.1`. Other versions are expected to work, but this cannot be guaranteed at the moment.
 * It is a good idea to perform RobotStudio simulations before working with a real robot.
 * It is prudent to familiarize oneself with general safety regulations (e.g. described in ABB manuals).
 * Consider cyber security aspects, before connecting robot controllers to networks.
@@ -88,27 +75,12 @@ To install the Add-In:
 
 1. Go to the *Add-Ins* tab in RobotStudio.
 2. Search for *StateMachine Add-In* in the *RobotApps* window.
-3. Select the desired Add-In version and retrieve it by pressing the *Add* button.
+3. Select the Add-In and retrieve the Add-In by pressing the *Add* button.
 4. Verify that the Add-In was added to the list *Installed Packages*.
 5. The Add-In should appear as an option during the installation of a RobotWare system.
 
-See the Add-In's user manual ([1.0](https://robotapps.blob.core.windows.net/appreferences/docs/27e5bd15-b5ec-401d-986a-30c9d2934e97UserManual.pdf) or [1.1](https://robotapps.blob.core.windows.net/appreferences/docs/cd504500-80e2-4cb6-9419-c60ea4ad6d56UserManual.pdf)) for more details, as well as for install instructions for RobotWare systems. The manual can also be accessed by right-clicking on the Add-In in the *Installed Packages* list and selecting *Documentation*.
+See the Add-In's [user manual](https://robotapps.blob.core.windows.net/appreferences/docs/2093c0e8-d469-4188-bdd2-ca42e27cba5cUserManual.pdf) for more details, as well as for install instructions for RobotWare systems. The manual can also be accessed by right-clicking on the Add-In in the *Installed Packages* list and selecting *Documentation*.
 
 ## Acknowledgements
 
-The **core development** has been supported by the European Union's Horizon 2020 project [SYMBIO-TIC](http://www.symbio-tic.eu/).
-The SYMBIO-TIC project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement no. 637107.
-
-<img src="docs/images/symbio_tic_logo.png" width="250">
-
-The **open-source process** has been supported by the European Union's Horizon 2020 project [ROSIN](http://rosin-project.eu/).
-The ROSIN project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement no. 732287.
-
-<img src="docs/images/rosin_logo.png" width="250">
-
-The opinions expressed reflects only the author's view and reflects in no way the European Commission's opinions.
-The European Commission is not responsible for any use that may be made of the contained information.
-
-### Special Thanks
-
-Special thanks to [gavanderhoorn](https://github.com/gavanderhoorn) for guidance with open-source practices and ROS-Industrial conventions.
+This work is based on the [abb_librws](https://github.com/ros-industrial/abb_librws) classes developed by Jon Tjerngren for ABB IRC5 controllers (running RobotWare `6.x`)

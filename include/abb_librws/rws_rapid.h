@@ -1,6 +1,8 @@
 /***********************************************************************************************************************
  *
- * Copyright (c) 2015, ABB Schweiz AG
+ * Copyright (c) 
+ * 2015, ABB Schweiz AG
+ * 2021, JOiiNT LAB, Fondazione Istituto Italiano di Tecnologia, Intellimech Consorzio per la Meccatronica.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with
@@ -32,6 +34,13 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ***********************************************************************************************************************
+ * 
+ * Authors: Gianluca Lentini, Ugo Alberto Simioni
+ * Date:18/01/2022
+ * Version 1.0
+ * Description: this package provides a ROS node that communicates with the controller using Robot Web Services 2.0, original code can be retrieved at https://github.com/ros-industrial/abb_librws
+ * 
+ ***********************************************************************************************************************
  */
 
 #ifndef RWS_RAPID_H
@@ -39,7 +48,6 @@
 
 #include <string>
 #include <vector>
-#include <sstream>
 
 #include "Poco/SharedPtr.h"
 
@@ -70,17 +78,17 @@ public:
    * \return std::string containing the data type name.
    */
   virtual std::string getType() const = 0;
-
+  
   /**
    * \brief Pure virtual method for parsing a RAPID symbol data value string.
-   *
+   * 
    * \param value_string containing the string to parse.
    */
   virtual void parseString(const std::string&  value_string) = 0;
 
   /**
    * \brief Pure virtual method for constructing a RAPID symbol data value string.
-   *
+   * 
    * \return std::string containing the constructed string.
    */
   virtual std::string constructString() const = 0;
@@ -95,7 +103,7 @@ struct RAPIDAtomicTemplate : public RAPIDSymbolDataAbstract
 public:
   /**
    * \brief A method for parsing a RAPID symbol data value string.
-   *
+   * 
    * \param value_string containing the string to parse.
    */
   void parseString(const std::string& value_string)
@@ -103,7 +111,7 @@ public:
     std::stringstream ss(value_string);
     ss >> value;
   }
-
+  
   /**
    * \brief Container for the data's value.
    */
@@ -115,7 +123,7 @@ protected:
    *
    * \param value specifying the value of the data.
    */
-  RAPIDAtomicTemplate(const T& value) : value(value) {}
+  RAPIDAtomicTemplate(const T value) : value(value) {}
 };
 
 /**
@@ -135,7 +143,7 @@ struct RAPIDAtomic<RAPID_BOOL> : public RAPIDAtomicTemplate<bool>
    * \param value specifying the value of the data.
    */
   RAPIDAtomic(const bool value = false) : RAPIDAtomicTemplate(value) {}
-
+  
   /**
    * \brief A method for retrieving the name of the symbol's data type.
    *
@@ -149,7 +157,7 @@ struct RAPIDAtomic<RAPID_BOOL> : public RAPIDAtomicTemplate<bool>
    * \param value_string containing the string to parse.
    */
   void parseString(const std::string& value_string);
-
+  
   /**
    * \brief A method for constructing a RAPID symbol data value string.
    *
@@ -170,14 +178,14 @@ struct RAPIDAtomic<RAPID_NUM> : public RAPIDAtomicTemplate<float>
    * \param value specifying the value of the data.
    */
   RAPIDAtomic(const float value = (float) 0.0) : RAPIDAtomicTemplate(value) {}
-
+  
   /**
    * \brief A method for retrieving the name of the symbol's data type.
    *
    * \return std::string containing the data type name.
    */
   std::string getType() const;
-
+  
   /**
    * \brief A method for constructing a RAPID symbol data value string.
    *
@@ -198,7 +206,7 @@ struct RAPIDAtomic<RAPID_DNUM> : public RAPIDAtomicTemplate<double>
    * \param value specifying the value of the data.
    */
   RAPIDAtomic(const double value = (double) 0.0) : RAPIDAtomicTemplate(value) {}
-
+  
   /**
    * \brief A method for retrieving the name of the symbol's data type.
    *
@@ -225,15 +233,15 @@ struct RAPIDAtomic<RAPID_STRING> : public RAPIDAtomicTemplate<std::string>
    *
    * \param value specifying the value of the data.
    */
-  RAPIDAtomic(const std::string& value = "") : RAPIDAtomicTemplate(value) {}
-
+  RAPIDAtomic(const std::string value = "") : RAPIDAtomicTemplate(value) {}
+  
   /**
    * \brief A method for retrieving the name of the symbol's data type.
    *
    * \return std::string containing the data type name.
    */
   std::string getType() const;
-
+  
   /**
    * \brief A method for parsing a RAPID symbol data value string.
    *
@@ -277,35 +285,35 @@ struct RAPIDRecord : public RAPIDSymbolDataAbstract
 public:
   /**
    * \brief A constructor.
-   *
+   * 
    * \param record_type_name specifying the name of the RAPID record type (i.e. its name in the RAPID code).
    */
-  RAPIDRecord(const std::string& record_type_name);
-
+  RAPIDRecord(const std::string record_type_name);
+  
   /**
    * \brief A method for constructing a RAPID symbol data value string.
    *
    * \return std::string containing the constructed string.
    */
   std::string constructString() const;
-
+  
   /**
    * \brief A method for parsing a RAPID symbol data value string.
    *
    * \param value_string containing the string to parse.
    */
   void parseString(const std::string& value_string);
-
+  
   /**
    * \brief A method for getting the type of the RAPID record.
    *
    * \return std::string containing the type.
    */
   std::string getType() const;
-
+  
   /**
-   * \brief Operator for copying the RAPID record to another RAPID record.
-   *
+   * \brief Operator for copying the RAPID record to another RAPID record. 
+   * 
    * \param other containing the RAPID record to copy.
    *
    * \return RAPIDRecord& containing the copy.
@@ -314,29 +322,29 @@ public:
 
 protected:
   /**
-   * \brief A method to remove a character from a string and count the number of times it occurred.
-   *
+   * \brief A method to count the number of times a character occurs in a string.
+   * 
    * \param input for the string to search.
    * \param character specifying the character to search for.
    *
    * \return unsigned int containing the number of times the character occurs.
    */
   unsigned int countCharInString(std::string input, const char character);
-
+  
   /**
    * \brief A method to extract delimited substrings in a string.
-   *
+   * 
    * \param input containing the string with delimited substrings.
    *
    * \return std::vector<std::string> containing the extracted substrings.
    */
-  std::vector<std::string> extractDelimitedSubstrings(const std::string& input);
-
+  std::vector<std::string> extractDelimitedSubstrings(const std::string input);
+  
   /**
    * \brief The record's type name.
    */
   std::string record_type_name_;
-
+  
   /**
    * \brief Container for the record's components. I.e. other RAPID records or atomic RAPID data.
    */
@@ -363,7 +371,7 @@ public:
     components_.push_back(&rax_5);
     components_.push_back(&rax_6);
   }
-
+  
   /**
    * \brief First robot axis.
    */
@@ -373,22 +381,22 @@ public:
    * \brief Second robot axis.
    */
   RAPIDNum rax_2;
-
+  
   /**
    * \brief Third robot axis.
    */
   RAPIDNum rax_3;
-
+  
   /**
    * \brief Fourth robot axis.
    */
   RAPIDNum rax_4;
-
+  
   /**
    * \brief Fifth robot axis.
    */
   RAPIDNum rax_5;
-
+  
   /**
    * \brief Sixth robot axis.
    */
@@ -415,7 +423,7 @@ public:
     components_.push_back(&eax_e);
     components_.push_back(&eax_f);
   }
-
+  
   /**
    * \brief External axis a.
    */
@@ -463,26 +471,7 @@ public:
     components_.push_back(&robax);
     components_.push_back(&extax);
   }
-
-  /**
-   * \brief Copy constructor.
-   *
-   * \param other containing the values to copy.
-   */
-  JointTarget(const JointTarget& other)
-  :
-  RAPIDRecord(other.record_type_name_)
-  {
-    if (this != &other)
-    {
-      robax = other.robax;
-      extax = other.extax;
-      components_.clear();
-      components_.push_back(&robax);
-      components_.push_back(&extax);
-    }
-  }
-
+  
   /**
    * \brief Robot axes.
    */
@@ -516,12 +505,12 @@ public:
    * \brief X-value of the position.
    */
   RAPIDNum x;
-
+  
   /**
    * \brief Y-value of the position.
    */
   RAPIDNum y;
-
+  
   /**
    * \brief Z-value of the position.
    */
@@ -546,17 +535,17 @@ public:
     components_.push_back(&q3);
     components_.push_back(&q4);
   }
-
+  
   /**
    * \brief Quaternion 1.
    */
   RAPIDNum q1;
-
+  
   /**
    * \brief Quaternion 2.
    */
   RAPIDNum q2;
-
+  
   /**
    * \brief Quaternion 3.
    */
@@ -583,25 +572,6 @@ public:
   {
     components_.push_back(&pos);
     components_.push_back(&rot);
-  }
-
-  /**
-   * \brief Copy constructor.
-   *
-   * \param other containing the values to copy.
-   */
-  Pose(const Pose& other)
-  :
-  RAPIDRecord(other.record_type_name_)
-  {
-    if (this != &other)
-    {
-      pos = other.pos;
-      rot = other.rot;
-      components_.clear();
-      components_.push_back(&pos);
-      components_.push_back(&rot);
-    }
   }
 
   /**
@@ -675,29 +645,6 @@ public:
   }
 
   /**
-   * \brief Copy constructor.
-   *
-   * \param other containing the values to copy.
-   */
-  RobTarget(const RobTarget& other)
-  :
-  RAPIDRecord(other.record_type_name_)
-  {
-    if (this != &other)
-    {
-      pos = other.pos;
-      orient = other.orient;
-      robconf = other.robconf;
-      extax = other.extax;
-      components_.clear();
-      components_.push_back(&pos);
-      components_.push_back(&orient);
-      components_.push_back(&robconf);
-      components_.push_back(&extax);
-    }
-  }
-
-  /**
    * \brief Position for the tool center point [mm].
    */
   Pos pos;
@@ -738,34 +685,7 @@ public:
     components_.push_back(&iy);
     components_.push_back(&iz);
   }
-
-  /**
-   * \brief Copy constructor.
-   *
-   * \param other containing the values to copy.
-   */
-  LoadData(const LoadData& other)
-  :
-  RAPIDRecord(other.record_type_name_)
-  {
-    if (this != &other)
-    {
-      mass = other.mass;
-      cog = other.cog;
-      aom = other.aom;
-      ix = other.ix;
-      iy = other.iy;
-      iz = other.iz;
-      components_.clear();
-      components_.push_back(&mass);
-      components_.push_back(&cog);
-      components_.push_back(&aom);
-      components_.push_back(&ix);
-      components_.push_back(&iy);
-      components_.push_back(&iz);
-    }
-  }
-
+  
   /**
    * \brief The mass of the load [kg].
    */
@@ -780,17 +700,17 @@ public:
    * \brief Axes of moment.
    */
   Orient aom;
-
+  
   /**
    * \brief Inertia of the load around the x-axis [kgm^2].
    */
   RAPIDNum ix;
-
+  
   /**
    * \brief Inertia of the load around the y-axis [kgm^2].
    */
   RAPIDNum iy;
-
+  
   /**
    * \brief Inertia of the load around the z-axis [kgm^2].
    */
@@ -814,28 +734,7 @@ public:
     components_.push_back(&tframe);
     components_.push_back(&tload);
   }
-
-  /**
-   * \brief Copy constructor.
-   *
-   * \param other containing the values to copy.
-   */
-  ToolData(const ToolData& other)
-  :
-  RAPIDRecord(other.record_type_name_)
-  {
-    if (this != &other)
-    {
-      robhold = other.robhold;
-      tframe = other.tframe;
-      tload = other.tload;
-      components_.clear();
-      components_.push_back(&robhold);
-      components_.push_back(&tframe);
-      components_.push_back(&tload);
-    }
-  }
-
+  
   /**
    * \brief Defines if the robot is holding the tool or not.
    */
@@ -871,44 +770,19 @@ public:
     components_.push_back(&uframe);
     components_.push_back(&oframe);
   }
-
-  /**
-   * \brief Copy constructor.
-   *
-   * \param other containing the values to copy.
-   */
-  WObjData(const WObjData& other)
-  :
-  RAPIDRecord(other.record_type_name_)
-  {
-    if (this != &other)
-    {
-      robhold = other.robhold;
-      ufprog = other.ufprog;
-      ufmec = other.ufmec;
-      uframe = other.uframe;
-      oframe = other.oframe;
-      components_.clear();
-      components_.push_back(&robhold);
-      components_.push_back(&ufprog);
-      components_.push_back(&ufmec);
-      components_.push_back(&uframe);
-      components_.push_back(&oframe);
-    }
-  }
-
+  
   /**
    * \brief Defines if the robot is holding the work object or not.
    */
   RAPIDBool robhold;
-
+  
   /**
    * \brief User frame programmed.
    */
   RAPIDBool ufprog;
-
+  
   /**
-   * \brief User frame mechanical unit.
+   * \brief User frame mechancial unit.
    */
   RAPIDString ufmec;
 

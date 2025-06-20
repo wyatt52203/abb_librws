@@ -1,6 +1,8 @@
 /***********************************************************************************************************************
  *
- * Copyright (c) 2015, ABB Schweiz AG
+ * Copyright (c) 
+ * 2015, ABB Schweiz AG
+ * 2021, JOiiNT LAB, Fondazione Istituto Italiano di Tecnologia, Intellimech Consorzio per la Meccatronica.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with
@@ -32,19 +34,20 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ***********************************************************************************************************************
+ * 
+ * Authors: Gianluca Lentini, Ugo Alberto Simioni
+ * Date:18/01/2022
+ * Version 1.0
+ * Description: this package provides a ROS node that communicates with the controller using Robot Web Services 2.0, original code can be retrieved at https://github.com/ros-industrial/abb_librws
+ * 
+ ***********************************************************************************************************************
  */
 
 #include <sstream>
-#include <stdexcept>
 
 #include "Poco/SAX/InputSource.h"
 
 #include "abb_librws/rws_client.h"
-
-namespace
-{
-static const char EXCEPTION_CREATE_STRING[]{"Failed to create string"};
-}
 
 namespace abb
 {
@@ -66,7 +69,7 @@ typedef SystemConstants::RWS::XMLAttributes XMLAttributes;
  * Primary methods
  */
 
-void RWSClient::SubscriptionResources::addIOSignal(const std::string& iosignal, const Priority priority)
+void RWSClient::SubscriptionResources::addIOSignal(const std::string iosignal, const Priority priority)
 {
   std::string resource_uri = Resources::RW_IOSYSTEM_SIGNALS;
   resource_uri += "/";
@@ -77,8 +80,7 @@ void RWSClient::SubscriptionResources::addIOSignal(const std::string& iosignal, 
   add(resource_uri, priority);
 }
 
-void RWSClient::SubscriptionResources::addRAPIDPersistantVariable(const RAPIDResource& resource,
-                                                                  const Priority priority)
+void RWSClient::SubscriptionResources::addRAPIDPersistantVariable(const RAPIDResource resource, const Priority priority)
 {
   std::string resource_uri = Resources::RW_RAPID_SYMBOL_DATA_RAPID;
   resource_uri += "/";
@@ -93,233 +95,188 @@ void RWSClient::SubscriptionResources::addRAPIDPersistantVariable(const RAPIDRes
   add(resource_uri, priority);
 }
 
-void RWSClient::SubscriptionResources::add(const std::string& resource_uri, const Priority priority)
+void RWSClient::SubscriptionResources::add(const std::string resource_uri, const Priority priority)
 {
   resources_.push_back(SubscriptionResource(resource_uri, priority));
 }
 
-
-
-
 /***********************************************************************************************************************
  * Class definitions: RWSClient
  */
-
+  
 /************************************************************
  * Primary methods
  */
 
-RWSClient::RWSResult RWSClient::getContollerService()
+void RWSClient::debugPostAndPrint(const std::string& uri, const std::string& content)
 {
-  std::string uri = Services::CTRL;
-
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  POCOResult result = httpPost(uri, content);
+  
+  std::cout << "Request URI: " << uri << std::endl;
+  std::cout << "Request Content: " << content << std::endl;
+  std::cout << "HTTP Status: " << result.poco_info.http.response.status << std::endl;
+  std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
 }
 
-RWSClient::RWSResult RWSClient::getConfigurationInstances(const std::string& topic, const std::string& type)
+void RWSClient::debugGetAndPrint(const std::string& uri)
 {
-  std::string uri = generateConfigurationPath(topic, type) + Resources::INSTANCES;
+  POCOResult result = httpGet(uri);
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  std::cout << "Request URI: " << uri << std::endl;
+  std::cout << "HTTP Status: " << result.poco_info.http.response.status << std::endl;
+  std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
 }
 
-RWSClient::RWSResult RWSClient::getIOSignals()
+
+RWSClient::RWSResult RWSClient::getConfigurationInstances(const std::string topic, const std::string type)
 {
-  std::string const & uri = SystemConstants::RWS::Resources::RW_IOSYSTEM_SIGNALS;
+  uri_ = generateConfigurationPath(topic, type) + Resources::INSTANCES;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::getIOSignal(const std::string& iosignal)
+RWSClient::RWSResult RWSClient::getIOSignal(const std::string iosignal)
 {
-  std::string uri = generateIOSignalPath(iosignal);
+  uri_ = generateIOSignalPath(iosignal);
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::getMechanicalUnitStaticInfo(const std::string& mechunit)
+RWSClient::RWSResult RWSClient::getMechanicalUnitJointTarget(const std::string mechunit)
 {
-  std::string uri = generateMechanicalUnitPath(mechunit) + "?resource=static";
+  uri_ = generateMechanicalUnitPath(mechunit) + Resources::JOINTTARGET;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::getMechanicalUnitDynamicInfo(const std::string& mechunit)
+RWSClient::RWSResult RWSClient::getMechanicalUnitRobTarget(const std::string mechunit)
 {
-  std::string uri = generateMechanicalUnitPath(mechunit) + "?resource=dynamic";
+  uri_ = generateMechanicalUnitPath(mechunit) + Resources::ROBTARGET;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
-}
-
-RWSClient::RWSResult RWSClient::getMechanicalUnitJointTarget(const std::string& mechunit)
-{
-  std::string uri = generateMechanicalUnitPath(mechunit) + Resources::JOINTTARGET;
-
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
-}
-
-RWSClient::RWSResult RWSClient::getMechanicalUnitRobTarget(const std::string& mechunit,
-                                                           const Coordinate& coordinate,
-                                                           const std::string& tool,
-                                                           const std::string& wobj)
-{
-  std::string uri = generateMechanicalUnitPath(mechunit) + Resources::ROBTARGET;
-
-  std::string args = "";
-  if (!tool.empty())
-  {
-    args += "&tool=" + tool;
-  }
-  if (!wobj.empty())
-  {
-    args += "&wobj=" + wobj;
-  }
-
-  const std::string coordinate_arg = "?coordinate=";
-  switch (coordinate)
-  {
-    case BASE:
-      uri += coordinate_arg + SystemConstants::General::COORDINATE_BASE + args;
-    break;
-    case WORLD:
-      uri += coordinate_arg + SystemConstants::General::COORDINATE_WORLD + args;
-    break;
-    case TOOL:
-      uri += coordinate_arg + SystemConstants::General::COORDINATE_TOOL + args;
-    break;
-    case WOBJ:
-      uri += coordinate_arg + SystemConstants::General::COORDINATE_WOBJ + args;
-    break;
-    default:
-      // If the "ACTIVE" enumeration is passed in (or any other non-identified value),
-      // do not add any arguments to this command
-    break;
-  }
-
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::getRAPIDExecution()
 {
-  std::string uri = Resources::RW_RAPID_EXECUTION;
+  uri_ = Resources::RW_RAPID_EXECUTION;
+  
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::getRAPIDModulesInfo(const std::string& task)
+RWSClient::RWSResult RWSClient::getRAPIDModulesInfo(const std::string task)
 {
-  std::string uri = Resources::RW_RAPID_MODULES + "?" + Queries::TASK + task;
+  uri_ = Resources::RW_RAPID_TASKS + "/" + task + Resources::MODULES;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::getRAPIDTasks()
 {
-  std::string uri = Resources::RW_RAPID_TASKS;
+  uri_ = Resources::RW_RAPID_TASKS;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::getRobotWareSystem()
 {
-  std::string uri = Resources::RW_SYSTEM;
+  uri_ = Resources::RW_SYSTEM;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
-}
-
-RWSClient::RWSResult RWSClient::getSpeedRatio()
-{
-  std::string uri = "/rw/panel/speedratio";
-
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::getPanelControllerState()
 {
-  std::string uri = Resources::RW_PANEL_CTRLSTATE;
+  uri_ = Resources::RW_PANEL_CTRLSTATE;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::getPanelOperationMode()
 {
-  std::string uri = Resources::RW_PANEL_OPMODE;
+  // std::cout<<"sono in getPanelOperationMode "<< std::endl;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  uri_ = Resources::RW_PANEL_OPMODE;
 
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::getRAPIDSymbolData(const RAPIDResource& resource)
+RWSClient::RWSResult RWSClient::setAutoMode()
 {
-  std::string uri = generateRAPIDDataPath(resource);
+  uri_ = Resources::RW_PANEL_OPMODE;
+  content_ = "opmode=auto";
+  
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::getRAPIDSymbolData(const RAPIDResource& resource, RAPIDSymbolDataAbstract* p_data)
+RWSClient::RWSResult RWSClient::setManualMode()
+{
+  uri_ = Resources::RW_PANEL_OPMODE;
+  content_ = "opmode=man";
+
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  
+  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
+}
+
+
+RWSClient::RWSResult RWSClient::getRAPIDSymbolData(const RAPIDResource resource)
+{
+  uri_ = generateRAPIDDataPath(resource);
+
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
+}
+
+RWSClient::RWSResult RWSClient::getRAPIDSymbolData(const RAPIDResource resource, RAPIDSymbolDataAbstract* p_data)
 {
   RWSResult result;
   std::string data_type;
@@ -327,7 +284,7 @@ RWSClient::RWSResult RWSClient::getRAPIDSymbolData(const RAPIDResource& resource
   if (p_data)
   {
     RWSResult temp_result = getRAPIDSymbolProperties(resource);
-
+    
     if (temp_result.success)
     {
       data_type = xmlFindTextContent(temp_result.p_xml_document, XMLAttributes::CLASS_DATTYP);
@@ -357,138 +314,149 @@ RWSClient::RWSResult RWSClient::getRAPIDSymbolData(const RAPIDResource& resource
   return result;
 }
 
-RWSClient::RWSResult RWSClient::getRAPIDSymbolProperties(const RAPIDResource& resource)
+RWSClient::RWSResult RWSClient::getRAPIDSymbolProperties(const RAPIDResource resource)
 {
-  std::string uri = generateRAPIDPropertiesPath(resource);
+  uri_ = generateRAPIDPropertiesPath(resource);
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::setIOSignal(const std::string& iosignal, const std::string& value)
+RWSClient::RWSResult RWSClient::setIOSignal(const std::string iosignal, const std::string value)
 {
-  std::string uri = generateIOSignalPath(iosignal) + "?" + Queries::ACTION_SET;
-  std::string content = Identifiers::LVALUE + "=" + value;
+  uri_ = generateIOSignalPath(iosignal) + "/" + Queries::ACTION_SET;
+  // std::cout<<"URI: "<< uri_ << std::endl;
+  content_ = Identifiers::LVALUE + "=" + value;
+  // std::cout<<"content_: "<< content_ << std::endl;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri, content), evaluation_conditions);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+
+  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::setRAPIDSymbolData(const RAPIDResource& resource, const std::string& data)
+
+RWSClient::RWSResult RWSClient::setRAPIDSymbolData(const RAPIDResource resource, const std::string data)
 {
-  std::string uri = generateRAPIDDataPath(resource) + "?" + Queries::ACTION_SET;
-  std::string content = Identifiers::VALUE + "=" + data;
+  // uri_ = generateRAPIDDataPath(resource) + "?" + Queries::ACTION_SET;
+  uri_ = generateRAPIDDataPath(resource);
+  content_ = Identifiers::VALUE + "=" + data;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri, content), evaluation_conditions);
+  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::setRAPIDSymbolData(const RAPIDResource& resource, const RAPIDSymbolDataAbstract& data)
+RWSClient::RWSResult RWSClient::setRAPIDSymbolData(const RAPIDResource resource, RAPIDSymbolDataAbstract& data)
 {
   return setRAPIDSymbolData(resource, data.constructString());
 }
 
 RWSClient::RWSResult RWSClient::startRAPIDExecution()
 {
-  std::string uri = Resources::RW_RAPID_EXECUTION + "?" + Queries::ACTION_START;
-  std::string content = "regain=continue&execmode=continue&cycle=forever&condition=none&stopatbp=disabled&alltaskbytsp=false";
+  uri_ = Resources::RW_RAPID_EXECUTION + "/" + Queries::ACTION_START;
+  content_ = "regain=continue&execmode=continue&cycle=forever&condition=none&stopatbp=disabled&alltaskbytsp=false";
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri, content), evaluation_conditions);
+  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::stopRAPIDExecution()
 {
-  std::string uri = Resources::RW_RAPID_EXECUTION + "?" + Queries::ACTION_STOP;
-  std::string content = "stopmode=stop";
+  uri_ = Resources::RW_RAPID_EXECUTION + "/" + Queries::ACTION_STOP;
+  content_ = "stopmode=stop";
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri, content), evaluation_conditions);
+  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::resetRAPIDProgramPointer()
 {
-  std::string uri = Resources::RW_RAPID_EXECUTION + "?" + Queries::ACTION_RESETPP;
+  uri_ = Resources::RW_RAPID_EXECUTION + "/" + Queries::ACTION_RESETPP;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
-
-  return evaluatePOCOResult(httpPost(uri), evaluation_conditions);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+  
+  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_); 
 }
 
 RWSClient::RWSResult RWSClient::setMotorsOn()
 {
-  std::string uri = Resources::RW_PANEL_CTRLSTATE + "?" + Queries::ACTION_SETCTRLSTATE;
-  std::string content = "ctrl-state=motoron";
+  uri_ = Resources::RW_PANEL_CTRLSTATE;
+  content_ = "ctrl-state=motoron";
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri, content), evaluation_conditions);
+  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::setMotorsOff()
 {
-  std::string uri = Resources::RW_PANEL_CTRLSTATE + "?" + Queries::ACTION_SETCTRLSTATE;
-  std::string content = "ctrl-state=motoroff";
+  uri_ = Resources::RW_PANEL_CTRLSTATE;
+  content_ = "ctrl-state=motoroff";
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri, content), evaluation_conditions);
+  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::setSpeedRatio(unsigned int ratio)
+RWSClient::RWSResult RWSClient::setLeadThroughOn(const std::string mechUnit)
 {
-  if(ratio > 100) throw std::out_of_range("Speed ratio argument out of range (should be 0 <= ratio <= 100)");
+  uri_ = Resources::RW_MOTIONSYSTEM_MECHUNITS + "/" + mechUnit + Resources::LEADTHROUGH;
+  content_ = "status=active";
 
-  std::stringstream ss;
-  ss << ratio;
-  if(ss.fail()) throw std::runtime_error(EXCEPTION_CREATE_STRING);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  std::string uri = "/rw/panel/speedratio?action=setspeedratio";
-  std::string content = "speed-ratio=" + ss.str();
-
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
-
-  return evaluatePOCOResult(httpPost(uri, content), evaluation_conditions);
+  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::getFile(const FileResource& resource, std::string* p_file_content)
+RWSClient::RWSResult RWSClient::setLeadThroughOff(const std::string mechUnit)
+{
+  uri_ = Resources::RW_MOTIONSYSTEM_MECHUNITS + "/" + mechUnit + Resources::LEADTHROUGH;
+  content_ = "status=inactive";
+
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+
+  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
+}
+
+RWSClient::RWSResult RWSClient::getFile(const FileResource resource, std::string* p_file_content)
 {
   RWSResult rws_result;
   POCOClient::POCOResult poco_result;
 
   if (p_file_content)
   {
-    std::string uri = generateFilePath(resource);
-    poco_result = httpGet(uri);
+    uri_ = generateFilePath(resource);
+    poco_result = httpGet(uri_);
 
-    EvaluationConditions evaluation_conditions;
-    evaluation_conditions.parse_message_into_xml = false;
-    evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+    evaluation_conditions_.reset();
+    evaluation_conditions_.parse_message_into_xml = false;
+    evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-    rws_result = evaluatePOCOResult(poco_result, evaluation_conditions);
+    rws_result = evaluatePOCOResult(poco_result, evaluation_conditions_);
 
     if (rws_result.success)
     {
@@ -499,32 +467,58 @@ RWSClient::RWSResult RWSClient::getFile(const FileResource& resource, std::strin
   return rws_result;
 }
 
-RWSClient::RWSResult RWSClient::uploadFile(const FileResource& resource, const std::string& file_content)
+RWSClient::RWSResult RWSClient::uploadFile(const FileResource resource, const std::string file_content)
 {
-  std::string uri = generateFilePath(resource);
-  std::string content = file_content;
+  uri_ = generateFilePath(resource);
+  content_ = file_content;
+  
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
 
-  return evaluatePOCOResult(httpPut(uri, content), evaluation_conditions);
+  return evaluatePOCOResult(httpPut(uri_, content_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::deleteFile(const FileResource& resource)
+RWSClient::RWSResult RWSClient::deleteFile(const FileResource resource)
 {
-  std::string uri = generateFilePath(resource);
+  uri_ = generateFilePath(resource);
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpDelete(uri), evaluation_conditions);
+  return evaluatePOCOResult(httpDelete(uri_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::startSubscription(const SubscriptionResources& resources)
+RWSClient::RWSResult RWSClient::loadFileToRapid(const FileResource resource, std::string task_name)
+{
+  uri_ = Resources::RW_RAPID_TASKS + "/" + task_name + "/program/load";
+  content_ = "progpath=/" + resource.directory + "/" + resource.filename;
+
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
+
+  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
+}
+
+RWSClient::RWSResult RWSClient::unloadFileFromRapid(std::string task_name)
+{
+  uri_ = Resources::RW_RAPID_TASKS + "/" + task_name + "/program/unload";
+
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
+
+  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
+}
+
+RWSClient::RWSResult RWSClient::startSubscription(SubscriptionResources resources)
 {
   RWSResult result;
 
@@ -533,23 +527,23 @@ RWSClient::RWSResult RWSClient::startSubscription(const SubscriptionResources& r
     std::vector<SubscriptionResources::SubscriptionResource> temp = resources.getResources();
 
     // Generate content for a subscription HTTP post request.
-    std::stringstream subscription_content;
-    for (std::size_t i = 0; i < temp.size(); ++i)
+    subscription_content_.str(std::string());
+    for (int i = 0; i < temp.size(); ++i)
     {
-      subscription_content << "resources=" << i
-                           << "&"
-                           << i << "=" << temp.at(i).resource_uri
-                           << "&"
-                           << i << "-p=" << temp.at(i).priority
-                           << (i < temp.size() - 1 ? "&" : "");
+      subscription_content_ << "resources=" << i
+                            << "&"
+                            << i << "=" << temp.at(i).resource_uri
+                            << "&"
+                            << i << "-p=" << temp.at(i).priority
+                            << (i < temp.size() - 1 ? "&" : "");
     }
 
     // Make a subscription request.
-    EvaluationConditions evaluation_conditions;
-    evaluation_conditions.parse_message_into_xml = false;
-    evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
-    POCOClient::POCOResult poco_result = httpPost(Services::SUBSCRIPTION, subscription_content.str());
-    result = evaluatePOCOResult(poco_result, evaluation_conditions);
+    evaluation_conditions_.reset();
+    evaluation_conditions_.parse_message_into_xml = false;
+    evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
+    POCOClient::POCOResult poco_result = httpPost(Services::SUBSCRIPTION, subscription_content_.str());
+    result = evaluatePOCOResult(poco_result, evaluation_conditions_);
 
     if (result.success)
     {
@@ -558,13 +552,13 @@ RWSClient::RWSResult RWSClient::startSubscription(const SubscriptionResources& r
       poll += subscription_group_id_;
 
       // Create a WebSocket for receiving subscription events.
-      EvaluationConditions evaluation_conditions;
-      evaluation_conditions.parse_message_into_xml = false;
-      evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_SWITCHING_PROTOCOLS);
-      result = evaluatePOCOResult(webSocketConnect(poll, "robapi2_subscription", DEFAULT_SUBSCRIPTION_TIMEOUT),
-                                  evaluation_conditions);
+      evaluation_conditions_.reset();
+      evaluation_conditions_.parse_message_into_xml = false;
+      evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_SWITCHING_PROTOCOLS);
+      result = evaluatePOCOResult(webSocketConnect(poll, "rws_subscription", DEFAULT_SUBSCRIPTION_TIMEOUT),
+                                  evaluation_conditions_);
 
-      if (!result.success)
+      if(!result.success)
       {
         subscription_group_id_.clear();
       }
@@ -576,11 +570,11 @@ RWSClient::RWSResult RWSClient::startSubscription(const SubscriptionResources& r
 
 RWSClient::RWSResult RWSClient::waitForSubscriptionEvent()
 {
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-  return evaluatePOCOResult(webSocketReceiveFrame(), evaluation_conditions);
+  return evaluatePOCOResult(webSocketRecieveFrame(), evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::endSubscription()
@@ -591,73 +585,112 @@ RWSClient::RWSResult RWSClient::endSubscription()
   {
     if (!subscription_group_id_.empty())
     {
-      std::string uri = Services::SUBSCRIPTION + "/" + subscription_group_id_;
+      uri_ = Services::SUBSCRIPTION + "/" + subscription_group_id_;
 
-      EvaluationConditions evaluation_conditions;
-      evaluation_conditions.parse_message_into_xml = false;
-      evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+      evaluation_conditions_.reset();
+      evaluation_conditions_.parse_message_into_xml = false;
+      evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
-      result = evaluatePOCOResult(httpDelete(uri), evaluation_conditions);
+      result = evaluatePOCOResult(httpDelete(uri_), evaluation_conditions_);
     }
   }
 
   return result;
 }
 
-void RWSClient::forceCloseSubscription()
-{
-  webSocketShutdown();
-}
-
 RWSClient::RWSResult RWSClient::logout()
 {
-  std::string uri = Resources::LOGOUT;
-
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = true;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-
-  return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
+  uri_ = Resources::LOGOUT;
+  
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  
+  return evaluatePOCOResult(httpGet(uri_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::registerLocalUser(const std::string& username,
-                                                  const std::string& application,
-                                                  const std::string& location)
+RWSClient::RWSResult RWSClient::registerLocalUser(std::string username,
+                                                  std::string application,
+                                                  std::string location)
 {
-  std::string uri = Services::USERS;
-  std::string content = "username=" + username +
+  uri_ = Services::USERS;
+  content_ = "username=" + username +
              "&application=" + application +
              "&location=" + location +
              "&ulocale=" + SystemConstants::General::LOCAL;
-
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
-
-  RWSResult result = evaluatePOCOResult(httpPost(uri, content), evaluation_conditions);
+  
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
+  
+  RWSResult result = evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
 
   return result;
 }
 
-RWSClient::RWSResult RWSClient::registerRemoteUser(const std::string& username,
-                                                   const std::string& application,
-                                                   const std::string& location)
+RWSClient::RWSResult RWSClient::registerRemoteUser(std::string username,
+                                                   std::string application,
+                                                   std::string location)
 {
-  std::string uri = Services::USERS;
-  std::string content = "username=" + username +
-                        "&application=" + application +
-                        "&location=" + location +
-                        "&ulocale=" + SystemConstants::General::REMOTE;
+  uri_ = Services::USERS;
+  content_ = "username=" + username +
+             "&application=" + application +
+             "&location=" + location +
+             "&ulocale=" + SystemConstants::General::REMOTE;
 
-  EvaluationConditions evaluation_conditions;
-  evaluation_conditions.parse_message_into_xml = false;
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-  evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
 
-  RWSResult result = evaluatePOCOResult(httpPost(uri, content), evaluation_conditions);
+  RWSResult result = evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
 
   return result;
+}
+
+RWSClient::RWSResult RWSClient::requestMasterShip()
+{
+  uri_ = Resources::RW_MASTERSHIP + "/" + Queries::ACTION_REQUEST;
+
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+
+  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
+}
+
+RWSClient::RWSResult RWSClient::releaseMasterShip()
+{
+  uri_ = Resources::RW_MASTERSHIP + "/" + Queries::ACTION_RELEASE;
+
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+ 
+  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
+}
+
+RWSClient::RWSResult RWSClient::requestMasterShipMotion()
+{
+  uri_ = Resources::RW_MASTERSHIP_MOTION + "/" + Queries::ACTION_REQUEST;
+
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+
+  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
+}
+
+RWSClient::RWSResult RWSClient::releaseMasterShipMotion()
+{
+  uri_ = Resources::RW_MASTERSHIP_MOTION + "/" + Queries::ACTION_RELEASE;
+
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = false;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+
+  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
 }
 
 /************************************************************
@@ -667,6 +700,7 @@ RWSClient::RWSResult RWSClient::registerRemoteUser(const std::string& username,
 RWSClient::RWSResult RWSClient::evaluatePOCOResult(const POCOResult& poco_result,
                                                    const EvaluationConditions& conditions)
 {
+  // std::cout<< "sono in evaluatePOCOResult"<<std::endl;
   RWSResult result;
 
   checkAcceptedOutcomes(&result, poco_result, conditions);
@@ -691,8 +725,12 @@ void RWSClient::checkAcceptedOutcomes(RWSResult* result,
 {
   if (result)
   {
+    // std::cout<< "sono in if result checkAcceptedOutcomes: "<<poco_result.status <<std::endl;
+
     if (poco_result.status == POCOResult::OK && poco_result.exception_message.empty())
     {
+      // std::cout<< "sono in if 2 result checkAcceptedOutcomes"<<std::endl;
+
       for (size_t i = 0; i < conditions.accepted_outcomes.size() && !result->success; ++i)
       {
         result->success = (poco_result.poco_info.http.response.status == conditions.accepted_outcomes.at(i));
@@ -700,6 +738,8 @@ void RWSClient::checkAcceptedOutcomes(RWSResult* result,
 
       if (!result->success)
       {
+        // std::cout<< "sono in if 3 result checkAcceptedOutcomes"<<std::endl;
+
         result->error_message = "checkAcceptedOutcomes(...): RWS response status not accepted";
       }
     }
@@ -732,7 +772,7 @@ void RWSClient::parseMessage(RWSResult* result, const POCOResult& poco_result)
       try
       {
         Poco::XML::InputSource input_source(ss);
-        result->p_xml_document = Poco::XML::DOMParser().parse(&input_source);
+        result->p_xml_document = xml_parser_.parse(&input_source);
       }
       catch (...)
       {
@@ -750,9 +790,9 @@ std::string RWSClient::getLogText(const bool verbose)
   {
     return "";
   }
-
+  
   std::stringstream ss;
-
+  
   for (size_t i = 0; i < log_.size(); ++i)
   {
     std::stringstream temp;
@@ -785,12 +825,12 @@ std::string RWSClient::generateMechanicalUnitPath(const std::string& mechunit)
 
 std::string RWSClient::generateRAPIDDataPath(const RAPIDResource& resource)
 {
-  return Resources::RW_RAPID_SYMBOL_DATA_RAPID + "/" + resource.task + "/" + resource.module + "/" + resource.name;
+  return Resources::RW_RAPID_SYMBOL_DATA_RAPID + "/" + resource.task + "/" + resource.module + "/" + resource.name + "/data";
 }
 
 std::string RWSClient::generateRAPIDPropertiesPath(const RAPIDResource& resource)
 {
-  return Resources::RW_RAPID_SYMBOL_PROPERTIES_RAPID + "/" + resource.task + "/" + resource.module + "/"+ resource.name;
+  return Resources::RW_RAPID_SYMBOL_PROPERTIES_RAPID + "/" + resource.task + "/" + resource.module + "/"+ resource.name + "/properties";
 }
 
 std::string RWSClient::generateFilePath(const FileResource& resource)

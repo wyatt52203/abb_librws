@@ -1,6 +1,8 @@
 /***********************************************************************************************************************
  *
- * Copyright (c) 2015, ABB Schweiz AG
+ * Copyright (c) 
+ * 2015, ABB Schweiz AG
+ * 2021, JOiiNT LAB, Fondazione Istituto Italiano di Tecnologia, Intellimech Consorzio per la Meccatronica.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with
@@ -31,6 +33,13 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
+ ***********************************************************************************************************************
+ * 
+ * Authors: Gianluca Lentini, Ugo Alberto Simioni
+ * Date:18/01/2022
+ * Version 1.0
+ * Description: this package provides a ROS node that communicates with the controller using Robot Web Services 2.0, original code can be retrieved at https://github.com/ros-industrial/abb_librws
+ * 
  ***********************************************************************************************************************
  */
 
@@ -120,7 +129,7 @@ public:
     /**
      * \brief IO signal resources.
      */
-    struct ABB_LIBRWS_EXPORT IOSignals
+    struct IOSignals
     {
       /**
        * \brief IO signal for requesting start of EGM joint motions (i.e. EGM joint mode).
@@ -137,25 +146,11 @@ public:
       static const std::string EGM_START_POSE;
 
       /**
-       * \brief IO signal for requesting start of EGM position streaming (i.e. only feedback).
-       *
-       * Note: Requires that the EGM option exists in the controller system.
-       */
-      static const std::string EGM_START_STREAM;
-
-      /**
        * \brief IO signal for requesting stop of EGM motions.
        *
        * Note: Requires that the EGM option exists in the controller system.
        */
       static const std::string EGM_STOP;
-
-      /**
-       * \brief IO signal for requesting stop of EGM position streaming.
-       *
-       * Note: Requires that the EGM option exists in the controller system.
-       */
-      static const std::string EGM_STOP_STREAM;
 
       /**
        * \brief Prefix for IO signals, used for checking if a mechanical unit is stationary or not.
@@ -189,6 +184,21 @@ public:
        * Important: Not equivalent to an emergency stop.
        */
       static const std::string WD_STOP_REQUEST;
+
+      static const std::string SG_CMD_GRIPPER;
+      static const std::string SG_SYS_STATE;
+      static const std::string SG_ACTUAL_SPEED;
+      static const std::string SG_STATUS_CALIBRATED;
+      static const std::string SG_HAND_HOLDFORCE;
+      static const std::string SG_HAND_MAXSPEED;
+
+      static const std::string SG_CMD_VACUUM;
+      static const std::string SG_CMD_BLOW;
+      static const std::string SG_STATUS_VACUUM;
+      static const std::string SG_STATUS_BLOW;
+      static const std::string SG_ACTUAL_PRESSURE;
+
+
     };
 
     /**
@@ -199,7 +209,7 @@ public:
       /**
        * \brief RAPID modules.
        */
-      struct ABB_LIBRWS_EXPORT Modules
+      struct Modules
       {
         /**
          * \brief RAPID module providing functionality for using EGM.
@@ -226,12 +236,12 @@ public:
         static const std::string T_ROB_SG;
 
         /**
-         * \brief RAPID module providing utility functionality.
+         * \brief RAPID module providing utility functionallity.
          */
         static const std::string T_ROB_UTILITY;
 
         /**
-         * \brief RAPID module providing functionality for a watchdog.
+         * \brief RAPID module providing functionallity for a watchdog.
          */
         static const std::string T_ROB_WATCHDOG;
       };
@@ -239,7 +249,7 @@ public:
       /**
        * \brief Predefiend RAPID procedures.
        */
-      struct ABB_LIBRWS_EXPORT Procedures
+      struct Procedures
       {
         /**
          * \brief Predefined RAPID procedure "runCallByVar".
@@ -275,7 +285,7 @@ public:
       /**
        * \brief RAPID symbols.
        */
-      struct ABB_LIBRWS_EXPORT Symbols
+      struct Symbols
       {
         /**
          * \brief RAPID symbol indicating the current EGM action of a RAPID motion task.
@@ -427,37 +437,6 @@ public:
     };
 
     /**
-     * \brief Copy constructor.
-     *
-     * \param other containing the values to copy.
-     */
-    EGMActivateSettings(const EGMActivateSettings& other)
-    :
-    RAPIDRecord(other.record_type_name_)
-    {
-      if (this != &other)
-      {
-        tool = other.tool;
-        wobj = other.wobj;
-        correction_frame = other.correction_frame;
-        sensor_frame = other.sensor_frame;
-        cond_min_max = other.cond_min_max;
-        lp_filter = other.lp_filter;
-        sample_rate = other.sample_rate;
-        max_speed_deviation = other.max_speed_deviation;
-        components_.clear();
-        components_.push_back(&tool);
-        components_.push_back(&wobj);
-        components_.push_back(&correction_frame);
-        components_.push_back(&sensor_frame);
-        components_.push_back(&cond_min_max);
-        components_.push_back(&lp_filter);
-        components_.push_back(&sample_rate);
-        components_.push_back(&max_speed_deviation);
-      }
-    }
-
-    /**
      * \brief The tool to use.
      */
     ToolData tool;
@@ -528,29 +507,6 @@ public:
     }
 
     /**
-     * \brief Copy constructor.
-     *
-     * \param other containing the values to copy.
-     */
-    EGMRunSettings(const EGMRunSettings& other)
-    :
-    RAPIDRecord(other.record_type_name_)
-    {
-      if (this != &other)
-      {
-        cond_time = other.cond_time;
-        ramp_in_time = other.ramp_in_time;
-        offset = other.offset;
-        pos_corr_gain = other.pos_corr_gain;
-        components_.clear();
-        components_.push_back(&cond_time);
-        components_.push_back(&ramp_in_time);
-        components_.push_back(&offset);
-        components_.push_back(&pos_corr_gain);
-      }
-    }
-
-    /**
      * \brief Condition time [s].
      */
     RAPIDNum cond_time;
@@ -612,33 +568,6 @@ public:
       components_.push_back(&activate);
       components_.push_back(&run);
       components_.push_back(&stop);
-    }
-
-    /**
-     * \brief Copy constructor.
-     *
-     * \param other containing the values to copy.
-     */
-    EGMSettings(const EGMSettings& other)
-    :
-    RAPIDRecord(other.record_type_name_)
-    {
-      if (this != &other)
-      {
-        allow_egm_motions = other.allow_egm_motions;
-        use_presync = other.use_presync;
-        setup_uc = other.setup_uc;
-        activate = other.activate;
-        run = other.run;
-        stop = other.stop;
-        components_.clear();
-        components_.push_back(&allow_egm_motions);
-        components_.push_back(&use_presync);
-        components_.push_back(&setup_uc);
-        components_.push_back(&activate);
-        components_.push_back(&run);
-        components_.push_back(&stop);
-      }
     }
 
     /**
@@ -712,12 +641,13 @@ public:
    *
    * \param ip_address specifying the robot controller's IP address.
    */
-  RWSStateMachineInterface(const std::string& ip_address)
+  RWSStateMachineInterface(const std::string ip_address, const Poco::Net::Context::Ptr ptrContext)
   :
   RWSInterface(ip_address,
                SystemConstants::General::DEFAULT_PORT_NUMBER,
                SystemConstants::General::DEFAULT_USERNAME,
-               SystemConstants::General::DEFAULT_PASSWORD),
+               SystemConstants::General::DEFAULT_PASSWORD,
+               ptrContext),
   services_(this)
   {}
 
@@ -728,12 +658,13 @@ public:
    * \param username for the username to the RWS authentication process.
    * \param password for the password to the RWS authentication process.
    */
-  RWSStateMachineInterface(const std::string& ip_address, const std::string& username, const std::string& password)
+  RWSStateMachineInterface(const std::string ip_address, const std::string username, const std::string password, const Poco::Net::Context::Ptr ptrContext)
   :
   RWSInterface(ip_address,
                SystemConstants::General::DEFAULT_PORT_NUMBER,
                username,
-               password),
+               password,
+               ptrContext),
   services_(this)
   {}
 
@@ -743,12 +674,13 @@ public:
    * \param ip_address specifying the robot controller's IP address.
    * \param port for the port used by the RWS server.
    */
-  RWSStateMachineInterface(const std::string& ip_address, const unsigned short port)
+  RWSStateMachineInterface(const std::string ip_address, const unsigned short port, const Poco::Net::Context::Ptr ptrContext)
   :
   RWSInterface(ip_address,
                port,
                SystemConstants::General::DEFAULT_USERNAME,
-               SystemConstants::General::DEFAULT_PASSWORD),
+               SystemConstants::General::DEFAULT_PASSWORD,
+               ptrContext),
   services_(this)
   {}
 
@@ -760,15 +692,17 @@ public:
    * \param username for the username to the RWS authentication process.
    * \param password for the password to the RWS authentication process.
    */
-  RWSStateMachineInterface(const std::string& ip_address,
+  RWSStateMachineInterface(const std::string ip_address,
                            const unsigned short port,
-                           const std::string& username,
-                           const std::string& password)
+                           const std::string username,
+                           const std::string password, 
+                           const Poco::Net::Context::Ptr ptrContext)
   :
   RWSInterface(ip_address,
                port,
                username,
-               password),
+               password,
+               ptrContext),
   services_(this)
   {}
 
@@ -887,7 +821,7 @@ private:
        *
        * \return EGMActions indicating the current EGM action.
        */
-      EGMActions getCurrentAction(const std::string& task) const;
+      EGMActions getCurrentAction(const std::string task) const;
 
       /**
        * \brief Get the settings for the EGM RAPID instructions.
@@ -897,7 +831,9 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool getSettings(const std::string& task, EGMSettings* p_settings) const;
+      bool getSettings(const std::string task, EGMSettings* p_settings) const; // STRUCTURE containing CONFIGURATION
+                      // param 1 = input i.e. specify the "task" for which wish to retrieve information
+                      // param 2 = output i.e. container for the obtained task information (pos/vel modes, speed set, ..)
 
       /**
        * \brief Set the settings for the EGM RAPID instructions.
@@ -907,7 +843,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool setSettings(const std::string& task, const EGMSettings& settings) const;
+      bool setSettings(const std::string task, EGMSettings settings) const;
 
       /**
        * \brief Signal the StateMachine AddIn to start EGM joint motions.
@@ -924,25 +860,11 @@ private:
       bool signalEGMStartPose() const;
 
       /**
-       * \brief Signal the StateMachine AddIn to start EGM position streaming.
-       *
-       * \return bool indicating if the signaling was successful or not.
-       */
-      bool signalEGMStartStream() const;
-
-      /**
        * \brief Signal the StateMachine AddIn to stop any current EGM motions.
        *
        * \return bool indicating if the signaling was successful or not.
        */
       bool signalEGMStop() const;
-
-      /**
-       * \brief Signal the StateMachine AddIn to stop any current position streaming.
-       *
-       * \return bool indicating if the signaling was successful or not.
-       */
-      bool signalEGMStopStream() const;
 
     private:
       /**
@@ -971,7 +893,7 @@ private:
        *
        * \return States indicating the current state of the StateMachine.
        */
-      States getCurrentState(const std::string& task) const;
+      States getCurrentState(const std::string task) const;
 
       /**
        * \brief Checks if a motion task is in the idle state or not.
@@ -980,7 +902,7 @@ private:
        *
        * \return TriBool indicating if the state is idle or not.
        */
-      TriBool isStateIdle(const std::string& task) const;
+      TriBool isStateIdle(const std::string task) const;
 
       /**
        * \brief Checks if a mechanical unit is stationary or not.
@@ -989,7 +911,7 @@ private:
        *
        * \return TriBool indicating if the mechanical unit is stationary or not.
        */
-      TriBool isStationary(const std::string& mechanical_unit) const;
+      TriBool isStationary(const std::string mechanical_unit) const;
 
     private:
       /**
@@ -1020,8 +942,8 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool runCallByVar(const std::string& task,
-                        const std::string& routine_name,
+      bool runCallByVar(const std::string task,
+                        const std::string routine_name,
                         const unsigned int routine_number) const;
 
       /**
@@ -1032,7 +954,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool runModuleLoad(const std::string& task, const std::string& file_path) const;
+      bool runModuleLoad(const std::string task, const std::string file_path) const;
 
       /**
        * \brief Request the execution of the predefined RAPID procedure "runModuleUnload".
@@ -1042,7 +964,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool runModuleUnload(const std::string& task, const std::string& file_path) const;
+      bool runModuleUnload(const std::string task, const std::string file_path) const;
 
       /**
        * \brief Request the execution of the predefined RAPID procedure "runMoveAbsJ".
@@ -1052,7 +974,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool runMoveAbsJ(const std::string& task, const JointTarget& joint_target) const;
+      bool runMoveAbsJ(const std::string task, JointTarget joint_target) const;
 
       /**
        * \brief Request the execution of the predefined RAPID procedure "runMoveJ".
@@ -1062,7 +984,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool runMoveJ(const std::string& task, const RobTarget& rob_target) const;
+      bool runMoveJ(const std::string task, RobTarget rob_target) const;
 
       /**
        * \brief Request the execution of the predefined RAPID procedure "runMoveToCalibrationPosition".
@@ -1071,7 +993,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool runMoveToCalibrationPosition(const std::string& task) const;
+      bool runMoveToCalibrationPosition(const std::string task) const;
 
       /**
        * \brief Set the move speed for the predefined RAPID procedures "runMoveAbsJ" and "runMoveJ".
@@ -1081,7 +1003,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool setMoveSpeed(const std::string& task, const SpeedData& speed_data) const;
+      bool setMoveSpeed(const std::string task, SpeedData speed_data) const;
 
       /**
        * \brief Set the routine name specifying which routine to run.
@@ -1091,7 +1013,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool setRoutineName(const std::string& task, const std::string& routine_name) const;
+      bool setRoutineName(const std::string task, const std::string routine_name) const;
 
       /**
        * \brief Signal the StateMachine AddIn to run RAPID routine(s).
@@ -1206,7 +1128,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool dualSetSettings(const SGSettings& left_settings, const SGSettings& right_settings) const;
+      bool dualSetSettings(SGSettings left_settings, SGSettings right_settings) const;
 
       /**
        * \brief Request turning off both SmartGrippers' first vacuum.
@@ -1317,7 +1239,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool leftSetSettings(const SGSettings& settings) const;
+      bool leftSetSettings(SGSettings settings) const;
 
       /**
        * \brief Request turning off the left SmartGripper's first vacuum.
@@ -1428,7 +1350,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool rightSetSettings(const SGSettings& settings) const;
+      bool rightSetSettings(SGSettings settings) const;
 
       /**
        * \brief Request turning off the right SmartGripper's first vacuum.
@@ -1465,6 +1387,37 @@ private:
        */
       bool signalRunSGRoutine() const;
 
+      bool GripIn() const;
+
+      bool GripOut() const;
+
+      bool JogIn() const;
+
+      bool JogOut() const;
+      
+
+      bool Calibrate(uint max_force, uint max_speed) const;
+      
+      bool Calibrate() const;
+
+      
+
+      bool Initialize(const std::string task) const;
+
+      bool VacuumOn(uint num_valve) const;
+
+      bool VacuumOff(uint num_valve) const;
+
+      bool BlowOn(uint num_valve) const;
+
+      bool BlowOff(uint num_valve) const;
+
+      std::string getPressure(uint num_valve) const;
+
+
+
+
+
     private:
       /**
        * \brief Get the settings for a SmartGripper's RAPID instructions.
@@ -1474,7 +1427,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool getSettings(const std::string& task, SGSettings* p_settings) const;
+      bool getSettings(const std::string task, SGSettings* p_settings) const;
 
       /**
        * \brief Set command input for specifying a SmartGripper's desired command.
@@ -1484,7 +1437,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool setCommandInput(const std::string& task, const SGCommands& command) const;
+      bool setCommandInput(const std::string task, const SGCommands command) const;
 
       /**
        * \brief Set the settings for a SmartGripper's RAPID instructions.
@@ -1494,7 +1447,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool setSettings(const std::string& task, const SGSettings& settings) const;
+      bool setSettings(const std::string task, SGSettings settings) const;
 
       /**
        * \brief Set target position input for specifying where to move a SmartGripper.
@@ -1504,7 +1457,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool setTargetPositionInput(const std::string& task, const float position) const;
+      bool setTargetPositionInput(const std::string task, const float position) const;
 
       /**
        * \brief The RWS interface instance.
@@ -1533,7 +1486,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool getBaseFrame(const std::string& task, Pose* p_base_frame) const;
+      bool getBaseFrame(const std::string task, Pose* p_base_frame) const;
 
       /**
        * \brief Get a motion task's calibration target, extracted during initialization of the task.
@@ -1543,7 +1496,7 @@ private:
        *
        * \return bool indicating if the communication was successful or not.
        */
-      bool getCalibrationTarget(const std::string& task, JointTarget* p_calibration_joint_target) const;
+      bool getCalibrationTarget(const std::string task, JointTarget* p_calibration_joint_target) const;
 
     private:
       /**
@@ -1572,7 +1525,7 @@ private:
        *
        * \return TriBool indicating if the watchdog is active or not.
        */
-      TriBool isActive(const std::string& task) const;
+      TriBool isActive(const std::string task) const;
 
       /**
        * \brief Checks if the watchdog is set to watch an external status signal or not.
@@ -1581,7 +1534,7 @@ private:
        *
        * \return TriBool indicating if the watchdog is set to watch an external status signal or not.
        */
-      TriBool isCheckingExternalStatus(const std::string& task) const;
+      TriBool isCheckingExternalStatus(const std::string task) const;
 
       /**
        * \brief Set the external status signal, which the watchdog can watch.
@@ -1642,7 +1595,7 @@ private:
    *
    * \return bool indicating if the toggling was successful or not.
    */
-  bool toggleIOSignal(const std::string& iosignal);
+  bool toggleIOSignal(const std::string iosignal);
 
   /**
    * \brief Services provided by the StateMachine AddIn.

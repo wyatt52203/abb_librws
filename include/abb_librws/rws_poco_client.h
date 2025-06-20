@@ -1,6 +1,8 @@
 /***********************************************************************************************************************
  *
- * Copyright (c) 2015, ABB Schweiz AG
+ * Copyright (c) 
+ * 2015, ABB Schweiz AG
+ * 2021, JOiiNT LAB, Fondazione Istituto Italiano di Tecnologia, Intellimech Consorzio per la Meccatronica.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with
@@ -32,6 +34,13 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ***********************************************************************************************************************
+ * 
+ * Authors: Gianluca Lentini, Ugo Alberto Simioni
+ * Date:18/01/2022
+ * Version 1.0
+ * Description: this package provides a ROS node that communicates with the controller using Robot Web Services 2.0, original code can be retrieved at https://github.com/ros-industrial/abb_librws
+ * 
+ ***********************************************************************************************************************
  */
 
 #ifndef RWS_POCO_CLIENT_H
@@ -42,7 +51,11 @@
 #include "Poco/Net/HTTPCredentials.h"
 #include "Poco/Net/HTTPResponse.h"
 #include "Poco/Net/WebSocket.h"
+#include "Poco/Net/Context.h"
 #include "Poco/SharedPtr.h"
+
+#include "Poco/Net/HTTPSClientSession.h"
+
 
 namespace abb
 {
@@ -72,7 +85,7 @@ public:
       EXCEPTION_POCO_NET,              ///< POCO net exception.
       EXCEPTION_POCO_WEBSOCKET         ///< POCO WebSocket exception.
     };
-
+    
     /**
      * \brief A struct for containing POCO info.
      */
@@ -97,7 +110,7 @@ public:
            * \brief URI used for the request.
            */
           std::string uri;
-
+        
           /**
            * \brief Content used for the request.
            */
@@ -123,13 +136,13 @@ public:
            * \brief Response content.
            */
           std::string content;
-
+          
           /**
            * \brief A default constructor.
            */
           ResponseInfo() : status(Poco::Net::HTTPResponse::HTTP_OK) {}
         };
-
+       
         /**
          * \brief Info about a HTTP request.
          */
@@ -140,19 +153,19 @@ public:
           */
         ResponseInfo response;
       };
-
+      
       /**
        * \brief A struct for containing WebSocket info.
        */
       struct WebSocketInfo
       {
         /**
-         * \brief Flags from a received WebSocket frame.
+         * \brief Flags from a recieved WebSocket frame.
          */
         int flags;
 
         /**
-         * \brief Content from a received WebSocket frame.
+         * \brief Content from a recieved WebSocket frame.
          */
         std::string frame_content;
 
@@ -166,20 +179,20 @@ public:
        * \brief Container for HTTP info.
        */
       HTTPInfo http;
-
+      
       /**
        * \brief Container for WebSocket info.
        */
       WebSocketInfo websocket;
     };
-
+    
     /**
      * \brief Container for a general status.
      */
     GeneralStatus status;
 
     /**
-     * \brief Container for an exception message (if one occurred).
+     * \brief Container for an exception message (if one occured).
      */
     std::string exception_message;
 
@@ -187,35 +200,35 @@ public:
      * \brief Container for POCO info.
      */
     POCOInfo poco_info;
-
+    
     /**
      * \brief A default constructor.
      */
     POCOResult() : status(UNKNOWN) {};
-
+   
     /**
      * \brief A method for adding info from a HTTP request.
      *
      * \param request for the HTTP request.
      * \param request_content for the HTTP request's content.
      */
-    void addHTTPRequestInfo(const Poco::Net::HTTPRequest& request, const std::string& request_content = "");
-
+    void addHTTPRequestInfo(const Poco::Net::HTTPRequest& request, const std::string request_content = "");
+    
     /**
      * \brief A method for adding info from a HTTP response.
      *
      * \param response for the HTTP response.
      * \param response_content for the HTTP response's content.
      */
-    void addHTTPResponseInfo(const Poco::Net::HTTPResponse& response, const std::string& response_content = "");
-
+    void addHTTPResponseInfo(const Poco::Net::HTTPResponse& response, const std::string response_content = "");
+    
     /**
      * \brief A method for adding info from a received WebSocket frame.
      *
      * \param flags for the received WebSocket frame's flags.
      * \param frame_content for the received WebSocket frame's content.
      */
-    void addWebSocketFrameInfo(const int flags, const std::string& frame_content);
+    void addWebSocketFrameInfo(const int flags, const std::string frame_content);
 
     /**
      * \brief A method to map the general status to a std::string.
@@ -223,7 +236,7 @@ public:
      * \return std::string containing the mapped general status.
      */
     std::string mapGeneralStatus() const;
-
+    
     /**
      * \brief A method to map the opcode of a received WebSocket frame.
      *
@@ -250,12 +263,14 @@ public:
    * \param username for the username to the remote server's authentication process.
    * \param password for the password to the remote server's authentication process.
    */
-  POCOClient(const std::string& ip_address,
+  POCOClient(const std::string ip_address,
              const Poco::UInt16 port,
-             const std::string& username,
-             const std::string& password)
+             const std::string username,
+             const std::string password,
+             const Poco::Net::Context::Ptr ptrContext)
   :
-  http_client_session_(ip_address, port),
+  http_client_session_(ip_address, port, ptrContext),
+  // http_client_session_(ip_address, 443, ptrContext),
   http_credentials_(username, password)
   {
     http_client_session_.setKeepAlive(true);
@@ -266,7 +281,7 @@ public:
    * \brief A destructor.
    */
   ~POCOClient() {}
-
+  
   /**
    * \brief A method for sending a HTTP GET request.
    *
@@ -274,8 +289,8 @@ public:
    *
    * \return POCOResult containing the result.
    */
-  POCOResult httpGet(const std::string& uri);
-
+  POCOResult httpGet(const std::string uri);
+  
   /**
    * \brief A method for sending a HTTP POST request.
    *
@@ -284,8 +299,8 @@ public:
    *
    * \return POCOResult containing the result.
    */
-  POCOResult httpPost(const std::string& uri, const std::string& content = "");
-
+  POCOResult httpPost(const std::string uri, const std::string content = "");
+  
   /**
    * \brief A method for sending a HTTP PUT request.
    *
@@ -294,7 +309,7 @@ public:
    *
    * \return POCOResult containing the result.
    */
-  POCOResult httpPut(const std::string& uri, const std::string& content = "");
+  POCOResult httpPut(const std::string uri, const std::string content = "");
 
   /**
    * \brief A method for sending a HTTP DELETE request.
@@ -303,8 +318,8 @@ public:
    *
    * \return POCOResult containing the result.
    */
-  POCOResult httpDelete(const std::string& uri);
-
+  POCOResult httpDelete(const std::string uri);
+  
   /**
    * \brief A method for setting the HTTP communication timeout.
    *
@@ -336,27 +351,14 @@ public:
    *
    * \return POCOResult containing the result.
    */
-  POCOResult webSocketConnect(const std::string& uri, const std::string& protocol, const Poco::Int64 timeout);
-
+  POCOResult webSocketConnect(const std::string uri, const std::string protocol, const Poco::Int64 timeout);
+  
   /**
    * \brief A method for receiving a WebSocket frame.
    *
    * \return POCOResult containing the result.
    */
-  POCOResult webSocketReceiveFrame();
-
-  /**
-   * \brief Forcibly shut down the websocket connection.
-   *
-   * The connection is shut down immediately.
-   * Subsequently, the function will block until a current call to webSocketReceiveFrame() has finished,
-   * before cleaning up the local state.
-   *
-   * Note that since mutexes do not guarantee the order of acquisition for multiple contenders,
-   * it is undefined how many calls to webSocketReceiveFrame() will still attempt to use the shut down
-   * connection before the local state is cleaned. Those invocation will throw a runtime error.
-   */
-  void webSocketShutdown();
+  POCOResult webSocketRecieveFrame();
 
   /**
    * \brief A method for retrieving a substring in a string.
@@ -367,9 +369,9 @@ public:
    *
    * \return string containing the substring.
    */
-  std::string findSubstringContent(const std::string& whole_string,
-                                   const std::string& substring_start,
-                                   const std::string& substring_end);
+  std::string findSubstringContent(const std::string whole_string,
+                                   const std::string substring_start,
+                                   const std::string substring_end);
 
 private:
   /**
@@ -381,10 +383,10 @@ private:
    *
    * \return POCOResult containing the result.
    */
-  POCOResult makeHTTPRequest(const std::string& method,
-                             const std::string& uri = "/",
-                             const std::string& content = "");
-
+  POCOResult makeHTTPRequest(const std::string method,
+                             const std::string uri = "/",
+                             const std::string content = "");
+ 
   /**
    * \brief A method for sending and receiving HTTP messages.
    *
@@ -396,8 +398,8 @@ private:
   void sendAndReceive(POCOResult& result,
                       Poco::Net::HTTPRequest& request,
                       Poco::Net::HTTPResponse& response,
-                      const std::string& request_content);
-
+                      const std::string request_content);
+  
   /**
    * \brief A method for performing authentication.
    *
@@ -409,14 +411,14 @@ private:
   void authenticate(POCOResult& result,
                     Poco::Net::HTTPRequest& request,
                     Poco::Net::HTTPResponse& response,
-                    const std::string& request_content);
-
+                    const std::string request_content);
+  
   /**
    * \brief A method for extracting and storing information from a cookie string.
    *
    * \param cookie_string for the cookie string.
    */
-  void extractAndStoreCookie(const std::string& cookie_string);
+  void extractAndStoreCookie(const std::string cookie_string);
 
   /**
    * \brief Static constant for the default HTTP communication timeout [microseconds].
@@ -434,32 +436,9 @@ private:
   Poco::Mutex http_mutex_;
 
   /**
-   * \brief A mutex for protecting the client's WebSocket pointer.
-   *
-   * This mutex must be held while setting or invalidating the p_websocket_ member.
-   * Note that the websocket_use_mutex_ must also be held while invalidating the pointer,
-   * since someone may be using it otherwise.
-   *
-   * If acquiring both websocket_connect_mutex_ and websocket_use_mutex_,
-   * the connect mutex must be acquired first.
-   */
-  Poco::Mutex websocket_connect_mutex_;
-
-  /**
    * \brief A mutex for protecting the client's WebSocket resources.
-   *
-   * This mutex must be held while using the p_websocket_ member,
-   * and while invalidating the pointer.
-   *
-   * If acquiring both websocket_connect_mutex_ and websocket_use_mutex_,
-   * the connect mutex must be acquired first.
    */
-  Poco::Mutex websocket_use_mutex_;
-
-  /**
-   * \brief A HTTP client session.
-   */
-  Poco::Net::HTTPClientSession http_client_session_;
+  Poco::Mutex websocket_mutex_;
 
   /**
    * \brief HTTP credentials for the remote server's access authentication process.
@@ -472,10 +451,17 @@ private:
   Poco::Net::NameValueCollection cookies_;
 
   /**
+   * \brief A HTTP client session.
+   */
+  // Poco::Net::HTTPClientSession http_client_session_;
+
+  Poco::Net::HTTPSClientSession http_client_session_;
+  
+  /**
    * \brief A buffer for a WebSocket.
    */
   char websocket_buffer_[BUFFER_SIZE];
-
+  
   /**
    * \brief A pointer to a WebSocket client.
    */
