@@ -4,6 +4,8 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <thread>
+#include <chrono>
 
 // Reads an entire file into a std::string
 std::string readFileAsString(const std::string& filepath)
