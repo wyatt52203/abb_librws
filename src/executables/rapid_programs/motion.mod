@@ -91,7 +91,7 @@ MODULE motion
         StopMove;
         ClearPath;
         StartMove;
-        MoveL [[350, lft, upr], [1,0,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+        MoveJ [[350, lft, upr], [1,0,0,0], [-1,0,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
 
         go := FALSE;
         SetDO MyResetSignal, 0;
