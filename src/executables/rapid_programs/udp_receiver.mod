@@ -36,8 +36,8 @@ MODULE udp_receiver
         int := 100;
         lft := -600;
         rgt := 600;
-        upr := 700;
-        lwr := 100;
+        upr := 850;
+        lwr := 250;
         acc := 100;
         jrk := 100;
         dac := 100;

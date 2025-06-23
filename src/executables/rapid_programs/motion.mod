@@ -34,8 +34,9 @@ MODULE motion
         CONNECT intno2 WITH reset_trap;
         ISignalDO MyResetSignal, 1, intno2;
 
-        WHILE TRUE DO
+        ConfL \Off;
 
+        WHILE TRUE DO
             ! Wait for persistent variable signal
             WaitUntil go;
 
@@ -51,7 +52,7 @@ MODULE motion
                     y := rgt;
                 ENDIF
 
-                IF go MoveL [[300, y, z], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+                IF go MoveL [[350, y, z], [1,0,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
 
                 IF left_to_right THEN
                     y := rgt;
@@ -59,7 +60,7 @@ MODULE motion
                     y := lft;
                 ENDIF
 
-                IF go MoveL [[300, y, z], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+                IF go MoveL [[350, y, z], [1,0,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
 
                 z := z - int;
                 left_to_right := NOT left_to_right;
@@ -90,7 +91,7 @@ MODULE motion
         StopMove;
         ClearPath;
         StartMove;
-        MoveL [[300, lft, upr], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+        MoveL [[350, lft, upr], [1,0,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
 
         go := FALSE;
         SetDO MyResetSignal, 0;
