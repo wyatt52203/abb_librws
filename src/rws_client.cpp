@@ -108,23 +108,56 @@ void RWSClient::SubscriptionResources::add(const std::string resource_uri, const
  * Primary methods
  */
 
-void RWSClient::debugPostAndPrint(const std::string& uri, const std::string& content)
+POCOClient::POCOResult RWSClient::debugPostAndPrint(const std::string& uri)
 {
-  POCOResult result = httpPost(uri, content);
-  
-  std::cout << "Request URI: " << uri << std::endl;
-  std::cout << "Request Content: " << content << std::endl;
+  POCOResult result = httpPost(uri);
+
   std::cout << "HTTP Status: " << result.poco_info.http.response.status << std::endl;
-  std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  if (result.poco_info.http.response.content != "")
+  {
+    std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  }
+
+  return result;
 }
 
-void RWSClient::debugGetAndPrint(const std::string& uri)
+POCOClient::POCOResult RWSClient::debugPostAndPrint(const std::string& uri, const std::string& content)
+{
+  POCOResult result = httpPost(uri, content);
+
+  std::cout << "HTTP Status: " << result.poco_info.http.response.status << std::endl;
+  if (result.poco_info.http.response.content != "")
+  {
+    std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  }
+
+  return result;
+}
+
+POCOClient::POCOResult RWSClient::debugGetAndPrint(const std::string& uri)
 {
   POCOResult result = httpGet(uri);
 
-  std::cout << "Request URI: " << uri << std::endl;
   std::cout << "HTTP Status: " << result.poco_info.http.response.status << std::endl;
-  std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  if (result.poco_info.http.response.content != "")
+  {
+    std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  }
+
+  return result;
+}
+
+POCOClient::POCOResult RWSClient::debugPutAndPrint(const std::string& uri, const std::string& content)
+{
+  POCOResult result = httpPut(uri, content);
+
+  std::cout << "HTTP Status: " << result.poco_info.http.response.status << std::endl;
+  if (result.poco_info.http.response.content != "")
+  {
+    std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  }
+
+  return result;
 }
 
 
@@ -368,7 +401,9 @@ RWSClient::RWSResult RWSClient::startRAPIDExecution()
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_, content_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::stopRAPIDExecution()
@@ -380,7 +415,9 @@ RWSClient::RWSResult RWSClient::stopRAPIDExecution()
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_, content_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::resetRAPIDProgramPointer()
@@ -403,7 +440,9 @@ RWSClient::RWSResult RWSClient::setMotorsOn()
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_, content_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::setMotorsOff()
@@ -478,7 +517,9 @@ RWSClient::RWSResult RWSClient::uploadFile(const FileResource resource, const st
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
 
-  return evaluatePOCOResult(httpPut(uri_, content_), evaluation_conditions_);
+  POCOResult result = debugPutAndPrint(uri_, content_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::deleteFile(const FileResource resource)
@@ -503,7 +544,9 @@ RWSClient::RWSResult RWSClient::loadFileToRapid(const FileResource resource, std
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
 
-  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_, content_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::unloadFileFromRapid(std::string task_name)
@@ -515,7 +558,9 @@ RWSClient::RWSResult RWSClient::unloadFileFromRapid(std::string task_name)
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
 
-  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::startSubscription(SubscriptionResources resources)
@@ -657,7 +702,9 @@ RWSClient::RWSResult RWSClient::requestMasterShip()
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::releaseMasterShip()
@@ -667,8 +714,10 @@ RWSClient::RWSResult RWSClient::releaseMasterShip()
   evaluation_conditions_.reset();
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+
+  POCOResult result = debugPostAndPrint(uri_);
  
-  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::requestMasterShipMotion()

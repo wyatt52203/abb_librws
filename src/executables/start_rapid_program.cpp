@@ -20,29 +20,36 @@ int main()
     abb::rws::RWSInterface rws_interface(ip, username, password, ptrContext);
 
     // Turn off existing processes
-    std::cout << "program off: " << rws_interface.stopRAPIDExecution() << std::endl;
+    std::cout << "program off: " << std::endl;
+    rws_interface.stopRAPIDExecution();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
     if (attempt_local_connect) {
         std::cout << "requesting local user registration: " << rws_interface.registerLocalUser("Admin", "ExternalApplication", "ExternalLocation") << std::endl;
         std::cout << "set to auto mode: " << rws_interface.setAutoMode() << std::endl;
     }
 
     // turn motors on
-    std::cout << "set motors on: " << rws_interface.setMotorsOn() << std::endl;
+    std::cout << "set motors on: " << std::endl;
+    rws_interface.setMotorsOn();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
     // Request MasterShip (Required to reset program pointer)
-    std::cout << "requesting mastership: " << rws_interface.requestMasterShip() << std::endl;
+    std::cout << "requesting mastership: " << std::endl;
+    rws_interface.requestMasterShip();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-    std::cout << "reset pointer to main status: " << rws_interface.resetRAPIDProgramPointer() << std::endl;
+    std::cout << "reset pointer to main status: " << std::endl;
+    rws_interface.resetRAPIDProgramPointer();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     
-    std::cout << "releasing mastership: " << rws_interface.releaseMasterShip() << std::endl;
+    std::cout << "releasing mastership: " << std::endl;
+    rws_interface.releaseMasterShip();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
     // start program
-    std::cout << "program on status: " << rws_interface.startRAPIDExecution() << std::endl;
+    std::cout << "program on: " << std::endl;
+    rws_interface.startRAPIDExecution();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 

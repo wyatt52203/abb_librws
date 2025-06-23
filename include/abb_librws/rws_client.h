@@ -365,9 +365,13 @@ public:
   }
   
   
-  void debugPostAndPrint(const std::string& uri, const std::string& content);
+  POCOClient::POCOResult debugPostAndPrint(const std::string& uri);
 
-  void debugGetAndPrint(const std::string& uri);
+  POCOClient::POCOResult debugPostAndPrint(const std::string& uri, const std::string& content);
+
+  POCOClient::POCOResult debugGetAndPrint(const std::string& uri);
+
+  POCOClient::POCOResult debugPutAndPrint(const std::string& uri, const std::string& content);  
 
   /**
    * \brief A method for retrieving the configuration instances of a type, belonging to a specific configuration topic.
