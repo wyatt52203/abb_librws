@@ -50,6 +50,7 @@
 #include <sstream>
 #include <vector>
 #include <iostream>
+#include <unordered_map>
 
 #include "Poco/DOM/DOMParser.h"
 
@@ -709,7 +710,7 @@ public:
    * \brief Method for getting the recent event logs on the controller
    *
    */  
-  RWSResult getELog();
+  RWSResult getELog(const std::unordered_map<std::string, std::string>& codeDescriptions);
 
   /**
    * \brief Method for parsing a communication result into a XML document.
@@ -849,7 +850,7 @@ private:
    *
    * \return std::string containing timestamped event codes
    */
-  std::string parseEventLog(const std::string& response);
+  std::string parseEventLog(const std::string& response, const std::unordered_map<std::string, std::string>& codeDescriptions);
   
   /**
    * \brief Static constant for the log's size.

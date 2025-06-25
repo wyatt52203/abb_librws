@@ -457,9 +457,9 @@ bool RWSInterface::releaseMasterShipMotion()
   return rws_client_.releaseMasterShipMotion().success;
 }
 
-bool RWSInterface::getELog()
+bool RWSInterface::getELog(const std::unordered_map<std::string, std::string>& codeDescriptions)
 {
-  RWSClient::RWSResult res = rws_client_.getELog();
+  RWSClient::RWSResult res = rws_client_.getELog(codeDescriptions);
   return res.success;
 }
 

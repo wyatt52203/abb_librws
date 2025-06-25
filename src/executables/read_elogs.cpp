@@ -6,6 +6,7 @@
 #include <string>
 #include <thread>
 #include <chrono>
+#include <unordered_map>
 
 
 int main()
@@ -21,6 +22,7 @@ int main()
 
     std::string original_file_name = controller_file_name;
     std::string controller_file_path = "Home/Programs/Wizard";
+    std::unordered_map<std::string, std::string> codeDescriptions;
 
 
     // Create Poco SSL context with no verification (self-signed certs likely)
@@ -29,7 +31,22 @@ int main()
     // Create RWS interface
     abb::rws::RWSInterface rws_interface(ip, username, password, ptrContext);
 
+    // generate event log description map
+    std::ifstream file("/root/abb_librws/docs/event_codes/event_log_lookup_full.csv");
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        std::istringstream iss(line);
+        std::string code, description;
+
+        if (std::getline(iss, code, ',') && std::getline(iss, description))
+        {
+            codeDescriptions[code] = description;
+        }
+    }
+
     // prints elogs
-    rws_interface.getELog();
+    rws_interface.getELog(codeDescriptions);
 
 }

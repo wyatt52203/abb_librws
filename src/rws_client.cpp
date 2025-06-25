@@ -745,7 +745,7 @@ RWSClient::RWSResult RWSClient::releaseMasterShipMotion()
   return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
 }
 
-RWSClient::RWSResult RWSClient::getELog()
+RWSClient::RWSResult RWSClient::getELog(const std::unordered_map<std::string, std::string>& codeDescriptions)
 {
   uri_ = Resources::RW_ELOG + "/0";
   evaluation_conditions_.reset();
@@ -753,7 +753,7 @@ RWSClient::RWSResult RWSClient::getELog()
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
 
   POCOResult result = httpGet(uri_);
-  std::string event_log = parseEventLog(result.poco_info.http.response.content);
+  std::string event_log = parseEventLog(result.poco_info.http.response.content, codeDescriptions);
 
   std::cout << event_log;
 
@@ -905,7 +905,9 @@ std::string RWSClient::generateFilePath(const FileResource& resource)
   return Services::FILESERVICE + "/" + resource.directory + "/" + resource.filename;
 }
 
-std::string RWSClient::parseEventLog(const std::string& xml)
+std::string RWSClient::parseEventLog(
+    const std::string& xml, 
+    const std::unordered_map<std::string, std::string>& codeDescriptions)
 {
     std::string result;
     std::string::size_type pos = 0;
@@ -926,8 +928,28 @@ std::string RWSClient::parseEventLog(const std::string& xml)
         std::string::size_type timeEnd = xml.find("</span>", timePos);
         std::string tstamp = xml.substr(timePos, timeEnd - timePos);
 
+        // Lookup code description
+        std::string shortDesc = "Unknown Event";
+        std::string fullDesc;
+        auto it = codeDescriptions.find(code);
+        if (it != codeDescriptions.end())
+        {
+            const std::string& desc = it->second;
+            std::string::size_type commaPos = desc.find(',');
+            if (commaPos != std::string::npos)
+            {
+                shortDesc = desc.substr(0, commaPos);
+                fullDesc = desc.substr(commaPos + 1);
+            }
+            else
+            {
+                shortDesc = desc;  // fallback: no comma found
+            }
+        }
+
         // Append to result
         result += "Event Code: " + code + "; Time: " + tstamp + "\n";
+        result += shortDesc + "\n" + fullDesc + "\n\n";
 
         pos = timeEnd;
     }
