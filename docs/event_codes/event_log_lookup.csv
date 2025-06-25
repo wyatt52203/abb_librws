@@ -1,0 +1,2851 @@
+Event Code,Description
+10002,Program pointer has been reset or
+10010,Motors OFF state
+10011,Motors ON state
+10012,Safety guard stop state
+10013,Emergency stop state
+10014,System failure state
+10015,Manual mode selected
+10016,Automatic mode requested
+10017,Automatic mode confirmed
+10018,Manual mode full speed requested
+10019,Manual mode full speed confirmed
+10020,Execution error state
+10021,Execution error reset
+10024,Collision triggered
+10025,Collision confirmed
+10026,Collision retraction
+10027,Collision retraction fail
+10030,All axes commutated
+10031,All axes calibrated
+10032,All revolution counters updated
+10033,All axes synchronized
+10034,Axis not commutated
+10035,Axis not calibrated
+10036,Revolution counter not updated
+10037,Axis not synchronized
+10038,Robot memory is OK
+10039,Robot memory is not OK
+10040,Program loaded
+10041,Program deleted
+10042,Axis synchronized
+10044,Program Pointer updated
+10045,System restarted
+10046,System reset
+10048,Background task did stop
+10051,Event routine error
+10052,Regain start
+10053,Regain ready
+10056,System shutdown initiated
+10057,The controller name has been changed
+10061,A target has been modified
+10062,A module has been edited.
+10063,Module has been edited
+10064,A module has been erased.
+10066,Not possible to load system module
+10067,Program Pointer Reset
+10068,Start Program
+10074,NFS server up
+10075,NFS server down
+10076,FTP server up
+10077,FTP server down
+10078,A module has been edited
+10079,A module has been edited
+10082,RAPID Task supervision
+10083,RAPID Task supervision
+10084,RAPID Task supervision
+10090,Reset RAPID done
+10091,Restart not possible
+10092,(Re)start not possible
+10095,At least one task is unchecked in the task
+10096,
+10097,Restart not possible
+10098,Restart not possible
+10099,Program start rejected
+10100,SFTP server up
+10101,SFTP server down
+10106,Time for service
+10107,Close to service
+10108,Time for service
+10109,Close to service
+10110,Gearbox needs service
+10111,Gearbox reached service interval
+10112,SIS calendar notification
+10115,A backup is made of the robot memory
+10116,Robot memory is restored from the
+10117,The robot memory is cleared
+10118,The backup of the robot memory is
+10120,Program stopped
+10121,Program stopped
+10122,Program stopped
+10123,Program stopped
+10124,Program stopped
+10125,Program stopped
+10126,Program stopped
+10127,Backward execution not possible
+10128,Backward execution not possible
+10129,Program stopped
+10130,Program stopped
+10131,Program stopped
+10132,Program stopped
+10133,Program stopped
+10134,POWER_ON event routine stopped
+10135,Program stopped
+10136,Program stopped
+10137,Program stopped
+10138,Program stopped
+10139,Execution is stopped
+10140,Speed adjusted
+10141,Program pointer moved to cursor
+10142,Call routine
+10143,Cancel call routine
+10144,Simulate of Wait instruction
+10145,Task selection panel is set
+10146,Task selection panel is cleared
+10147,Setting of variable
+10148,Setting of IO
+10149,Program Pointer moved to routine
+10150,Program started
+10151,Program started
+10152,Program started
+10153,Run mode is changed
+10154,Run mode is changed
+10155,Program restarted
+10156,Program restarted
+10157,Program restarted
+10158,Program started
+10159,Program started
+10160,Pulsing of IO
+10170,Background task
+10171,Background task
+10172,Background task
+10173,Background task
+10174,Background task
+10175,Background task
+10176,Background task
+10177,Task refuses to start
+10185,Task could not be prepared for start
+10190,Protected area not done
+10191,Protected area not done
+10192,Protected area not done
+10193,Protected area not done
+10194,Protected area not done
+10195,Protected area not done
+10196,Protected area not done
+10200,Event logs are cleared
+10201,Event logs for one domain is cleared
+10202,Date and/or time is changed
+10205,Configuration parameter changed
+10206,Configuration file has been loaded
+10210,Execution cancelled
+10211,Execution cancelled
+10212,Execution cancelled
+10213,Execution cancelled
+10214,Execution cancelled
+10215,Execution cancelled
+10217,Execution cancelled
+10218,Execution cancelled
+10219,Execution cancelled
+10230,Backup step ready
+10231,Backup step ready
+10232,Backup step ready
+10233,Backup step ready
+10250,Restore step ready
+10251,Restore step ready
+10252,Restore step ready
+10253,Restore step ready
+10254,Restore step ready
+10255,Restore step ready
+10260,System diagnostics info generated
+10261,System diagnostics info unavailable
+10262,System log has been created
+10270,Cyclic Brake Check Done
+10271,Cyclic Brake Check Started
+10272,Brake Check Done
+10273,Brake Check Started
+10280,The coordinate system has been changed
+10281,The coordinate system has been changed
+10282,The coordinate system has been changed
+10283,The coordinate system has been changed
+10284,Non motion execution mode is set
+10285,Non motion execution mode has been
+10286,Payload has been changed
+10287,Total load has been changed
+10288,The Work Object has been changed
+10289,The tool has been changed
+10290,The robot has been calibrated
+10291,Goto position
+10292,Revolution Counter updated
+10293,Path Supervision is set to On
+10294,Path Supervision is set to Off
+10295,The Sensitivity for Path Supervision is
+10296,Jog Supervision is set to On
+10297,Jog Supervision is set to Off
+10298,The Sensitivity for Jog Supervision is
+10300,A Reset RAPID is ordered
+10304,An update has been ordered
+10350,Update of task failed
+10351,A task is removed
+10352,A task is added
+10353,A task is reinstalled
+10354,Restore aborted due to lost system data.
+10355,Restore error
+10356,Restore warning
+10400,User
+10401,User
+10420,New unsafe robot path
+10421,Planned path not aborted
+10451,Update of RobotWare system failed
+10452,Update of RobotWare system done
+10455,Update of RobotWare system error
+10457,Event routines are deferred
+10458,System state could not be restored after
+10459,System restored from a snapshot
+10460,System state could not be restored after
+10461,System recovery done
+11020,Backup error
+11024,Backup error
+11025,Backup error
+11026,Backup error
+11029,Backup error
+11031,Backup error
+11036,Backup error
+11037,Backup error
+11039,Backup error
+11041,Backup error
+11042,Backup error
+11044,Backup error
+11045,Backup error
+11120,Backup error
+11127,Backup error
+11128,Backup error
+11129,Backup error
+11130,Backup error
+11136,Backup error
+11220,Backup error
+11221,Backup error
+11222,Backup error
+11223,Backup error
+11224,Backup error
+11225,Backup error
+11226,Backup error
+11229,Backup error
+11230,Backup error
+11231,Backup error
+11236,Backup error
+11237,Backup error
+11238,Backup error
+11261,Backup removed
+11262,Backup error
+11263,Backup operation failed
+12020,Restore error
+12023,Restore error
+12024,Restore error
+12029,Restore error
+12030,Restore error
+12031,Restore error
+12032,Restore error
+12033,Restore error
+12035,Restore error
+12036,Restore error
+12120,Restore error
+12123,Restore error
+12129,Restore error
+12130,Restore error
+12131,Restore error
+12134,Restore error
+12136,Restore error
+12220,Restore error
+12230,Restore error
+12231,Restore error
+12236,Restore error
+12320,Restore error
+12323,Restore error
+12338,Restore error
+12341,Restore error
+12342,Restore error
+12350,Backup pending
+12351,Backup pending
+12510,Network subnet mask illegal
+12511,Network interface IP address illegal
+12512,Network gateway IP address illegal
+12513,No parameters from the DHCP server
+12514,Network interface initialization error
+12515,Network interface IP addresses overlap
+12516,Port forwarding configuration failed
+12521,Network service disabled
+12610,Available RAM memory low
+12611,Available RAM memory very low
+12612,Available RAM memory too low
+12620,Mass storage predictive failure
+12700,Missing time zone information
+12705,OPC UA Server up and running
+12706,WAN IP Address Changed
+20012,System failure state active
+20030,Axis not commutated
+20031,Axis not calibrated.
+20032,Rev. counter not updated
+20033,Axis not synchronized.
+20034,Robot memory is not OK
+20051,Not allowed command
+20054,Not allowed command
+20059,Not allowed command
+20060,Not allowed command
+20061,Not allowed command
+20062,Not allowed command
+20063,Not allowed command
+20064,Not allowed command
+20066,Not allowed command
+20067,Not allowed command
+20068,Not allowed command
+20069,Not allowed command
+20070,Not allowed command
+20071,Not allowed command
+20072,Not allowed command
+20073,Not allowed command
+20074,Not allowed command
+20075,Not allowed command
+20076,Not allowed command
+20080,Not allowed command
+20081,Not allowed command
+20082,Not allowed command
+20083,Not allowed command
+20084,Not allowed command
+20088,Automatic Mode Rejected
+20089,Automatic Mode Rejected
+20092,Not allowed command
+20093,Automatic Mode Rejected
+20094,Load name could not be found
+20095,Tool name could not be found
+20096,WorkObject name could not be found
+20103,Controller busy updating Task Selection
+20104,The system path is too long.
+20105,Backup already in progress
+20106,Backup path
+20126,Load data has changed
+20127,Tool data has changed
+20128,Work object data has changed
+20131,Automatic Mode Rejected
+20132,Blocked I/O signals
+20133,Debug Settings in Auto
+20134,Call Chain
+20135,Debug Settings in Auto
+20136,Reduced Speed
+20137,Debug Settings in Auto
+20138,Disabled Tasks
+20139,Debug Settings in Auto
+20140,Motors On rejected
+20141,Motors Off rejected
+20142,Start rejected
+20143,Start at main rejected
+20144,Stop rejected
+20145,Stop cycle rejected
+20146,Manual interrupt rejected
+20147,Load and start rejected
+20149,Error reset rejected
+20150,Load failure
+20153,Motors On and Start rejected
+20154,Stop instruction rejected
+20156,Undefined Argument
+20157,Undefined Argument
+20158,No System Input signal
+20159,No System Output signal
+20161,Path not found
+20162,Write error
+20164,Reconfig failed
+20165,Program Pointer lost.
+20166,Refuse to save module
+20167,Unsaved module
+20170,The system was stopped
+20171,The system was halted
+20172,The system has failed
+20176,Analog System Output Outside Limits
+20178,Wrong task name configured
+20181,System Reset rejected.
+20182,The System Input Signal QuickStop is
+20184,Incorrect argument for System Inputs
+20188,System data is not valid
+20189,Robot data not valid
+20193,Robot data update warning
+20194,Auto-recovery backup could not be
+20195,System state from last shutdown is lost
+20196,Module saved
+20271,Text files are no longer supported.
+20280,Symbol conflict
+20282,Resource and index exist
+20283,Text database is full.
+20284,Wrong Signal Type For System Input
+20285,Wrong Signal Type For System Output
+20286,Not Unique I/O-Signal For System Output
+20287,Not Unique I/O-signal For System Input
+20288,Unknown System Output Type
+20289,Unknown System Input Type
+20290,Unknown Mechanical Unit Name For
+20291,Unknown System Input Restriction Type
+20292,Unknown System Input Restriction
+20293,The Requested Action is Restricted
+20294,Action
+20295,Signal cannot be used as System Output.
+20296,Wrong task name configured
+20297,System Output Communication Failure
+20299,Several I/O-signals Configured For System
+20300,Restricted System Input
+20301,Restricted System Output
+20321,Not-a-Number
+20322,Positive infinity
+20323,Negative infinity
+20324,Incorrect argument for System IO Signal
+20326,Incorrect argument for System IO Signal
+20327,System Signal already installed
+20350,Not a valid task name
+20351,Max number of tasks exceeded
+20352,Not a valid Motion Planner name
+20353,Mechanical unit not found
+20354,The argument is undefined
+20355,Mechanical Unit Group name not correct
+20356,Maximum number of Motion tasks
+20357,No configured Motion task
+20358,No members of
+20359,Cfg type
+20360,Unknown event in cfg type
+20361,Only shared modules in the shared task
+20362,Not defined task name
+20363,Module not a system module
+20364,Max number of Mechanical Unit Groups
+20365,Update of configuration is done
+20366,Type error in task configuration
+20367,No configured mechanical units
+20368,Not connected Mechanical Unit Group
+20370,Failed to read configuration data for regain
+20371,A default Mechanical Unit Group is used
+20372,Failed to read configuration data.
+20373,Missing task name
+20380,No Motion Planner connected to
+20381,Error when recreating path after power
+20390,Start rejected
+20391,Start at main rejected
+20392,Manual interrupt rejected
+20393,Load and start rejected
+20394,Motors On and Start rejected.
+20395,Load rejected
+20396,Manual interrupt rejected
+20397,Manual interrupt rejected
+20398,Automatic Mode Rejected
+20399,Static/Semi-static task started
+20400,Debug Settings In Auto
+20401,Too many CFG instances
+20402,Automatic Mode Rejected
+20403,RAPID Spy deactivated
+20404,Debug Settings In Auto
+20408,PP to Main rejected
+20409,PP to Main rejected
+20410,Energy Saving has been reset
+20411,Energy saving activated
+20412,Energy saving deactivated
+20413,Motors On failed
+20414,Program start failed
+20415,Motors On/Program Start failed
+20416,Energy saving blocked
+20417,Energy saving unblocked
+20418,Energy saving already active
+20425,Write Access rejected
+20426,Write Access rejected
+20440,Failed to initialize FW upgrade framework
+20441,Failed to initialize firmware patch
+20443,Multiple firmware upgrade restarts
+20573,Controller ID is Missing
+20578,ABB internal licenses are used
+20600,Unofficial RobotWare release
+20602,Unofficial RobotWare image
+20610,Motor phase short circuit
+20620,The system has entered an internal test
+20630,Camera job missing Output to Rapid
+20633,Integrated Vision not installed
+20634,No result for current camera job
+20635,Too many cameras connected
+20636,Duplicated camera name
+20637,Camera permission denied
+20638,Option missing
+20639,Camera connection up
+20640,Camera connection down
+20641,New camera detected
+20642,DryRun configuration error
+20643,DryRun configuration error
+20644,DryRun configuration error
+20645,DryRun configuration error
+20646,DryRun aborted
+20647,DryRun aborted
+20648,DryRun aborted
+20649,DryRun configuration error
+20650,DryRun aborted
+20651,Image request timed out
+20652,Camera job is not valid
+20653,DryRun rejected
+20655,No job is loaded in the camera
+20656,Camera refresh started
+20657,Camera IP address changed
+20658,Camera updated
+20659,Camera instruction
+20660,Debug service not using default values
+20661,Debug service using default values
+20665,Error during automatic calibration
+20666,Error during automatic calibration
+20667,System state is lost
+20668,Uas grant removed
+20669,The camera user is missing sufficient
+20670,Obsolete compression format
+20671,Restricted command
+20672,Restricted command
+20673,No brake release function available
+20674,Invalid subnet mask
+20675,Invalid IP address
+31810,DeviceNet master/slave board is missing
+31910,PROFIBUS master board is missing
+31911,Profibus board update error
+31912,PROFIBUS master board failure
+31913,PROFIBUS master board internal error
+31914,PROFIBUS network startup error
+31915,PROFIBUS network error
+31916,PROFIBUS network OK
+31917,PROFIBUS master board exception
+32540,Drive unit firmware re-flash started
+32541,Drive unit firmware re-flash complete
+32542,Drive unit hardware not supported
+32543,Drive unit firmware re-flash failed
+32544,Drive unit firmware file not found
+32545,Drive unit firmware file type error
+32546,Drive unit firmware file error
+32550,Firmware re-flash started
+32551,Firmware re-flash completed
+32552,Firmware re-flash failed
+32553,Firmware file is corrupt
+32554,Firmware file not found
+32560,Axis computer firmware re-flash started
+32561,Axis computer firmware re-flash complete
+32562,Axis computer communication error
+32563,Axis computer hardware not supported
+32564,Axis computer firmware re-flash failed
+32565,Axis computer firmware file not found
+32567,Axis computer firmware file type error
+32568,Axis computer firmware file error
+32569,Corrupt axis computer hardware
+32570,Firmware re-flash started
+32571,Firmware re-flash completed
+32572,Firmware re-flash failed
+32573,Unable to download firmware file
+32574,Corrupt axis computer hardware
+32575,Found no axis computer board
+32576,Axis firmware: No communication
+32577,Axis computer hardware data error
+33503,Revolution counter update failure
+33601,Anybus module is missing
+34101,Drive system not supported
+34102,Missing rectifier unit
+34200,Lost communication with all drive units
+34202,Lost communication with drive unit
+34203,Motor current too high
+34251,Incoming mains phase missing
+34252,Incoming mains missing
+34255,Rectifier temperature error
+34256,Rectifier temperature warning
+34257,Open circuit in bleeder resistor circuit
+34258,Short circuit in bleeder resistor circuit
+34261,Rectifier startup error
+34263,Rectifier startup error
+34264,Rectifier inrush limitation active in Motors
+34265,DC link short circuit error
+34266,Rectifier inrush limitation and bleeder
+34267,Too many rectifiers connected
+34268,Rectifier charging error
+34269,AC Over voltage error
+34270,AC input not symmetric warning
+34271,AC input rotation warning
+34272,AC Over current error
+34273,DC intermediate over voltage error
+34274,DC over voltage error
+34275,DC over current error
+34276,DC short circuit error
+34277,Brake supply error
+34278,Rectifier over temperature error
+34279,Rectifier regulator error
+34280,Rectifier shutdown error
+34300,Unknown drive unit type
+34303,Motor current warning
+34304,Motor current warning
+34306,Drive unit temperature error
+34307,Drive unit temperature warning
+34308,Drive unit critical temperature error
+34309,Drive transistor current too high
+34311,Drive inverter saturated warning
+34312,Missing drive unit
+34313,Wrong type of drive unit
+34314,Missing drive unit node
+34316,Motor current error
+34317,Motor current error
+34318,Drive inverter saturated error
+34319,Drive unit critical error
+34320,Too many drive nodes connected
+34321,Drive unit configuration error
+34322,Drive unit configuration error
+34324,Drive unit junction temperature warning
+34325,Drive unit junction temperature error
+34326,Drive unit HW temperature warning
+34327,Drive unit HW temperature error
+34328,Drive unit HW detected short warning
+34329,Drive unit HW detected short error
+34330,Resolver error
+34331,Resolver error
+34332,Motor position consistency error
+34333,Motor position commutation error
+34334,Arm side torque sensor error
+34335,Current tracking error
+34336,Motor current error
+34337,Parameter configuration error
+34338,Resolver sampling error
+34339,Resolver start position error
+34340,Resolver revolution counter error
+34341,Torque generation could not be verified
+34400,DC link voltage too high
+34401,DC link voltage too low warning
+34402,DC link voltage too low
+34404,DC link voltage is critically high
+34405,DC link voltage too high warning
+34406,Drive unit power supply error
+34407,Drive unit internal error
+34408,Drive unit hardware data error
+34409,Drive unit startup error
+34410,Too many drive units connected
+34411,DC link error
+34412,DC ground error
+34413,DC short error
+34415,Drive unit communication warning
+34416,Drive unit communication error
+34417,Drive unit internal warning
+34423,Incompatible drive unit types
+34430,Serial measurement board not found
+34431,Serial measurement board communication
+34432,Serial measurement board communication
+34433,Serial measurement board battery low
+34434,Brake short circuit
+34435,Manual brake release switch faulty
+34436,Manual brake release switch fault cleared
+34437,Emergency brake supply failure
+34438,Brake switch short and emergency brake
+34439,Emergency brake switch short
+34440,Short circuit of the brake and the
+34441,Manual brake release switch timeout
+34442,Drive Unit Power Board Temperature 1
+34443,Drive Unit Power Board Temperature 1
+34444,Drive Unit Power Board Temperature 2
+34445,Drive Unit Power Board Temperature 2
+34446,"Parity warning, detected by the serial"
+34447,"Parity error, detected by the serial"
+34448,Timeout warning in the communication
+34449,Timeout error in the communication with
+34450,"Parity warning, detected by the FPGA"
+34451,"Parity error, detected by the FPGA"
+34452,Brake over current error
+34453,Emergency brake over current error
+34454,Drive unit internal error
+34455,Drive unit internal failure
+34456,Drive system does not allow Motors On
+34457,DC bus midpoint voltage out of range
+34458,DC bus midpoint voltage out of range error
+36500,Failed to configure the Connected
+36502,Could not communicate with the
+36503,Connected Services gateway firmware
+36504,Connected Services gateway firmware
+36505,Connected Services gateway detected
+36506,Connected Services gateway connected
+36507,Connected Services gateway failed to go
+36508,Firmware update of Connected Services
+36600,Failed to initialize the robot signal
+36601,Failed to start up the robot signal
+36602,Energy bank not charged
+36603,Default turn off behavior not overridden
+36604,Power-up sequence failed.
+36605,Robot signal exchange proxy module
+36606,Fan Control parameters not set
+36607,Failure on the 24V_PC power rail
+36608,Failure on the 24V_HMI power rail
+36609,Failure on the 24V_SYS power rail
+36610,Failure on the 24V_SYS_DRV power rail
+36611,Failure on the 24V_IO power rail
+36612,Failure on the 24V_COOL_MAN power rail
+36613,Failure on the 24V_BRAKE power rail
+36614,Failure on the 24V_COOL_INT power rail
+36615,Failure on the 24V_COOL_EXT power rail
+36616,Ambient temperature is too high
+36700,LED board firmware upgrade required
+36701,LED board firmware upgrade done
+36702,LED board firmware upgrade failed
+37001,Motors ON contactor activation error
+37043,Safety signals overloaded
+37044,Overload on Panel Board digital output
+37045,Faulty external computer fan
+37046,Safety signals overloaded
+37049,Activation contactor activation error
+37056,Cooling fan error
+37094,Activate connection error
+37101,Brake Failure
+37109,Brake Release Failure
+37110,Missing signal for Leak Detection
+37111,Leak Detected
+37230,Brake Performance Warning
+37231,Brake Performance Error
+37232,Cyclic Brake Check Configuration Error
+37233,Cyclic Brake Check Configuration Error
+37234,Brake Performance Warning
+37235,Brake Performance Error
+37236,Brake Check Configuration Error
+37237,Brake Check Configuration Error
+37274,Brake Maintenance
+37275,Brake Performance
+38100,Configuration failure
+38101,SMB Communication Failure
+38102,Internal failure
+38103,Lost communication with the SMB
+38104,Overspeed During Teach Mode
+38106,Drive unit is not connected to an SMB link
+38107,Wrong order of chain connection serial
+38108,Broken sequence order of serial
+38109,SMB Communication failure
+38110,Configuration failure
+38200,Battery backup lost
+38201,Serial Board not found
+38203,SMB offset X error
+38204,SMB offset Y error
+38208,Resolver error
+38209,Resolver error
+38211,Measurement functionality error
+38213,Battery charge low
+38214,Battery failure
+38215,Battery supervision failure
+38216,SMB functionality error
+38217,SMB functionality error
+38218,Encoder high temperature
+38219,SMB version not supported
+38220,SMB battery backup lost
+38221,SMB functionality error
+38233,Force sensor safety channel error
+38234,Max Force or Torque reached
+38235,Saturation warning of force sensor input
+38236,Saturation error of force sensor input
+38237,Configuration error for Force
+38238,Force Sensor has too noisy signals
+38239,Battery failure
+38240,Serial Board not found
+38502,Rectifier bleeder open circuit warning
+38503,Rectifier bleeder open circuit error
+38504,Rectifier bleeder short circuit warning
+38505,Rectifier bleeder short circuit error
+38506,Rectifier phase voltage too low
+38507,Rectifier mains missing
+38508,Rectifier grid voltage is too low
+38509,Rectifier grid frequency is out of range.
+38510,Rectifier DC bus is charging
+38511,Rectifier over current on grid side
+38512,Rectifier error
+38513,Rectifier AC input overload
+38514,Rectifier 24 V Trunk overload
+38515,Rectifier AC input over voltage warning
+38516,Rectifier AC input over voltage error
+38517,Rectifier grid open circuit
+38518,Rectifier 24 V Trunk timeout
+38519,Rectifier AC input over current warning
+38520,Rectifier AC input over current error
+38521,Rectifier ACOUT OFF warning
+38522,Rectifier buck over voltage software error
+38523,Rectifier buck over current software error
+38524,Rectifier buck over current hardware error
+38525,Rectifier 24 V Brake power not ok
+38526,Rectifier heatsink over temperature
+38527,Rectifier heatsink over temperature error
+38528,Rectifier CPU temperature too high
+38529,Rectifier brake power good timeout
+38530,Rectifier brake 24 V over voltage
+38531,Rectifier brake 24 V overload
+38532,Rectifier bleeder overload
+38533,Rectifier CPU temperature too low
+38534,Rectifier heatsink temperature too low
+38535,Rectifier AC out overload
+38536,Rectifier AC Out over current Common
+38537,Rectifier DC bus charge timeout
+38538,Rectifier holdup supervision too low
+38539,Rectifier fan speed too low
+38540,Rectifier 24 V Sys lost
+38541,Rectifier 24 V Trunk over voltage
+38542,Rectifier communication failure
+38543,Rectifier power supply error
+38544,Rectifier DC voltage too low
+38545,Rectifier DC under voltage warning
+38546,Rectifier DC over voltage warning
+38547,Rectifier DC over voltage error
+38548,Rectifier critical DC voltage error
+39351,The drive system communication link is
+39352,Drive system communication error.
+39353,Drive link unit communication error.
+39354,No drive system detected during startup.
+39355,No drive system interrupts received.
+39408,Rectifier Unit has the wrong type code
+39409,Capacitor Unit has the wrong type code
+39479,External Motor PTC Temperature Error
+39487,PTC Temperature Supervision Not
+39488,Missing sensor for force control
+39503,Power Supply Overtemperature
+39504,Power Supply to Brakes Overload
+39505,Mains Voltage to Power Supply Lost
+39520,Communication lost with Drive Module
+39522,Axis computer not found
+39523,Unused Axis computer connected
+39525,Drive Module startup error
+39526,Axis computer not found in Multi Move
+39527,Axis computer not found in single Multi
+39530,Axis Computer Lost Communication With
+39531,Run chain glitch test not running
+39600,Invalid unit position for drive module
+39601,Wrong unit position for drive module
+39602,Communication failure
+39603,Communication lost with Power Unit
+39604,Power Unit reports communication error
+39605,Power Unit 24 V supply error
+39606,Power Unit internal error
+39607,DC link voltage too high
+39608,DC link voltage too low
+39609,Open circuit in bleeder resistor circuit
+39610,Short circuit in bleeder resistor circuit
+39611,Incoming mains missing
+39612,Rectifier temperature warning
+39613,Rectifier temperature error
+39700,Roberta first HW elog
+40001,Argument error
+40002,Argument error
+40003,Argument error
+40004,Argument error
+40005,Argument error
+40006,Argument error
+40007,Argument error
+40008,Argument error
+40009,Argument error
+40010,Argument error
+40011,Argument error
+40012,Argument error
+40013,Argument error
+40014,Argument error
+40015,Data declaration error
+40016,Data declaration error
+40017,Type error
+40018,Type error
+40019,Limit error
+40020,Data declaration error
+40021,Instruction error
+40022,Type error
+40023,Instruction error
+40024,Type error
+40025,Type error
+40026,Type error
+40027,Type error
+40028,Type error
+40029,Type error
+40030,Type error
+40031,Type error
+40032,Type error
+40033,Type error
+40034,Type error
+40035,Type error
+40036,Type error
+40037,Data declaration error
+40038,Data declaration error
+40039,Name error
+40040,Name error
+40041,Name error
+40042,Name error
+40043,Name error
+40044,Name error
+40045,Name error
+40046,Name error
+40047,Name error
+40048,Name error
+40049,Name error
+40050,Type error
+40051,Type error
+40052,Instruction error
+40054,Type error
+40055,Type error
+40056,Type error
+40057,Type error
+40058,Type error
+40059,Data declaration error
+40060,Data declaration error
+40061,Routine declaration error
+40062,Name error
+40063,Data declaration error
+40064,Routine declaration error
+40065,Reference error
+40066,Data declaration error
+40067,Type error
+40068,Type error
+40069,Reference error
+40070,Reference error
+40071,Reference error
+40072,Reference error
+40073,Reference error
+40074,Reference error
+40075,Reference error
+40076,Reference error
+40077,Reference error
+40078,Reference error
+40079,Reference error
+40080,Reference error
+40081,Reference error
+40082,Reference error
+40083,Type error
+40086,Reference error
+40087,Reference error
+40089,Reference error
+40090,Reference error
+40092,Reference error
+40093,Instruction error
+40094,Data declaration error
+40095,Instruction error
+40096,Instruction error
+40097,Instruction error
+40098,Parameter error
+40099,Parameter error
+40100,Parameter error
+40101,Type error
+40102,Type error
+40103,Type error
+40104,Data declaration error
+40105,Data declaration error
+40106,Data declaration error
+40107,Data declaration error
+40108,Type error
+40109,Type definition error
+40110,Reference error
+40111,Name error
+40112,Reference error
+40113,Name error
+40114,Type definition error
+40115,Type definition error
+40116,Reference error
+40117,Type definition error
+40120,Reference error
+40122,Reference error
+40123,Argument error
+40124,Argument error
+40125,Instruction error
+40126,Value error
+40127,Value error
+40128,Reference error
+40129,Reference error
+40130,Reference error
+40131,Reference error
+40135,Syntax error
+40136,Syntax error
+40137,Syntax error
+40138,Syntax error
+40139,Syntax error
+40140,Numerical value for symbol
+40141,String too long
+40144,Integer out of range
+40145,Parser stack is full
+40146,Not enough heap space
+40147,Identifier is reserved word in current
+40148,Identifier too long
+40149,Placeholder too long
+40150,Unexpected unknown token
+40152,Data declaration error
+40155,Argument error
+40156,Argument error
+40157,Instruction error
+40158,Value error
+40159,Value error
+40160,Errors in RAPID program
+40161,Option is missing
+40162,Errors in RAPID program
+40163,Module error
+40165,Reference error
+40166,Reference error
+40168,Reference error
+40170,Reference error
+40171,Reference error
+40176,Instruction error
+40191,Instruction error
+40192,Argument error
+40193,Execution error
+40194,Value error
+40195,Limit error
+40196,Instruction error
+40197,Execution error
+40198,Value error
+40199,Value error
+40200,Limit error
+40202,Type error
+40203,Reference error
+40204,Value error
+40205,Value error
+40206,Interrupt queue full
+40207,Value error
+40208,Error event queue full
+40209,Error handler already executed
+40210,Interrupt removed from queue
+40211,Value error
+40221,Execution error
+40222,Limit error
+40223,Execution error
+40224,Execution error
+40225,Execution error
+40226,Name error
+40227,Limit error
+40228,Execution error
+40229,Execution error
+40230,Execution error
+40241,Value error
+40242,Type error
+40243,Value error
+40244,Value error
+40245,Parameter error
+40246,Cannot Deactivate Safe Interrupt
+40247,Persistent variable size error
+40251,Name error
+40252,Limit error
+40253,Type definition error
+40254,Symbol definition error
+40255,Symbol definition error
+40256,Parameter error
+40257,Parameter error
+40258,Parameter error
+40259,Parameter error
+40260,Symbol definition error
+40261,Type definition error
+40262,Data declaration error
+40263,Name error
+40264,Symbol definition error
+40265,Symbol definition error
+40266,Reference error
+40267,Reference error
+40268,Symbol definition error
+40269,Symbol definition error
+40270,Type definition error
+40271,Type definition error
+40272,Type error
+40273,Reference error
+40274,Parameter error
+40275,Symbol definition error
+40277,Undo Aborted
+40278,Undo Aborted
+40279,Undo Aborted
+40280,Undo Aborted
+40281,Undo Aborted
+40301,File access error
+40302,File access error
+40303,File access error
+40304,File access error
+40322,Load error
+40323,Load error
+40324,Load error
+40325,Load error
+40326,Load error
+40327,Load error
+40328,Load error
+40329,Module installation failure
+40330,RAPID errors in installed module
+40331,Type error
+40332,Type error
+40351,Memory allocation error
+40352,Memory allocation error
+40353,Mechanical Unit
+40354,A copy of a dynamic loaded module has
+40355,A Stop/QStop event routine has been
+40357,Missing Error Handler
+40358,RMQ message discarded
+40359,An event routine has been stopped
+40360,Module name contain illegal characters
+40361,Module name too long
+40362,String contains illegal characters
+40363,Execution error
+40502,Digital Input Break
+40506,System Access Error
+40507,Limit Error
+40508,Orientation Value Error
+40511,Parameter Error
+40512,Missing External Axis Value
+40513,Mechanical Unit Error
+40514,Execution Error
+40515,Type Error
+40518,Type Error
+40519,End Of File
+40522,Limit Error
+40523,Mechanical Unit Conflict
+40524,Conveyor Access Error
+40525,Conveyor Access Error
+40526,Conveyor Access Error
+40527,File Access Error
+40528,File Access Error
+40529,File Access Error
+40530,Parameter Error
+40531,Parameter Error
+40534,Timeout
+40535,Type Error
+40536,System Access Error
+40537,File Access Error
+40538,Max Time Expired
+40539,System Access Error
+40540,File Access Error
+40541,File Access Error
+40542,File Access Error
+40543,File Access Error
+40544,File Access Error
+40545,File Access Error
+40546,File Access Error
+40547,File Access Error
+40548,File Access Error
+40549,System Access Error
+40555,I/O Error
+40556,I/O Error
+40558,I/O Error
+40559,I/O Error
+40560,System Access Error
+40561,System Access Error
+40562,Parameter Error
+40563,System Access Error
+40564,Argument Error
+40565,Parameter Error
+40566,Parameter Error
+40567,Parameter Error
+40568,Parameter Error
+40569,Argument Error
+40570,Argument Error
+40571,Argument Error
+40572,Argument Error
+40573,Argument Error
+40574,Search Warning
+40576,ParId Error
+40577,ParId Error
+40578,ParId Error
+40579,ParId Error
+40580,ParId Error
+40581,ParId Error
+40582,ParId Error
+40583,ParId Error
+40584,ParId Error
+40585,ParId Error
+40586,ParId Error
+40587,ParId error
+40588,ParId Error
+40589,ParId Error
+40590,ParId error
+40591,Argument Error
+40592,Program Stop During Load Identification
+40593,Power Fail During Load Identification
+40594,User Error During Load Identification
+40595,Argument Error
+40596,Program Stop During Load Identification
+40597,Speed Override
+40598,Program Stop during Load Identification
+40599,Program Stop during Load Identification
+40603,Argument Error
+40607,Execution Error
+40609,Argument Error
+40611,Execution Error
+40612,Argument Error
+40614,Argument Error
+40615,Argument Error
+40616,Argument Error
+40617,Argument Error
+40620,Argument Error
+40622,Argument Error
+40623,Argument Error
+40624,Argument Error
+40625,Limit Error
+40631,Instruction Error
+40632,Instruction Error
+40634,Reference Error
+40648,Search Error
+40649,Path Limitation
+40650,Wrong Combination Of Parameters
+40651,Use Numeric Input
+40652,Axis Is Moving
+40654,Axis Not Active
+40655,Axis Is Not Independent
+40658,Parameter Error
+40661,Search Error
+40662,Invalid Worldzone Type
+40663,World Zone Not In Use
+40664,World Zone Already In Use
+40665,Too Many World Zones
+40666,Illegal World Zones
+40667,Illegal World Zones
+40668,Shapedata Not In Use
+40669,World Zone Too Small
+40670,Invalid World Zone
+40671,Illegal Use Of World Zone
+40672,World Zone Already In Use
+40673,I/O Access Error
+40674,I/O Access Error
+40675,Execution Error
+40676,Parameter Error
+40677,Parameter Error
+40678,Parameter Error
+40679,Parameter Error
+40680,Parameter Error
+40681,Parameter Error
+40698,Read error
+40699,Program Memory Full
+40700,Syntax Error
+40701,Program Memory Full
+40702,File Not Found
+40703,Unload Error
+40704,UnLoad Error
+40706,Load Error
+40707,I/O Device Name Invalid
+40708,I/O Device Is Not Enabled
+40709,I/O Device Is Not Deactivated
+40710,Argument Error
+40711,Alias Type Error
+40712,Event Routine Error
+40713,Alias Define Error
+40714,Argument Error
+40720,Alias I/O Installation
+40721,I/O Installation
+40722,Mechanical Units
+40723,Camera Installation
+40724,Save or Erase Error
+40726,Reference Error
+40727,Save Error
+40728,Frame Error
+40730,Symbol Definition Error
+40731,Value Error
+40732,Value Error
+40733,Value Error
+40734,Symbol Definition Error
+40736,Mechanical Unit Error
+40737,Symbol Definition Error
+40738,I/O Error
+40739,Parameter Error
+40740,Execution Error
+40741,Context Error
+40742,Parameter Error
+40743,Parameter Error
+40744,Parameter Error
+40745,Parameter Error
+40746,Parameter Error
+40747,Access Error
+40748,Value Error
+40749,Execution Error
+40752,Argument Error
+40753,Memory Fault
+40754,Argument Error
+40755,Context Error
+40756,Context Error
+40757,Argument Error
+40759,Parameter Error
+40761,Parameter Error
+40762,Value Error
+40763,Execution Error
+40764,Switch Argument Error
+40765,Argument Error
+40766,Parameter Error
+40767,Search Error
+40768,Symbol Access Error
+40769,Symbol Read Access Error
+40770,Symbol Type Error
+40771,Symbol Access Error
+40772,I\O Error
+40773,Instruction Interrupted
+40774,Object Dropped
+40775,Conveyor Error
+40776,Conveyor Error
+40777,Conveyor Error
+40778,Value Error
+40779,Error Number Local
+40780,Data Object Error
+40781,File Error
+40782,Mode Error
+40783,Mode Error
+40784,Mode Error
+40785,Mode Error
+40786,Read Error
+40787,User Frame Error
+40788,Axis Error
+40789,Limitation Error
+40790,Value Error
+40791,I/O Error
+40792,I/O Error
+40793,Error Installing Text Table
+40794,Error Installing Text Table
+40795,Error Installing Text Table
+40796,Overload Error
+40797,I/O Error
+40798,System Access Error
+40799,Execution Error
+40800,Tool Error
+40801,Calculation error
+40802,Execution Error
+40803,Error message too long
+40804,Argument Error
+40805,Motion Error
+40806,IOF Error
+40807,File Error
+40811,No Contact With I/O Device
+40812,Execution Error
+40813,Execution Error
+40814,Execution Error
+40816,RolGenInstr Error
+40817,Symbol Definition Error
+41050,Profile not activated
+41051,Recorded profile not stored
+41052,Can't use this profile data file
+41100,Too Many Corrections
+41101,Correction Not Connected
+41102,No Corrections Connected
+41200,Servo Tool Open Error
+41203,Servo Tool Error
+41204,Servo Tool error
+41205,Servo Tool Error
+41206,Servo Tool Parameter Error
+41207,Servo Tool Init Error
+41208,Servo Tool Synchronization Error
+41209,Servo Tool Activation Error
+41210,Servo Tool Error
+41211,Servo Tool Error
+41212,Servo Tool Error
+41300,Argument Error
+41301,Argument Error
+41302,Argument Error
+41303,Argument Error
+41304,Argument Error
+41400,Parameter Error
+41401,I/O Error
+41404,Parameter Error
+41405,Parameter Error
+41406,Parameter Error
+41407,Parameter Error
+41408,Parameter Error
+41409,Parameter Error
+41410,Parameter Error
+41411,Parameter Error
+41412,Parameter Error
+41413,Parameter Error
+41414,Parameter Error
+41415,Parameter Error
+41416,Parameter Error
+41417,System Access Error
+41419,Parameter Error
+41420,Parameter Error
+41421,Parameter Error
+41422,Parameter error
+41423,Parameter Error
+41424,Parameter Error
+41425,Parameter Error
+41426,I/O Error
+41427,Argument Error
+41428,Axis Error
+41429,Axis Error
+41431,System Access Error
+41432,System Access Error
+41433,Parameter Error
+41435,Parameter Error
+41437,System Access Error
+41438,Undefined Load
+41439,Undefined Load
+41440,Argument Is Missing
+41441,UnLoad Error
+41442,Reference Error
+41443,Argument Error
+41444,Argument Error
+41445,Argument Error
+41446,Argument Error
+41447,Argument Error
+41448,Argument Error
+41449,Value Error
+41450,Argument Error
+41451,Argument Error
+41452,Argument Error
+41453,Type Error
+41454,Reference Error
+41455,System Access Error
+41456,Argument Error
+41457,Argument Error
+41458,Argument Error
+41459,Argument Error
+41460,Argument Error
+41461,Value Error
+41462,Value Error
+41463,Argument Switch Is Missing
+41464,Index Too High
+41465,The String Is Empty
+41466,The Variables Are Equal
+41467,Value Error
+41468,Value Error
+41469,Value Error
+41470,Argument Error
+41471,Instruction Error
+41472,Instruction Error
+41474,Value Error
+41475,Wrong size of task list
+41476,Non-consistent task list
+41477,TimeOut
+41480,UnpackRawBytes Error
+41483,Argument Error
+41484,TimeOut
+41486,Instruction Error
+41487,Instruction Error
+41488,Value Error
+41490,TimeOut
+41491,Instruction Error
+41492,Instruction Error
+41493,Execution Error
+41494,Instruction error
+41495,Move PP Error
+41496,Move PP Error
+41497,Move PP Notification
+41498,No Defined UserFrame In Mechanical Unit
+41499,Synchronized Mode
+41500,Independent Mode
+41501,Illegal Id
+41502,Illegal Domain
+41503,Illegal Error Type
+41504,No Mechanical Unit Stated
+41505,Mechanical Unit Not In Task
+41506,Task Does Not Read a TCP Robot
+41508,LoadId Error
+41509,LoadId Error
+41510,LoadId Error
+41511,LoadId Error
+41512,Internal Error
+41513,LoadId Error
+41514,LoadId Error
+41515,LoadId Error
+41516,LoadId Error
+41517,LoadId Error
+41518,LoadId Error
+41519,LoadId Error
+41520,Error Recovery Constant Not Booked
+41521,Task Status Error
+41522,Wrong Error Recovery Constant Used
+41523,Argument Error
+41524,Instruction Error
+41525,Instruction Error
+41526,Instruction Error
+41527,Argument Switch Is Missing
+41528,Instruction Error
+41529,Instruction Error
+41530,Instruction error
+41531,Task Not In TaskList
+41532,Mismatch of task list
+41533,Mismatch Of SyncID
+41534,Inconsistent Synch Data
+41535,Unexpected SyncMoveOn
+41536,Unexpected SyncMoveOn
+41537,Unexpected SyncMoveOff
+41538,Wrong TaskList
+41539,Speed Too High
+41540,Wrong Mechanical Unit
+41541,Not Allowed From a Read Task
+41542,Program Stop
+41543,Argument Error
+41544,Obsolete Instruction
+41545,Argument Error
+41546,Argument Error
+41547,Argument Error
+41549,Unexpected SyncMoveOn or SyncMoveOff
+41550,PathRecorder Start/Stop Error
+41551,PathRecorder Move Error
+41552,PathRecorder Path Level Error
+41553,Destroyed Data
+41554,Synchronized Mode
+41555,No Contact With I/O Device
+41556,No Contact With I/O Device
+41557,Mechanical Unit not stopped
+41558,Argument Switch Missing
+41559,Not PERS variable
+41560,No Start of Movement
+41561,No Text in Function Key
+41562,Risk for faulty circular movement
+41563,Argument Error
+41564,Not allowed to run from a Motion Task
+41565,Not allowed value
+41566,Signal exceeds max number of allowed
+41567,Digital Output Break
+41568,Specified name is not a network
+41569,Socket error
+41570,Socket error
+41571,Socket error
+41572,Socket error
+41573,Socket error
+41574,Socket error
+41575,Socket error
+41576,Socket error
+41577,Socket error
+41578,Socket error
+41579,Socket error
+41580,Socket error
+41581,Socket error
+41582,Socket error
+41583,Socket error
+41584,Socket error
+41585,Socket error
+41586,Socket error
+41587,Socket error
+41588,Socket error
+41589,Socket error
+41590,Socket error
+41591,Socket error
+41592,Socket error
+41593,Socket error
+41594,Socket error
+41595,Socket error
+41596,Socket error
+41597,Socket error
+41598,Socket error
+41599,Socket error
+41600,Socket error
+41601,Socket error
+41602,Socket error
+41603,Socket error
+41604,Socket error
+41605,Socket error
+41606,Socket error
+41607,Socket error
+41608,Socket error
+41612,MinValue greater than MaxValue
+41613,InitValue not within specified value range
+41614,InitValue is not an integer
+41615,Reference Error
+41616,Reference Error
+41617,Too intense frequency of Write
+41618,Argument error buttondata
+41619,Argument error icondata
+41620,Socket Error
+41621,StorePath Error
+41622,Unexpected instruction
+41623,Faulty use of
+41625,Unexpected
+41626,Unexpected
+41627,Faulty use of
+41630,Unsafe Synchronization
+41631,Instruction Error
+41632,Argument does not exist
+41633,Can only be used in an UNDO handler
+41634,Unknown Task Name
+41635,Unexpected SyncMoveOff
+41636,Unexpected SyncMoveOff
+41637,Task not active in task selection panel
+41638,Not allowed task activation
+41640,Move PP Warning
+41641,Move PP Warning
+41642,Argument Error
+41643,Argument Error
+41644,Argument Error
+41645,Program Stopped from RAPID
+41646,Program Blocked from RAPID
+41647,Program Halted from RAPID
+41648,Execution Error
+41649,Incorrect Error Message
+41650,Task already stopped by another task
+41651,Ignored StartMove actions for task
+41652,Forced StartMove action
+41653,Argument error CalcJointT
+41654,Execution error CalcJointT
+41655,Argument not a Motion task
+41656,Not allowed value
+41657,File Access Error
+41658,Program task is in StopMove state
+41660,No space left for the new view
+41661,Assembly could not be found
+41662,Assembly could not be loaded
+41663,Instance could not be created
+41664,The typename is invalid for this assembly
+41665,
+41666,Fatal UIShow error
+41667,Fatal UI error
+41670,Entire Array Not Allowed As Argument
+41671,Too high poll rate
+41672,Invalid Combination
+41673,Index Out Of Bounds
+41674,Value Out Of Bounds
+41675,Not Integer
+41676,Device access error
+41677,Device access error
+41678,Device access error
+41679,Device access error
+41680,String too long
+41682,Too many subscriptions from I/O
+41683,Argument Error
+41685,Not valid value
+41687,File Open Error
+41688,Invalid Argument
+41690,Parameter Error
+41691,RMQ Error - Client name not valid
+41692,RMQ Error - Not valid Slot
+41693,RMQ Error - Max size for message
+41694,RMQ Error - Not equal data types
+41695,RMQ Error - Not equal dimensions on data
+41696,RMQ Error - Not valid use of instruction
+41697,RMQ Error - No RMQ configured
+41698,RMQ Error - Faulty use of instruction
+41699,RMQ Error - Max size for message
+41700,RMQ Error - Interrupt setup failed
+41701,RMQ Error - No message to collect
+41702,RMQ Error -
+41703,RMQ Error - Data could not be copied
+41704,RMQ Error - Full Queue
+41705,RMQ Error - Max Time Expired
+41706,RMQ Error - Max Time Expired
+41707,RMQ Error - Instruction invalid in current
+41708,RMQ Error - Invalid message
+41711,Value is not percent
+41712,Argument Error
+41713,Argument Error
+41714,Too many error events
+41715,Invalid Direction
+41716,Invalid Offset Direction
+41717,Too Low Value
+41718,Invalid Dimensions
+41719,Illegal Parameter
+41720,Path Not In Stop Point
+41721,Invalid Argument
+41722,Too High Value
+41723,Network is in error state
+41724,Current Work Object is Invalid
+41725,Invalid Configuration Settings
+41726,Ignored StopMoveReset actions for task
+41727,The size cannot be represented in a num
+41730,Signal exceeds max number of allowed
+41731,Signal name undefined
+41732,Too many trigs used
+41737,Instruction order Error
+41738,Wrist Interpolation option needed
+41739,StorePath required
+41740,Load Identification failed
+41744,Instruction Error
+41745,Instruction Error
+41746,Instruction Error
+41747,Process signal off
+41748,Value Error
+41749,Value Error
+41750,Not allowed value
+41751,Array size error
+41752,Num Limit Error
+41753,Invalid path level
+41754,Path Recorder cleared
+41755,Path time too long
+41756,Missing FricIdInit
+41757,Mechanical unit not found
+41758,Array too small
+41759,Signal exceeds max number of allowed
+41760,
+41761,Value out of range
+41762,The argument string value is invalid
+41763,The argument string value is too high
+41764,Wrong combination in
+41765,The argument value is too high
+41766,The precision will be lost
+41767,Instruction Error
+41768,Switch is missing
+41769,Service data not found
+41770,System Access Error
+41771,Cancel load of job
+41772,Parameter Error
+41773,Timeout
+41774,Type error
+41775,Ongoing request towards camera
+41776,No more data available
+41777,The camera is not connected
+41778,Failed to load job
+41779,Parameter cannot be modified
+41780,Camera is in program mode
+41781,Camera is in running mode
+41782,Camera does not support this
+41783,Communication timeout
+41784,Communication error
+41785,Failed to request image
+41786,Parameter out of range
+41787,Parameter cannot be read
+41788,No ongoing load of camera task
+41790,No results in image
+41791,SoftMove is not allowed with zero mass
+41792,Instruction not allowed
+41793,TriggInt stop error
+41794,Search error
+41795,Wrong payload mode
+41796,Argument Error
+41797,Signal not accessible
+41798,No TCP robot found
+41799,Speed value too low
+41800,Manual action needed
+41801,In synchronized mode
+41802,Not supported instruction or function
+41803,Argument Error
+41804,Not allowed command
+41805,Illegal dimension
+41806,The matrix A is singular
+41807,Not enough memory
+41808,Illegal dimension
+41809,Illegal dimension
+41810,Only allowed for 6 axis robot
+41811,Not allowed to reset signal
+41812,Domain not valid or not in use
+41813,File or directory access error
+41814,Reference Error
+41815,Reference error in Cyclic bool
+41816,Too many connected Cyclic bool
+41817,I/O Error in Cyclic bool
+41818,SDB Error in Cyclic bool
+41819,Integer Error in Cyclic bool
+41820,Invalid EGM identity
+41821,No EGM signals specified
+41822,No data from the UdpUc device
+41823,Invalid frame type
+41824,Not possible to open the UdpUc device
+41825,EGM not connected
+41826,EGM mode mismatch
+41827,TCP robot missing
+41828,Too many EGM instances
+41829,EGM state change error
+41830,Error sending EGM UdpUc message
+41831,ContactL Warning
+41832,EGM UdpUc inbound message contains
+41833,EGM input data from signals is invalid
+41834,ALXT General error
+41835,ALXT timeout
+41836,Wrong dimension in PERS array
+41840,Argument error
+41841,Argument error
+41842,Argument error
+41843,Instruction not allowed in TRAP or service
+41844,Search Error
+41845,Outside reach Error
+41846,Signal not writable
+41847,Signal not writable
+41848,Too low visualization time
+41849,Bad combination of values used in
+41850,User interface already active
+41851,Wrong value type used
+41852,Wrong signal value for signal
+41860,Evaluation error in Cyclic bool
+41861,Cyclic bool has been removed
+41862,ASCII log setup failed
+41863,Mechanical unit not TCP robot
+41864,Argument error
+41865,Invalid MAC address
+41880,AliasCamera Define Error
+41881,Persistent boolean Break
+41882,Error in Cyclic bool
+41883,
+41884,CyclicBrakeCheck Error
+41885,BrakeCheck Error
+41886,CyclicBrakeCheck Error
+41887,BrakeCheck Error
+41888,Not allowed command
+41889,Value error
+41890,Parameter error
+41891,Too few points
+41892,Too few points
+41893,Too few points
+41894,Too few points
+41895,Too many points
+41896,Argument error
+41897,Argument error
+41898,Argument error
+41899,Argument error
+41900,Orientation Value Error
+41901,Text Table Name not valid
+41902,Speed override changed
+41903,"Brake Check,"
+41905,Argument error
+41906,Path Not In Stop Point
+41907,Too far from path
+41908,Instruction Error
+41910,Collision simulated with instruction
+41911,Not valid character used in RAPID string
+41912,No ongoing camera set parameter request
+41913,Preceding instruction caused set
+41914,Cancel set parameter for camera
+41915,Load or Save module with old module
+41916,String too long
+41917,The number of characters does not fit in
+41918,Execution Error
+41919,Undefined value
+41920,Not accessible path
+41921,Parameter Error
+41922,Value error
+41923,Obsolete switch
+41924,Wrong combination of optional arguments
+41925,Cyclic bool setup error
+41926,Not enough access rights for the operation
+41927,Camera out of memory
+41930,App does not exist
+41931,App found but could not be launched.
+41932,Invalid arguments specified
+41934,Fatal UIDisplay error
+50021,Joint position error
+50024,Corner path failure
+50025,Restart interrupted
+50026,Close to singularity
+50027,Joint Out of Range
+50028,Jog outside working range
+50031,Command not allowed
+50032,Command not allowed
+50033,Command not allowed
+50035,Command not allowed
+50036,Correct regain impossible
+50037,Motors On order ignored
+50042,Could not create path
+50050,Position outside reach
+50052,Joint speed error
+50053,Too large revolution counter difference
+50055,Joint load too high
+50056,Joint collision
+50057,Joint not synchronized
+50058,Tool coordinate system error
+50063,Circle uncertain
+50065,Kinematics error
+50066,Robot not active
+50067,Unit not active
+50076,Orientation not correct
+50078,Too many close positions
+50079,Cannot use wrist weaving
+50080,Position not compatible
+50082,Path calculation time exceeded
+50085,Too many user frames
+50086,Singularity problem
+50087,Singularity problem
+50088,Restart not possible
+50089,Weaving changed
+50091,Restart not possible
+50092,Axis computer response
+50094,TuneServo not possible
+50096,TuneServo not allowed
+50124,Zone converted to fine point
+50132,Commutation failed
+50133,No signals available
+50134,Correction vector failed
+50135,SoftAct not possible
+50138,Arm check point limit
+50139,Arm check point limit
+50140,Payload too large
+50142,Motion configuration
+50143,Robot axes configuration
+50144,Displacement frame uncertain
+50145,Kinematic limitation
+50147,Power fail restart failed
+50153,Command not allowed
+50156,Not an Independent Joint
+50157,Correction vector X failed
+50158,Sensor process missing
+50159,No external process
+50160,Cannot reach position
+50163,Position adjustment
+50164,Deactivation not possible
+50167,New sync
+50168,New sync on
+50172,MoveJ not allowed
+50174,WObj not connected
+50175,Conveyor moving
+50176,Conveyor not active
+50177,Unable to restart
+50181,Out of coupled range
+50182,Jog in wrong direction
+50183,Robot outside work area
+50184,Correction vector Y failed
+50189,Relay signal not found
+50190,Permanent interpolator lock error
+50192,Jogging error
+50193,Joint not synchronized
+50194,Internal position error
+50195,Cannot move independent
+50196,Calibration failed
+50197,Calibration failed
+50198,Calibration failed
+50200,Torque error
+50201,Orientation outside reach
+50203,Measurement node used
+50204,Motion supervision
+50205,Data logger error
+50208,Missing function
+50209,Kinematic limitation
+50210,Load identification fail
+50214,Work area configuration failed
+50215,Load identification fail
+50218,Path not finished
+50220,No input signal
+50221,Object outside limit
+50222,Mismatch type - MechUnit
+50224,Cannot define load
+50225,Synchronization failed
+50226,Motor reference error
+50227,Invalid log signal channel
+50228,Unknown log signal number
+50229,Unknown log signal unit
+50230,Invalid log signal axis
+50231,Log signal unit not active
+50234,Overflow during logging
+50235,No Motion interrupts received
+50239,Emergency Stop change
+50240,Emergency Stop change
+50241,Missing function
+50242,Unsync due to system parameters
+50243,No acceleration limit
+50244,Absolute Accuracy calibration failed
+50245,Command not allowed
+50246,Linked motor error
+50247,Clear of Path failed
+50248,Servo Tool error
+50249,Programmed force reduced
+50250,Calibration force reduced
+50251,Tool opening failed
+50252,Tool opening failed
+50253,Cannot deactivate unit
+50254,Linked motor error
+50256,Sync pos outside limits
+50257,Sync speed outside limits
+50258,Sensor direction error
+50259,Sensor max distance error
+50260,Sensor Check dist error
+50261,WZone outside work area
+50262,WZone outside work area
+50263,Duty factor is too high
+50265,Thickness out of reach
+50266,Close request failed
+50267,Open request failed
+50268,Calibration failed
+50269,Tune value out of limit
+50271,Poor event accuracy
+50272,Motion configuration
+50273,Motion configuration
+50274,Motion configuration
+50275,Motion configuration
+50276,Motion configuration
+50277,Motion configuration
+50278,Motion configuration
+50279,Motion configuration
+50280,System configuration
+50281,Process failed
+50282,Record not ready
+50283,Unknown record file name
+50284,Cannot activate Mechanical Unit
+50285,DitherAct not possible
+50286,Mix of coordinated frames
+50287,Unit not stopped in a controlled position
+50288,Sync ID mismatch
+50289,Point type mismatch at sync
+50290,Service unavailable
+50294,Transmission error of data
+50295,Motion data missing
+50296,Robot memory data difference
+50297,Memory updated in robot
+50298,Memory updated in controller
+50299,Speed is reduced
+50300,Robot memory not used
+50301,All robot data missing
+50302,Sensor data missing
+50303,Controller data missing
+50305,Old SMB board used
+50306,Load identification error
+50307,Extended working range
+50308,In Position timeout
+50309,Absolute Accuracy error
+50310,Independent joint not active
+50311,Cannot activate Mechanical Unit in task
+50312,Mechanical Unit already active in other
+50313,Independent move reset restarted
+50314,Independent move outside reach
+50316,Absolute accuracy not activated
+50317,Disconnecting the drive module not
+50318,Reconnecting the drive module not
+50319,Cannot activate Mechanical Unit
+50320,Drive Module has been disconnected
+50321,Drive Module has been reconnected
+50322,Mechanical Unit not connected to Motion
+50323,Failed to read force sensor
+50324,Force control calibration failed
+50325,Failed to activate force control
+50326,Failed to deactivate force control
+50327,Failed to start references
+50328,Parameter error in FCRefSprForce or
+50329,Parameter error in FCRefSprForce
+50330,Parameter error in FCRefSprTorque
+50333,"Error FCRefLine, FCRefRot or FCRefCircle"
+50335,Parameter error in FCRefSpiral
+50336,Parameter error in FCGetProcessData
+50337,Force sensor not setup
+50338,Parameter error in FCCondAdvanced
+50339,Parameter error in FCCondTime
+50340,Error in force control box definition
+50341,Error in force control cylinder definition
+50342,Error in force control sphere definition
+50343,Error in force control cone definition
+50344,Joints outside limits in force control
+50345,Force control supervision error
+50346,Motor temperature error
+50348,Log signal definition failed
+50349,Same synchronization ID
+50350,Software Equalizing Not Allowed
+50351,Independent Move not allowed
+50352,Number of move instruction mismatch
+50353,Failed to read data from encoder card
+50354,Ordered force reference is too large
+50355,Ordered torque reference is too large
+50356,Ordered MaxForce is too large
+50357,Ordered MaxTorque is too large
+50358,Close to singularity when in force control
+50359,Path Recorder on StorePath level not
+50361,Brake release error
+50362,Brake release time out
+50363,SyncMoveOn failed
+50364,Axis in current vector mode
+50366,Reference Error
+50368,Too Short distance between equidistant
+50369,Calibration using stored offset failed
+50370,Transfer of data to robot memory failed
+50371,The programmed speed is too high
+50372,Contact force too high
+50373,Too high Event Preset Time
+50374,FC SpeedChange program stop error
+50375,Dynamic load too high
+50376,Geometric interpolation failed
+50377,Only allowed in position control
+50378,Error in FCSetMaxForceChangeTune
+50379,Active mechanical units have changed
+50380,Checksum error
+50381,Speed too low
+50382,Weave pattern error
+50383,Cartesian Soft Servo configuration error
+50384,Cartesian Soft Servo quaternions invalid
+50385,Cartesian Soft Servo activation failed
+50386,Cartesian Soft Servo offset activation
+50387,Cartesian Soft Servo close to unstable
+50388,Cartesian Soft Servo position supervision
+50389,Cartesian Soft Servo singularity
+50390,Cartesian Soft Servo speed supervision
+50391,Cartesian Soft Servo movement not
+50392,SafeMove communication error
+50393,Force offset applied in non-soft direction
+50394,The Path for the Unit is cleared
+50396,Default FC force supervision error
+50397,Path frame rotation speed error
+50400,Motion configuration error
+50401,Startup synchronization failed
+50402,Correction is not ended in a finepoint
+50404,Additional axis movement during Wrist
+50405,Coordinated movement during Wrist
+50406,Wrist Interpolation point not on circle
+50407,Wrist axis locked
+50408,Wrist joint limit
+50409,Wrist Interpolation not possible
+50410,Collinear targets in wrong order
+50411,Maximum allowed programmed TCP load
+50412,Error in speed change tuning instruction
+50413,Bleeder resistor overload error
+50414,Bleeder resistor overload
+50415,Motor temperature error
+50416,Motor temperature close to maximum
+50417,Drive unit overload error
+50418,Drive unit overload
+50419,Common base_frame error
+50420,IndCnv Mechanical Unit Error
+50421,IndCnv Tracking Single Error
+50422,IndCnv and Independent joint error
+50423,IndCnv Time before indexing move too
+50425,Friction FFW parameter is not On
+50426,Out of interpolation objects
+50427,Joint not synchronized after calibration
+50429,CSS parameter damping obsolete
+50430,Underrun in the axis computer
+50431,Predicted Collision
+50432,Identical Base Frames
+50433,Position changed to inside working area
+50434,Position changed to inside working area
+50435,Inconsistent system parameter
+50436,Robot configuration error
+50437,Follower axis is connected to wrong
+50438,Motor off sequence has timed out
+50439,Soft servo activation failure
+50440,Correction generator lost
+50441,Low voltage on battery inputs
+50442,Robot axis configuration error
+50443,Lack of Internal Event Objects
+50444,Manipulator supervision
+50445,Sync on/off not allowed while External
+50446,External Motion Interface ramp time
+50447,Incorrect mechanical units for External
+50448,Error in External Motion Interface input
+50449,Mechanical unit close to joint bound
+50450,External Motion Interface activation error
+50451,External Motion Interface deactivation
+50452,External Motion Interface cyclic error
+50453,Move not allowed in External Motion
+50454,External Motion Interface position
+50455,External Motion Interface speed
+50456,Close to singularity while External Motion
+50457,External Motion Interface configuration
+50458,Programmed speed too high
+50459,External Motion Interface input out of
+50460,External Motion Interface deactivation not
+50461,Too many continuous log signals
+50462,Cartesian speed too high
+50463,Log server communication error
+50464,A collision has occurred
+50465,Tuning of robot stiffness parameters is
+50466,Measurement Channel Conflict
+50467,Brake Relay Conflict
+50468,Cartesian speed limits changed
+50469,I/O controlled axis configuration failed
+50470,I/O controlled axis not ready for activation
+50471,I/O controlled axis not ready
+50472,Absolute accuracy data missing
+50473,Ascii Log configuration failed
+50474,Target in a singularity
+50475,Target in a singularity
+50476,AxisCal error
+50477,Axis Calibration data missing
+50478,Could not deactivate lead-through
+50479,Cannot jog joints in independent mode
+50480,I/O controlled axis RefSync failed
+50481,I/O controlled axis not synchronized
+50482,Search speed not reached
+50483,Movement in wrong direction
+50484,Stop-point too far away from circle
+50486,Load supervision
+50487,Motion configuration
+50488,Using old target definition
+50489,Trigg distance larger than movement
+50490,Measurement error detected
+50491,Dual-arm base frame error
+50492,Error during jogging
+50493,LockAxis4 not supported
+50494,Revolution counters missing
+50495,Axis Calibration error
+50496,Conveyor Tracking position error at pick
+50497,Maximum number of axes in drive module
+50499,Exceeded maximum allowed path
+50500,Functionality has Beta status
+50501,Short movements
+50502,Collision Avoidance load error
+50503,Collision Avoidance inactive during
+50504,Joint limit reached
+50505,Spot Gun configuration warning
+50506,Spot Gun missing tip error
+50507,Movement detected when brakes are
+50508,Conveyor board connection lost
+50509,License error
+50510,Lead through load mismatch
+50511,Safety Controller violation prevented.
+50512,Controller restarted
+50513,Activation or deactivation not allowed
+50514,No calibration tool found
+50515,Too many attempts during calibration
+50516,Speed too high during calibration
+50517,Speed too low during calibration
+50518,High speed detected after contact
+50519,Incorrect contact force
+50520,Incorrect contact force
+50521,Calibration timed out
+50522,Unexpected collision detected
+50523,Calibration speed not reached
+50530,Cannot activate Mechanical Unit
+50531,SingArea\Wrist not supported
+50532,Jog direction time-out
+50533,Checksum error
+50534,Robot memory data difference
+50535,Motion data missing
+50536,Transfer of data to robot memory failed
+50537,All robot data missing
+50538,Sensor data missing
+50539,Absolute Accuracy version is not
+50540,Low voltage on serial measurement board
+50541,Motion configuration error
+71001,Duplicate address
+71003,I/O device undefined
+71005,Invalid filter time
+71006,Invalid filter time
+71007,Logical values out of range
+71008,Physical values out of range
+71017,Cross connection without actor I/O signal
+71019,Cross connection with undefined I/O
+71020,Cross connection without resultant I/O
+71021,Duplicate cross connection with same
+71037,Closed chain in cross connection
+71038,Cross connection max depth exceeded
+71045,Invalid filter specification
+71049,Analog I/O signal inverted
+71050,Cross connection with non-digital actor
+71052,Max number of cross connections
+71054,Invalid signal type
+71058,Lost communication with I/O device
+71076,Communication error from rtp1
+71077,Communication error from rtp1
+71078,Communication error from rtp1
+71080,Max number of device predefined types
+71081,Max number of physical I/O signals
+71082,Max number of user I/O signals exceeded
+71083,Max number of symbols exceeded
+71084,Max number of subscribed I/O signals
+71085,Max number of I/O devices exceeded
+71098,NFS server lost
+71099,Trusted NFS server lost
+71101,Network undefined
+71114,Invalid IP address
+71115,Invalid subnet mask
+71116,Not allowed to deactivate I/O device
+71122,Incorrect IP address
+71123,No transmission protocol
+71125,Mount permission denied
+71126,Directory not exported
+71128,Ethernet not installed
+71129,Too many remote disks
+71130,Too many remote servers
+71131,Could not mount directory
+71141,Default value for I/O signal out of range
+71156,IPC queue full
+71158,Address out of range
+71163,I/O signal on internal I/O device
+71164,Internal I/O signal in cross connection
+71165,FTP server went down
+71166,FTP server went down
+71167,Wrong transmission protocol
+71169,Ethernet not installed
+71182,I/O signal undefined
+71183,Cross connection with invalid operator
+71185,Duplicate name
+71193,Invalid physical I/O mapping
+71196,Invalid encoding type
+71201,Unknown network
+71205,Could not mount directory
+71241,Too many I/O devices on network
+71261,Transport layer failure
+71262,Industrial network communication failure
+71263,CAN communication failure
+71264,Conveyor tracking error
+71273,I/O device configuration mismatch
+71276,Communication established with I/O
+71278,Mount permission denied
+71288,Mount path is too large
+71289,Memory partition is too big
+71290,Could not add FTP device
+71291,Invalid local path
+71293,Invalid input size
+71294,Invalid output size
+71295,Invalid input size
+71296,Invalid output size
+71297,Invalid connection type
+71298,Duplicated address
+71299,No power on DeviceNet network
+71300,DeviceNet network communication
+71301,"Bus off, DeviceNet network"
+71302,No DeviceNet option has been installed
+71303,Invalid DeviceNet vendor id
+71304,Invalid DeviceNet device type
+71305,Invalid DeviceNet product code
+71306,DeviceNet unknown error
+71307,DeviceNet generic connection 1
+71308,DeviceNet generic connection 2
+71309,DeviceNet generic device identification
+71310,DeviceNet I/O device connection error
+71311,Unable to establish communication on
+71312,DeviceNet I/O device explicit connection
+71313,Device command order number not unique
+71315,Max number of device commands
+71317,I/O device reset
+71320,Max number of I/O access levels exceeded
+71321,Invalid I/O access level
+71323,Invalid bit values
+71324,Physical limitation values out of range
+71325,Invalid network configuration
+71326,Invalid device predefined type
+71328,Invalid name
+71329,Invalid network connection
+71331,Invalid network
+71332,Invalid recovery time
+71333,Invalid DeviceNet baud rate
+71336,Device command without path
+71338,Invalid device command service identifier
+71339,Device command without reference to I/O
+71340,Device command with reference to
+71344,Device map undefined
+71346,Device map out of range
+71347,Device map with overlapping segments
+71348,Device map with unexpected character
+71349,Invalid signal size
+71350,Invalid network
+71351,Invalid connection 1 type
+71352,Invalid connection 2 type
+71354,I/O device without reference to network
+71355,Invalid Device Trust Level
+71356,Bus type mismatch
+71357,Duplicated I/O devices on network Local
+71361,Cross connection with non-digital
+71362,I/O signal mapped outside the I/O device
+71363,Internal slave configuration invalid
+71364,User I/O queue overload
+71365,Safety I/O queue overload
+71366,Cross connection I/O queue overload
+71367,No communication with I/O device
+71379,Unknown communication physical
+71380,Communication connector driver is
+71381,Communication connector is already in
+71382,DeviceNet watchdog time has expired
+71383,User defined I/O devices can't be
+71385,Request message resource exhausted
+71390,The DeviceNet network has recovered
+71391,System Signal configuration
+71392,Invalid output size
+71393,Error when allocating generic size
+71394,Invalid physical communication channel
+71395,No transport protocol
+71396,No transmission protocol
+71397,No application protocol
+71398,Communication error from bosv24
+71399,Communication error from bosv24
+71400,Communication error from bosv24
+71401,No option exists for the
+71402,Duplicate address on the
+71403,The interval time is invalid
+71404,Invalid input/output size
+71405,Duplicate device mapping
+71406,Communication established on DeviceNet
+71407,Route interface not found
+71408,Route port number out of range
+71409,Not able to add a port to
+71410,CIP route option not installed
+71411,Out of route resources
+71412,The DeviceNet network has regained the
+71414,Concurrent changes of signal value
+71428,DeviceNet I/O device configured
+71443,Too many PROFINET internal devices
+71446,PROFINET configuration mismatch
+71449,Too many Anybus adapters configured
+71450,EtherNet/IP Scanner/Adapter option not
+71452,Too many EtherNet/IP networks are
+71453,Wrong identity for EtherNet/IP adapter
+71454,The
+71455,EtherNet/IP connection type unknown
+71457,The EtherNet/IP gateway address is invalid
+71458,Could not change the default gateway
+71459,Illegal address for EtherNet/IP
+71460,Not able to connect to EtherNet/IP adapter
+71461,Duplicated address on the EtherNet/IP
+71462,Illegal subnet mask for EtherNet/IP
+71463,Illegal address for EtherNet/IP network
+71464,Could not add a new gateway for
+71469,Max number of internal I/O signals
+71473,DeviceNet network scan result
+71476,DeviceNet firmware file not found
+71477,Invalid connection size for EtherNet/IP
+71478,Invalid input or output assembly for
+71479,Invalid configuration assembly for
+71480,Adapter occupied by another scanner
+71481,PROFINET configuration file error
+71482,PROFINET network configuration changed
+71483,PROFINET identification request received
+71485,Illegal subnet mask
+71486,Illegal address for
+71487,Illegal IP address for
+71488,Illegal gateway address for
+71489,PROFINET internal device configuration
+71490,PROFINET I/O device configuration
+71491,PROFINET I/O device configuration
+71492,PROFINET diagnostic data reported
+71493,PROFINET I/O device auto configured
+71494,PROFINET option license is missing
+71495,PROFINET controller option license is
+71498,PROFINET network configuration changed
+71499,I/O signals in cross connection has
+71500,EtherNet/IP connection failure
+71501,PROFINET configuration file incompatible
+71502,PROFINET configuration mismatch
+71503,PROFINET station name error
+71504,File size exceeds max file size
+71505,Device command syntax error
+71506,Device command syntax error
+71507,Device command syntax error
+71508,Device command syntax error
+71509,Device command syntax error
+71510,Device command syntax error
+71511,Device command syntax error
+71512,Invalid service identifier in device
+71513,Device command response timeout
+71514,Device command connection error
+71515,Device command send error
+71516,An EtherNet/IP adapter does not support
+71517,An attribute is changed for an EtherNet/IP
+71519,Too many PROFINET Networks are
+71520,Input data invalid
+71521,Output data not processed
+71522,Ethernet port occupied by another client
+71524,PROFINET I/O device unknown alarm
+71525,PROFINET I/O device diagnostics
+71526,PROFINET I/O device unknown alarm
+71527,EtherNet/IP adapter state conflict
+71528,EtherNet/IP general failure
+71529,The destination address is missing
+71530,The subnet mask is missing
+71531,Faulty destination address
+71532,The gateway address is missing
+71533,Invalid configuration size for EtherNet/IP
+71534,Invalid output size for EtherNet/IP adapter
+71535,Invalid input size for EtherNet/IP adapter
+71536,Device command syntax error
+71537,Invalid configuration data for EtherNet/IP
+71538,The EtherNet/IP network address must
+71539,Invalid Signal Safe Level
+71541,"Network auto configuration, scan,"
+71542,"Network auto configuration, scan, not"
+71543,"Network auto configuration, scan EDS file,"
+71544,"Network auto configuration, scan EDS file,"
+71545,"Network auto configuration, device,"
+71546,"Network auto configuration, device, not"
+71547,"Network auto configuration, device and"
+71548,"Network auto configuration, device and"
+71549,Overlapping I/O signals with different
+71550,Overlapping I/O signals with differing
+71551,Network auto configuration not supported
+71552,Max number of device trust levels
+71553,Max number of device transfer data
+71554,Max number of signal safe levels
+71555,Invalid configuration of
+71556,Signal cannot be transferred
+71557,Signal transfer was defined but no internal
+71558,Transfer signals overlap
+71559,Transfer signal and cross-connection
+71560,Transfer signal and SYSOUT_SIG overlaps
+71561,Signal transfer has bitswapped devicemap
+71562,Signal transfer has a split devicemap
+71563,Signal on internal device with signal
+71564,Signal on internal device with signal
+71565,Signal on internal device overlaps with
+71566,Signal has both transfer signal attributes
+71567,Signal transfer without offset
+71568,Signal transfer to/from undefined device
+71569,Signal has offset but no transfer attribute
+71570,Signal has transfer defined with wrong
+71571,Transfer signal I/O queue overload
+71572,I/O device has entered error state
+71573,PROFINET configuration mismatch
+71574,PROFINET module has diagnostic data
+71575,PROFINET configuration mismatch
+71576,Submodule could not be taken over
+71577,Submodule has qualified information
+71578,Submodule requires maintenance
+71579,Submodule demands maintenance
+71580,Submodule has diagnostic data available
+71581,Submodule is blocked by device
+71582,Access from Robot Controller to
+71583,Submodule is locked by another IO
+71584,Submodule is locked by another IO
+71585,PROFINET submodule is of wrong type
+71586,PROFINET submodule is missing
+71587,Device command syntax error
+71588,Device command syntax error
+71589,Fiber optics error
+71590,Duplicate device name on network
+71591,Input signal update rate too high
+71592,Transfer to/from an invalid internal slot.
+71593,Firmware upgraded
+71594,Firmware upgrade failed
+71595,Firmware upgrade available
+71596,No SFTP fingerprint configured
+71597,Invalid SFTP fingerprint configured
+71598,Could not mount device
+71599,Mount permission denied
+71600,Authentication not supported by remote
+71601,Unable to identify remote server
+71602,NFS version not supported
+71603,NFS could not connect to server
+71604,No station name assigned to PROFINET
+71605,No IP-address set for PROFINET
+71606,Configuration for device is invalid
+71607,Ethernet not installed
+71608,Mount path is too large
+71609,SFTP server went down
+71610,SFTP server went down
+71611,FTP could not list directory
+71613,PROFINET network DCP accepted
+71614,Lost communication with PLC master
+71615,Restored communication with PLC master
+71616,CC-Link IE FB Master/Device option not
+71617,CC-Link device has unsupported group
+71618,Duplicate address on CC-Link device.
+71619,No IP-address set for CC-Link device
+71620,No interface for destination found
+71621,No interface for destination found
+71622,Conflicting interface for CC-Link master
+71623,Password could not be decrypted
+71624,PROFINET interface port is invalid
+71650,Device Transfer Data loop detected
+71651,Device Transfer Data long chain
+71652,Invalid Device Transfer Data source area
+71653,Device Transfer Data invalid network
+71654,Max number of Device Transfer Data
+71655,Device Transfer Data name already exists
+71656,Device Transfer Data destination area
+72010,PROFINET process alarm reported
+72011,PROFINET pull alarm data reported
+72012,PROFINET plug alarm data reported
+72013,PROFINET status alarm data reported
+72014,PROFINET update alarm data reported
+72015,PROFINET redundancy alarm data
+72016,PROFINET supervisor alarm data reported
+72017,PROFINET released alarm data reported
+72018,PROFINET wrong plug submodule alarm
+72019,PROFINET return of submodule data
+72020,PROFINET diagnosis disappears alarm
+72021,PROFINET diagnosis appears alarm data
+72022,PROFINET MC communication mismatch
+72023,PROFINET port data changed notification
+72024,PROFINET sync data changed alarm data
+72025,PROFINET isochronous mode problem
+72026,PROFINET alarm unit reported unknown
+72050,Error reported by a CC-Link device
+72051,CC-Link error indication
+72052,Duplicated CC-Link master detected on
+72053,Wrong number of occupied stations
+72054,Duplicated CC-Link devices detected on
+72055,Duplicated CC-Link master detected on
+72056,Disconnect notification from a CC-Link
+90500,Safety Controller Internal Failure
+90501,Safety Controller Reference Data Error
+90502,Safety Controller SMB Communication
+90503,Safety Controller Illegal Position Value
+90504,Safety Controller not synchronized
+90505,Safety Controller Synchronization rejected
+90506,Safety Controller Wrong Sync Position
+90507,Safety Controller Synchronized
+90508,Safety Controller Tool Change Incorrect
+90509,Safety Controller Brake Ramp supervision
+90511,Safety Controller Servo-Lag Limit
+90512,SC Contact Application Tolerance servo
+90513,Tool Position supervision violation
+90514,Safety Controller Standstill violation
+90515,Safety Controller Tool Speed violation
+90516,Safety Controller Reduced Speed violation
+90517,Safety Controller Unsynchronized speed
+90518,Safety Controller Emergency Stop
+90519,Safety Controller Input/Output Mismatch
+90520,Safety Controller Result Mismatch
+90521,Safety Controller Brake Test violation
+90523,Safety Controller Protective Stop triggered
+90524,Safety Controller configuration error
+90525,Operation in current mode not allowed by
+90526,Safety Controller Automatic Mode Warning
+90527,Safety Controller difference in revolution
+90528,Safety Controller Tool Orientation violation
+90529,Safety Controller axis Position violation
+90530,Safety Controller Axis Speed violation
+90531,Cyclic Brake Check needs to be done
+90532,Max allowed speed during Cyclic Brake
+90533,Cyclic Brake Check will be required soon
+90534,Cyclic Brake Check interrupted or
+90535,"Tool Position supervision violation, arm"
+90537,Missing Sync-request
+90538,Safety Enable input not set
+90539,Drive module without safety supervision
+90540,Only manual mode allowed
+90542,Unknown axis in safety configuration
+90543,Cyclic Brake Check needs to be done
+90544,Safety Controller Tool Force Supervision
+90545,Safety Controller Tool Force violation
+90546,Safety Controller Joint Torque violation
+90547,Drive System Communication Failure
+90548,Overspeed During Teach Mode
+90549,Torque sensor check failure
+90550,Position sensor check failure
+90551,Drive system lock information error
+90552,Safe payload undefined
+90553,Safe payload selection error
+90554,Safe payload selection not allowed
+90555,Safe payload identification movement
+90556,Safe payload changed
+90557,One or more brakes were released
+90558,Brake release request await activation
+90559,Out of sequence brake release requested
+90600,Invalid SiosCfg tag
+90601,Version attribute not found
+90602,Specified version is not supported
+90603,Unsupported XML tag in safety
+90604,Tag/Attribute is empty or contains invalid
+90605,Net name attribute is missing
+90606,Invalid net name
+90607,Net already exists
+90608,Could not create network instance
+90609,Device attribute is missing
+90610,Device already exists
+90611,Device create failed
+90612,Device attribute insize is invalid
+90613,Device attribute outsize is invalid
+90614,Could not attach device to net
+90615,Could not attach device to net
+90616,Could not find device
+90617,Device attribute is missing
+90618,Device attribute is invalid
+90619,Device attribute is invalid
+90620,Could not create device module
+90621,Signal width invalid in device mapping
+90622,Signal offset invalid in device mapping
+90623,Signal direction invalid in device mapping
+90624,Could not find signal
+90625,Could not find device
+90626,Signal name is missing
+90627,Signal attribute is missing
+90628,Signal type is unknown
+90629,Signal attribute invalid in this context
+90630,Signal default value empty or out of range
+90631,Signal type is invalid
+90632,Could not set signal value
+90633,Signal create failed
+90634,Signal configuration conflict
+90635,Signal input already assigned
+90636,Signal value has already been set
+90637,Signal mapped outside of device I/O area
+90638,Signal overlaps other signal
+90639,Signal type does not match value type
+90640,FuncIO name is missing
+90641,FuncIO attribute is missing
+90642,Error parsing the safety configuration file
+90643,FuncIO signal not found
+90644,FuncIOMapping already exists
+90646,FuncIOMapping attribute missing
+90648,FuncIOMapping signal does not exist
+90649,FuncIOMapping failed
+90650,Unexpected bitwidth mismatch
+90651,Unexpected data size during import
+90652,Unexpected data size during export
+90653,The version of the sc_cfg file is not
+90655,Invalid value of the encoding attribute
+90656,Device Assembly attribute is missing
+90657,Device Assembly attribute is invalid
+90658,IO configuration mismatch
+90659,Invalid signal direction for commissioning
+90660,FuncIO information missing
+90661,FuncIO signal could not be set
+90662,FuncIO signal not found
+90663,Unstable Operating Mode selector input
+90664,FuncIOMappings dependency failed
+90665,New safety configuration accepted
+90666,Safety Controller configuration version
+90667,MC option does not match SC
+90668,Emergency Stop Status input could not
+90669,Drive Enable Feedback is open
+90670,Detachable TPU is allowed
+90671,The TPU has been detached
+90672,The TPU has been reattached
+90673,Request to detach the TPU was ignored
+90674,Detaching a TPU is not allowed because
+90681,CL version attribute is missing
+90682,CL version is invalid
+90683,Invalid safety configuration item
+90684,Safety configuration item/Attribute is
+90685,More than one configuration item found
+90686,Safety configuration item missing
+90687,Safety configuration item attribute missing
+90688,Too many configuration items specified
+90689,Too few configuration items specified
+90690,CL operator or operation already exists
+90691,Actuator/resultant name already used
+90692,The specified signal does not exist
+90693,Unknown signal type
+90694,Signal types differ
+90695,Operator name is unknown
+90696,Actuator/Resultant numbers differ
+90697,Operation actuator/resultant not found
+90698,Operator type is unknown
+90699,Configured operator signal type is not
+90700,
+90701,
+90702,
+90703,
+90704,
+90705,
+90707,
+90720,Device already configured
+90721,Module already configured
+90722,Device slot and subslot has already been
+90723,F-Destination address already configured
+90724,Module F-Source address already used
+90725,Module F-Destination address already
+90760,Safety data is missing from drive system.
+90770,CIP Safety IP Address mismatch
+90771,CIP Safety Electronic key mismatch
+90772,CIP Safety memory reset
+90773,CIP Safety forward open fail
+90774,CIP Safety forward close fail
+90775,Selected RPI below recommended value
+90776,Configuration Signature Mismatch
+90777,CIP Safety Configuration Mismatch - Size
+90778,CIP Safety Configuration Mismatch - Name
+90779,CIP Safety Ownership Conflict
+90780,Two-channel fault in Safety Controller
+90781,Safe Local I/O GPIO input is unstable
+90790,
+90791,
+90792,
+90793,
+90794,
+90795,
+90796,
+90797,
+90798,PROFISafe host has received an Operator
+90800,Bad XML syntax in
+90801,CRC error in
+90802,Lock Information Error
+90803,Unsupported hardware identifier in
+90804,Communication lost with Safety Controller
+90805,Start of Safety Controller failed
+90806,Safety Configuration Locked
+90807,Safety Configuration Unlocked
+90808,Unsupported Robot Type
+90809,Safety Controller set to default
+90810,Safety Controller hardware diagnostics
+90811,CPU register self-test failed
+90812,GPIO register self-test failed
+90813,GPIO start-up circuit test failed
+90814,GPIO cyclic circuit test failed
+90815,Mode Selector input test failed
+90816,Invalid Mode Selector input
+90817,Invalid state of the Mode Selector
+90818,Temperature test failed
+90819,Voltage test failed
+90820,Motor contactor test failed
+90821,Motor contactor test failed
+90822,Diagnostic has been disabled
+90823,Clock test failed
+90824,GPIO cyclic short circuit test failed
+90830,Safety Controller persistent storage data
+90831,Safety Controller persistent data lost
+90832,File
+90833,Safety configuration version not
+90834,Safety configuration attribute missing or
+90835,Safety Controller performance warning
+90836,Safety Controller has entered safe state
+90837,Safety Controller timed out waiting for
+90851,Safety Configuration Error
+90852,Empty Safety Configuration
+90853,System failure during startup
+90854,Motor contactor status conflict
+90855,Missing required UAS grant
+90856,Acknowledge timeout
+90857,Change of Operating Mode is not allowed
+90858,Missing option for Remote Operating
+90859,Operation only allowed in Manual mode
+90860,Operation only allowed in Motors Off
+90861,Safety configuration is Locked
+90862,Safety Mode not allowed
+90863,Emergency Stop open
+90864,Protective Stop open
+90865,Enabling device active in Auto mode
+90866,Not allowed Command
+90867,Safety Controller not ready
+90868,Testrack with disabled SC
+90869,Protected elements group was modified
+90870,Element is protected and cannot be
+90871,Unresolved signal reference in complex
+90872,Safety configuration violates the validation
+90873,Safety configuration violates the validation
+90874,Safety configuration violates the validation
+90875,Safety configuration violates validation
+90876,Installation of safety configuration failed
+90890,Start of Safety Controller failed
+90900,CIP Safety connection parameters
+91000,Drive unit STO/SBC error
+91001,Resolver speed error
+91002,Resolver acceleration over limit
+91003,Resolver signal level is too high
+91004,Resolver signal level is too low
+91005,Resolver revolution counter mismatch
+91006,Axis lost measurement
+91007,Invalid axis configuration parameter
+91010,Brake control test failed
+91011,DC cut off test failed
+91013,Inconsistent brake control output and
+91014,Inconsistent DC cut-off output and
+91020,FSoE configuration data updated
+91021,Axis configuration data updated
+91022,FSoE configuration data invalid
+91023,Axis configuration data invalid
+91024,Error when storing configuration data
+91025,Incorrect drive safety software version
+91030,
+91031,
+91032,Drive controller board temperature
+91033,Drive controller board temperature
+91034,Drive controller board temperature too
+91035,Drive controller board temperature too
+91036,Drive controller board temperature reading
+91037,Drive controller board temperatures differ
+91038,Internal self-test completed
+91039,Drive controller board temperatures differ
+112700,Integrated Vision not installed
+112701,Communication failure with camera
+112702,Camera job is not valid
+120001,Out of memory
+120002,Instance cannot be replaced
+120003,Wrong cfg domain version
+120004,Too long line
+120005,Attribute value out of allowed range
+120006,Duplicate instance
+120007,Unknown input
+120008,Mandatory attribute is missing
+120009,Missing instance name
+120010,Attribute value out of allowed range
+120011,Illegal version string
+120012,Illegal domain name
+120013,Illegal type name
+120014,Configuration file error
+120015,Invalid parameter
+120016,Invalid parameter value
+120017,Invalid Rapid Identifier
+120018,Unknown attribute
+120019,Unknown type
+120020,Debug service reset
+120021,Unexpected debug service change
+150330,RAPID error in module
+170001,Connected Services Agent started
+170002,Connected Services registered
+170003,Connected to ABB Connected Services
+170004,Connected Services reset by server
+170005,Connected Services Agent reset mode
+170006,Connected Services reset by user
+170007,
+170008,Command received by Connected
+170009,
+170010,
+170011,
+170012,Connected Services Agent is disabled
+170013,Customer storage connector has
+170014,ABB Connected Services pending
+170015,ABB Connected Services registered
+170016,Connected to ABB Connected Services
+170017,Disconnected from ABB Connected
+170020,Connected Services route configuration
+170021,Connected Services name resolution
+170023,Connected Services client certificate
+170024,IP not valid for the connection type
+170025,External firewall required for Public
+170026,Connected Services gateway not plugged
+170027,Connected Services gateway retry to
+170028,Connected Services unregistered from
+170029,Connected Services internal error
+170030,Connected Services authentication error
+170032,Connected Services no server
+170033,Connected Services module start failed
+170034,Connected Services registration error
+170035,Connected Services start failed
+170036,Connected Services authentication error
+170037,Connected Services certificate renewal
+170041,Customer storage connector failed to
+170042,Unable to load Data Profile
+170043,Internal error in Connected Services
+170044,Unable to send data over customer
+170045,Device Registered with ABB Connected
+170046,Device Registration failed with ABB
+170048,
+170049,Enable ConnectedServices on Private
+170050,Controller Configuration Changed
+170051,Data collection is disabled
+170052,ABB Connected Services command
+170053,ABB Connected Services command
+170054,ABB Connected Services error in
+170055,Connected Services blocked: Incorrect

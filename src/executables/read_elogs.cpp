@@ -9,8 +9,18 @@
 #include <unordered_map>
 
 
-int main()
+int main(int argc, char* argv[])
 {
+    std::string event_code_path = "/root/abb_librws/docs/event_codes/event_log_lookup.csv";
+    if (argc >= 2)
+    {
+        if (std::string(argv[1]) == "full")
+        {
+            event_code_path = "/root/abb_librws/docs/event_codes/event_log_lookup_full.csv";
+            std::cout << "hi";
+        }
+    }
+
     std::string ip = "192.168.15.81";
     std::string username = "Admin";
     std::string password = "robotics";
@@ -32,7 +42,7 @@ int main()
     abb::rws::RWSInterface rws_interface(ip, username, password, ptrContext);
 
     // generate event log description map
-    std::ifstream file("/root/abb_librws/docs/event_codes/event_log_lookup_full.csv");
+    std::ifstream file(event_code_path);
     std::string line;
 
     while (std::getline(file, line))

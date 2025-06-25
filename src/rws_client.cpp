@@ -949,7 +949,12 @@ std::string RWSClient::parseEventLog(
 
         // Append to result
         result += "Event Code: " + code + "; Time: " + tstamp + "\n";
-        result += shortDesc + "\n" + fullDesc + "\n\n";
+        result += shortDesc + "\n";
+        if (fullDesc != "")
+        {
+          result += fullDesc + "\n";
+        }
+        result += "\n";
 
         pos = timeEnd;
     }
