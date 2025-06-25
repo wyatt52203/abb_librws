@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 
     std::string task_name = "T_ROB1";  // Default task name
     // default file path for rapid programs
-    std::string original_file_path = "/root/catkin_ws/src/abb_wrapper/abb_librws/src/executables/rapid_programs/";
+    std::string original_file_path = "/root/abb_librws/src/executables/rapid_programs";
     
     if (argc >= 3)
     {

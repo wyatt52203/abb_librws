@@ -457,6 +457,12 @@ bool RWSInterface::releaseMasterShipMotion()
   return rws_client_.releaseMasterShipMotion().success;
 }
 
+bool RWSInterface::getELog()
+{
+  RWSClient::RWSResult res = rws_client_.getELog();
+  return res.success;
+}
+
 std::string RWSInterface::getLogText(const bool verbose)
 {
   return rws_client_.getLogText(verbose);

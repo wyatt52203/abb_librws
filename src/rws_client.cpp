@@ -104,8 +104,8 @@ void RWSClient::SubscriptionResources::add(const std::string resource_uri, const
  * Class definitions: RWSClient
  */
   
-/************************************************************
- * Primary methods
+ /************************************************************
+ * Print Methods
  */
 
 POCOClient::POCOResult RWSClient::debugPostAndPrint(const std::string& uri)
@@ -160,6 +160,9 @@ POCOClient::POCOResult RWSClient::debugPutAndPrint(const std::string& uri, const
   return result;
 }
 
+/************************************************************
+ * Primary methods
+ */
 
 RWSClient::RWSResult RWSClient::getConfigurationInstances(const std::string topic, const std::string type)
 {
@@ -541,8 +544,7 @@ RWSClient::RWSResult RWSClient::loadFileToRapid(const FileResource resource, std
 
   evaluation_conditions_.reset();
   evaluation_conditions_.parse_message_into_xml = false;
-  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_ACCEPTED);
 
   POCOResult result = debugPostAndPrint(uri_, content_);
 
@@ -555,8 +557,7 @@ RWSClient::RWSResult RWSClient::unloadFileFromRapid(std::string task_name)
 
   evaluation_conditions_.reset();
   evaluation_conditions_.parse_message_into_xml = false;
-  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
   POCOResult result = debugPostAndPrint(uri_);
 
@@ -742,6 +743,21 @@ RWSClient::RWSResult RWSClient::releaseMasterShipMotion()
   return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
 }
 
+RWSClient::RWSResult RWSClient::getELog()
+{
+  uri_ = Resources::RW_ELOG + "/0";
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+
+  POCOResult result = httpGet(uri_);
+  std::string event_log = parseEventLog(result.poco_info.http.response.content);
+
+  std::cout << event_log;
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
+}
+
 /************************************************************
  * Auxiliary methods
  */
@@ -885,6 +901,36 @@ std::string RWSClient::generateRAPIDPropertiesPath(const RAPIDResource& resource
 std::string RWSClient::generateFilePath(const FileResource& resource)
 {
   return Services::FILESERVICE + "/" + resource.directory + "/" + resource.filename;
+}
+
+std::string RWSClient::parseEventLog(const std::string& xml)
+{
+    std::string result;
+    std::string::size_type pos = 0;
+
+    while (true)
+    {
+        // Find next <span class="code">
+        std::string::size_type codePos = xml.find("<span class=\"code\">", pos);
+        if (codePos == std::string::npos) break;
+        codePos += strlen("<span class=\"code\">");
+        std::string::size_type codeEnd = xml.find("</span>", codePos);
+        std::string code = xml.substr(codePos, codeEnd - codePos);
+
+        // Find next <span class="tstamp">
+        std::string::size_type timePos = xml.find("<span class=\"tstamp\">", codeEnd);
+        if (timePos == std::string::npos) break;
+        timePos += strlen("<span class=\"tstamp\">");
+        std::string::size_type timeEnd = xml.find("</span>", timePos);
+        std::string tstamp = xml.substr(timePos, timeEnd - timePos);
+
+        // Append to result
+        result += "Event Code: " + code + "; Time: " + tstamp + "\n";
+
+        pos = timeEnd;
+    }
+
+    return result;
 }
 
 } // end namespace rws

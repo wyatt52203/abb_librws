@@ -77,6 +77,18 @@ target_link_libraries(load_file
   PocoCrypto
 )
 
+add_executable(read_elogs src/executables/read_elogs.cpp)
+target_link_libraries(read_elogs
+  ${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+  ${Poco_LIBRARIES}
+  PocoNet
+  PocoUtil
+  PocoFoundation
+  PocoNetSSL
+  PocoCrypto
+)
+
 #############
 ## Install ##
 #############

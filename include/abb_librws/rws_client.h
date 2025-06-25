@@ -706,6 +706,12 @@ public:
   RWSResult releaseMasterShipMotion();
 
   /**
+   * \brief Method for getting the recent event logs on the controller
+   *
+   */  
+  RWSResult getELog();
+
+  /**
    * \brief Method for parsing a communication result into a XML document.
    *
    * \param result containing the result of the parsing.
@@ -835,6 +841,15 @@ private:
    * \return std::string containing the path.
    */
   std::string generateFilePath(const FileResource& resource);
+
+  /**
+   * \brief Method for parsing event log
+   *
+   * \param response specifying the xml response to parse
+   *
+   * \return std::string containing timestamped event codes
+   */
+  std::string parseEventLog(const std::string& response);
   
   /**
    * \brief Static constant for the log's size.

@@ -624,6 +624,12 @@ public:
    *
    */
   bool releaseMasterShipMotion();
+  
+  /**
+   * \brief Method for getting the recent event logs on the controller
+   *
+   */  
+  bool getELog();
 
   /**
    * \brief A method for retrieving the internal log as a text string.
