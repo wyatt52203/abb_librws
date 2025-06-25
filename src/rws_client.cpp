@@ -430,8 +430,10 @@ RWSClient::RWSResult RWSClient::resetRAPIDProgramPointer()
   evaluation_conditions_.reset();
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+
+  POCOResult result = debugPostAndPrint(uri_);
   
-  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_); 
+  return evaluatePOCOResult(result, evaluation_conditions_); 
 }
 
 RWSClient::RWSResult RWSClient::setMotorsOn()
