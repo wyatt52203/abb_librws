@@ -272,6 +272,7 @@ const std::string Resources::RW_RAPID_SYMBOL_DATA_RAPID       = Services::RW + "
 const std::string Resources::RW_RAPID_SYMBOL_PROPERTIES_RAPID = Services::RW + "/rapid/symbol/RAPID";
 const std::string Resources::RW_RAPID_TASKS                   = Services::RW + "/rapid/tasks";
 const std::string Resources::RW_SYSTEM                        = Services::RW + "/system";
+const std::string Resources::RW_ELOG                          = Services::RW + "/elog";
 
 const XMLAttribute XMLAttributes::CLASS_CFG_IA_T_LI(Identifiers::CLASS       , Identifiers::CFG_IA_T_LI);
 const XMLAttribute XMLAttributes::CLASS_CTRLEXECSTATE(Identifiers::CLASS     , Identifiers::CTRLEXECSTATE);

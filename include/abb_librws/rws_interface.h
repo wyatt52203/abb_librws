@@ -47,6 +47,7 @@
 #define RWS_INTERFACE_H
 
 #include "rws_client.h"
+#include <unordered_map>
 
 namespace abb
 {
@@ -624,6 +625,12 @@ public:
    *
    */
   bool releaseMasterShipMotion();
+  
+  /**
+   * \brief Method for getting the recent event logs on the controller
+   *
+   */  
+  bool getELog(const std::unordered_map<std::string, std::string>& codeDescriptions);
 
   /**
    * \brief A method for retrieving the internal log as a text string.

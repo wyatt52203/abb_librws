@@ -699,6 +699,8 @@ struct SystemConstants
        * \brief RobotWare system.
        */
       static const std::string RW_SYSTEM;
+
+      static const std::string RW_ELOG;
     };
     
     /**

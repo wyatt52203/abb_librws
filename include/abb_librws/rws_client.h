@@ -50,6 +50,7 @@
 #include <sstream>
 #include <vector>
 #include <iostream>
+#include <unordered_map>
 
 #include "Poco/DOM/DOMParser.h"
 
@@ -365,9 +366,13 @@ public:
   }
   
   
-  void debugPostAndPrint(const std::string& uri, const std::string& content);
+  POCOClient::POCOResult debugPostAndPrint(const std::string& uri);
 
-  void debugGetAndPrint(const std::string& uri);
+  POCOClient::POCOResult debugPostAndPrint(const std::string& uri, const std::string& content);
+
+  POCOClient::POCOResult debugGetAndPrint(const std::string& uri);
+
+  POCOClient::POCOResult debugPutAndPrint(const std::string& uri, const std::string& content);  
 
   /**
    * \brief A method for retrieving the configuration instances of a type, belonging to a specific configuration topic.
@@ -702,6 +707,12 @@ public:
   RWSResult releaseMasterShipMotion();
 
   /**
+   * \brief Method for getting the recent event logs on the controller
+   *
+   */  
+  RWSResult getELog(const std::unordered_map<std::string, std::string>& codeDescriptions);
+
+  /**
    * \brief Method for parsing a communication result into a XML document.
    *
    * \param result containing the result of the parsing.
@@ -831,6 +842,15 @@ private:
    * \return std::string containing the path.
    */
   std::string generateFilePath(const FileResource& resource);
+
+  /**
+   * \brief Method for parsing event log
+   *
+   * \param response specifying the xml response to parse
+   *
+   * \return std::string containing timestamped event codes
+   */
+  std::string parseEventLog(const std::string& response, const std::unordered_map<std::string, std::string>& codeDescriptions);
   
   /**
    * \brief Static constant for the log's size.

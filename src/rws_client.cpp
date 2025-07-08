@@ -104,29 +104,65 @@ void RWSClient::SubscriptionResources::add(const std::string resource_uri, const
  * Class definitions: RWSClient
  */
   
-/************************************************************
- * Primary methods
+ /************************************************************
+ * Print Methods
  */
 
-void RWSClient::debugPostAndPrint(const std::string& uri, const std::string& content)
+POCOClient::POCOResult RWSClient::debugPostAndPrint(const std::string& uri)
 {
-  POCOResult result = httpPost(uri, content);
-  
-  std::cout << "Request URI: " << uri << std::endl;
-  std::cout << "Request Content: " << content << std::endl;
+  POCOResult result = httpPost(uri);
+
   std::cout << "HTTP Status: " << result.poco_info.http.response.status << std::endl;
-  std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  if (result.poco_info.http.response.content != "")
+  {
+    std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  }
+
+  return result;
 }
 
-void RWSClient::debugGetAndPrint(const std::string& uri)
+POCOClient::POCOResult RWSClient::debugPostAndPrint(const std::string& uri, const std::string& content)
+{
+  POCOResult result = httpPost(uri, content);
+
+  std::cout << "HTTP Status: " << result.poco_info.http.response.status << std::endl;
+  if (result.poco_info.http.response.content != "")
+  {
+    std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  }
+
+  return result;
+}
+
+POCOClient::POCOResult RWSClient::debugGetAndPrint(const std::string& uri)
 {
   POCOResult result = httpGet(uri);
 
-  std::cout << "Request URI: " << uri << std::endl;
   std::cout << "HTTP Status: " << result.poco_info.http.response.status << std::endl;
-  std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  if (result.poco_info.http.response.content != "")
+  {
+    std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  }
+
+  return result;
 }
 
+POCOClient::POCOResult RWSClient::debugPutAndPrint(const std::string& uri, const std::string& content)
+{
+  POCOResult result = httpPut(uri, content);
+
+  std::cout << "HTTP Status: " << result.poco_info.http.response.status << std::endl;
+  if (result.poco_info.http.response.content != "")
+  {
+    std::cout << "Response Content:\n" << result.poco_info.http.response.content << std::endl;
+  }
+
+  return result;
+}
+
+/************************************************************
+ * Primary methods
+ */
 
 RWSClient::RWSResult RWSClient::getConfigurationInstances(const std::string topic, const std::string type)
 {
@@ -368,7 +404,9 @@ RWSClient::RWSResult RWSClient::startRAPIDExecution()
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_, content_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::stopRAPIDExecution()
@@ -380,7 +418,9 @@ RWSClient::RWSResult RWSClient::stopRAPIDExecution()
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_, content_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::resetRAPIDProgramPointer()
@@ -390,8 +430,10 @@ RWSClient::RWSResult RWSClient::resetRAPIDProgramPointer()
   evaluation_conditions_.reset();
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+
+  POCOResult result = debugPostAndPrint(uri_);
   
-  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_); 
+  return evaluatePOCOResult(result, evaluation_conditions_); 
 }
 
 RWSClient::RWSResult RWSClient::setMotorsOn()
@@ -403,7 +445,9 @@ RWSClient::RWSResult RWSClient::setMotorsOn()
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_, content_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::setMotorsOff()
@@ -478,7 +522,9 @@ RWSClient::RWSResult RWSClient::uploadFile(const FileResource resource, const st
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
 
-  return evaluatePOCOResult(httpPut(uri_, content_), evaluation_conditions_);
+  POCOResult result = debugPutAndPrint(uri_, content_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::deleteFile(const FileResource resource)
@@ -500,10 +546,11 @@ RWSClient::RWSResult RWSClient::loadFileToRapid(const FileResource resource, std
 
   evaluation_conditions_.reset();
   evaluation_conditions_.parse_message_into_xml = false;
-  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_ACCEPTED);
 
-  return evaluatePOCOResult(httpPost(uri_, content_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_, content_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::unloadFileFromRapid(std::string task_name)
@@ -512,10 +559,11 @@ RWSClient::RWSResult RWSClient::unloadFileFromRapid(std::string task_name)
 
   evaluation_conditions_.reset();
   evaluation_conditions_.parse_message_into_xml = false;
-  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_CREATED);
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::startSubscription(SubscriptionResources resources)
@@ -657,7 +705,9 @@ RWSClient::RWSResult RWSClient::requestMasterShip()
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
-  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
+  POCOResult result = debugPostAndPrint(uri_);
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::releaseMasterShip()
@@ -667,8 +717,10 @@ RWSClient::RWSResult RWSClient::releaseMasterShip()
   evaluation_conditions_.reset();
   evaluation_conditions_.parse_message_into_xml = false;
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
+
+  POCOResult result = debugPostAndPrint(uri_);
  
-  return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 RWSClient::RWSResult RWSClient::requestMasterShipMotion()
@@ -691,6 +743,21 @@ RWSClient::RWSResult RWSClient::releaseMasterShipMotion()
   evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_NO_CONTENT);
 
   return evaluatePOCOResult(httpPost(uri_), evaluation_conditions_);
+}
+
+RWSClient::RWSResult RWSClient::getELog(const std::unordered_map<std::string, std::string>& codeDescriptions)
+{
+  uri_ = Resources::RW_ELOG + "/0";
+  evaluation_conditions_.reset();
+  evaluation_conditions_.parse_message_into_xml = true;
+  evaluation_conditions_.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
+
+  POCOResult result = httpGet(uri_);
+  std::string event_log = parseEventLog(result.poco_info.http.response.content, codeDescriptions);
+
+  std::cout << event_log;
+
+  return evaluatePOCOResult(result, evaluation_conditions_);
 }
 
 /************************************************************
@@ -836,6 +903,63 @@ std::string RWSClient::generateRAPIDPropertiesPath(const RAPIDResource& resource
 std::string RWSClient::generateFilePath(const FileResource& resource)
 {
   return Services::FILESERVICE + "/" + resource.directory + "/" + resource.filename;
+}
+
+std::string RWSClient::parseEventLog(
+    const std::string& xml, 
+    const std::unordered_map<std::string, std::string>& codeDescriptions)
+{
+    std::string result;
+    std::string::size_type pos = 0;
+
+    while (true)
+    {
+        // Find next <span class="code">
+        std::string::size_type codePos = xml.find("<span class=\"code\">", pos);
+        if (codePos == std::string::npos) break;
+        codePos += strlen("<span class=\"code\">");
+        std::string::size_type codeEnd = xml.find("</span>", codePos);
+        std::string code = xml.substr(codePos, codeEnd - codePos);
+
+        // Find next <span class="tstamp">
+        std::string::size_type timePos = xml.find("<span class=\"tstamp\">", codeEnd);
+        if (timePos == std::string::npos) break;
+        timePos += strlen("<span class=\"tstamp\">");
+        std::string::size_type timeEnd = xml.find("</span>", timePos);
+        std::string tstamp = xml.substr(timePos, timeEnd - timePos);
+
+        // Lookup code description
+        std::string shortDesc = "Unknown Event";
+        std::string fullDesc;
+        auto it = codeDescriptions.find(code);
+        if (it != codeDescriptions.end())
+        {
+            const std::string& desc = it->second;
+            std::string::size_type commaPos = desc.find(',');
+            if (commaPos != std::string::npos)
+            {
+                shortDesc = desc.substr(0, commaPos);
+                fullDesc = desc.substr(commaPos + 1);
+            }
+            else
+            {
+                shortDesc = desc;  // fallback: no comma found
+            }
+        }
+
+        // Append to result
+        result += "Event Code: " + code + "; Time: " + tstamp + "\n";
+        result += shortDesc + "\n";
+        if (fullDesc != "")
+        {
+          result += fullDesc + "\n";
+        }
+        result += "\n";
+
+        pos = timeEnd;
+    }
+
+    return result;
 }
 
 } // end namespace rws

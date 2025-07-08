@@ -15,7 +15,8 @@ int main()
     abb::rws::RWSInterface rws_interface(ip, username, password, ptrContext);
 
     // Turn off existing processes
-    std::cout << "program off: " << rws_interface.stopRAPIDExecution() << std::endl;
+    std::cout << "program off: " << std::endl;
+    rws_interface.stopRAPIDExecution();
 
     return 0;
 }
