@@ -191,8 +191,8 @@ Event Code,Description
 10354,Restore aborted due to lost system data.
 10355,Restore error
 10356,Restore warning
-10400,User
-10401,User
+10400,User Admin Log On
+10401,User Admin Log Off
 10420,New unsafe robot path
 10421,Planned path not aborted
 10451,Update of RobotWare system failed
@@ -1482,7 +1482,7 @@ Event Code,Description
 41578,Socket error
 41579,Socket error
 41580,Socket error
-41581,Socket error
+41581,Socket timeout warning
 41582,Socket error
 41583,Socket error
 41584,Socket error
