@@ -1,7 +1,5 @@
 MODULE motion
     VAR bool left_to_right;
-    VAR num y;
-    VAR num z;
     
     ! interrupt identifiers
     VAR intnum intno1;
@@ -21,6 +19,8 @@ MODULE motion
     PERS bool play;
     PERS zonedata zone;
     PERS speeddata speed;
+    PERS num y;
+    PERS num z;
     
     
     
@@ -91,7 +91,7 @@ MODULE motion
         StopMove;
         ClearPath;
         StartMove;
-        MoveJ [[350, lft, upr], [1,0,0,0], [-1,0,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+        MoveJ [[350, lft, upr], [1,0,0,0], [-1,0,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0;
 
         go := FALSE;
         SetDO MyResetSignal, 0;

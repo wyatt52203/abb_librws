@@ -1,4 +1,4 @@
-MODULE udp_receiver
+MODULE udp_communication
     VAR socketdev udp_socket;
     VAR string client_ip;
     VAR string server_ip;
@@ -33,6 +33,8 @@ MODULE udp_receiver
     PERS bool play;
     PERS zonedata zone;
     PERS speeddata speed;
+    PERS num y;
+    PERS num z;
     
     
     
@@ -66,7 +68,6 @@ MODULE udp_receiver
 
         SocketCreate udp_socket \UDP;
         SocketBind udp_socket, server_ip, server_port;
-        TPWrite "UDP server ready.";
 
 
         !receive   
@@ -76,12 +77,10 @@ MODULE udp_receiver
             
             !recieve_sucess gets set to false if socketReceiveFrom error handler is called
             if receive_success THEN
-                TPWrite "msg: " + msg;
                 cmd := StrPart(msg, 1, 3);
-                TPWrite "cmd: " + cmd;
                 str_length := StrLen(msg);
+                ! Extracts (str_length - 4) total characters, starting at 5
                 value := StrPart(msg, 5, (str_length - 4));
-                TPWrite "val: " + value;
                 parse_success := StrToVal(value, parsed_val);
 
                 if parse_success THEN
@@ -193,13 +192,11 @@ MODULE udp_receiver
         ENDWHILE        
 
         ERROR
-            TPWrite "ERRNO: " + ValToStr(ERRNO);
             IF ERRNO = ERR_SOCK_TIMEOUT THEN
                 receive_success := FALSE;
                 TRYNEXT;
             ENDIF
 
-        TPWrite "closing now";
         SocketClose udp_socket;
         
     ENDPROC
