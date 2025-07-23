@@ -1,5 +1,4 @@
 MODULE direct_arm_ctl
-    VAR num move_distance := 60;  ! Default move distance
     VAR robtarget current_pos;
     VAR intnum intno2;
 
@@ -11,21 +10,32 @@ MODULE direct_arm_ctl
     VAR num j6;
     VAR jointtarget jt;
 
-    ! Web Params
+    VAR num y;
+    VAR num z;
+    VAR bool calibrated;
+    VAR num cur_error;
+
+    VAR string print_msg;
+
+    VAR num temp1;
+    VAR num temp2;
+
+    ! PERS Params
     PERS bool go;
     PERS zonedata zone;
     PERS speeddata speed;
-    PERS num mdr;
-    PERS bool cb;
-    PERS num y;
-    PERS num z;
+    PERS num prev_y_target;
+    PERS num prev_z_target;
+
+    PERS num y_target;
+    PERS num z_target;
     
     TRAP reset_trap
         StopMove;
         ClearPath;
         StartMove;
         MoveJ [[350, -600, 850], [1,0,0,0], [-1,0,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0 \WObj:=wobj0;
-        Calibrate;
+        CustomCalibrate;
 
         go := FALSE;
         SetDO MyResetSignal, 0;
@@ -33,7 +43,7 @@ MODULE direct_arm_ctl
         ExitCycle;
     ENDTRAP
 
-    PROC Calibrate()
+    PROC CustomCalibrate()
         
         ! Wait for robot to fully stop
         WaitRob \ZeroSpeed;
@@ -46,6 +56,9 @@ MODULE direct_arm_ctl
         y := current_pos.trans.y;
         z := current_pos.trans.z;
 
+        prev_y_target := y;
+        prev_z_target := z;
+
     ENDPROC
 
     
@@ -57,63 +70,67 @@ MODULE direct_arm_ctl
 
         ConfL \Off;
 
-        zone := z200;
-        speed := v1000;
-        AccSet 50, 50 \FinePointRamp:=50;
+        zone := z100;
+        speed := v80;
+        AccSet 100, 100 \FinePointRamp:=100;
 
-        Calibrate;
+        CustomCalibrate;
+
+        y_target := y;
+        z_target := z;
+        calibrated := TRUE;
 
         WHILE TRUE DO
 
-            if (NOT go) THEN
-                ! Wait for persistent variable signal
-                WaitUntil go;
+            WaitTime 0.01;
 
-                if cb THEN
-                    Calibrate;
-                    cb := FALSE;
-                    mdr := -5;
+            if go THEN
+                TPWrite("go!");
+                ! Enforce Y bounds [-600, 600]
+                IF y_target > 600 THEN
+                    y_target := 600;
+                ELSEIF y_target < -600 THEN
+                    y_target := -600;
+                ENDIF
+
+                ! Enforce Z bounds [250, 850]
+                IF z_target > 850 THEN
+                    z_target := 850;
+                ELSEIF z_target < 250 THEN
+                    z_target := 250;
+                ENDIF
+                
+                go := FALSE;
+
+                ! save location to move to within this task
+                temp1 := y_target;
+                temp2 := z_target;
+
+                ! Perform movement
+                calibrated := FALSE;
+                MoveL [[350, y_target, z_target], [1,0,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, z100, tool0;
+
+                ! save location that was moved to persisent variable
+                prev_y_target := temp1;
+                prev_z_target := temp2;
+
+            ELSEIF NOT calibrated THEN
+                ! Find true y and z
+                CustomCalibrate;
+
+                cur_error := Abs(y - y_target) + Abs(z - z_target);
+
+                IF (cur_error > 0.1) THEN
+                    TPWrite("movin fine");
+                    ! move towards target if there is any error
+                    MoveL [[350, y_target, z_target], [1,0,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], v80, fine, tool0;
+                ELSE
+                    ! Mark errorless otherwise
+                    calibrated := TRUE;
                 ENDIF
             ENDIF
-
-            TEST mdr
-                CASE -1:
-                    y := y + move_distance;
-                CASE -2:
-                    y := y - move_distance;
-                CASE -3:
-                    z := z + move_distance;
-                CASE -4:
-                    z := z - move_distance;
-                DEFAULT:
-                    IF mdr > 0 THEN
-                        move_distance := mdr;
-                    ENDIF
-            ENDTEST
-
-            ! Enforce Y bounds [-600, 600]
-            IF y > 600 THEN
-                y := 600;
-            ELSEIF y < -600 THEN
-                y := -600;
-            ENDIF
-
-            ! Enforce Z bounds [100, 700]
-            IF z > 850 THEN
-                z := 850;
-            ELSEIF z < 250 THEN
-                z := 250;
-            ENDIF
-            
-            go := FALSE;
-
-            ! Perform movement
-            MoveL [[350, y, z], [1,0,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
         ENDWHILE        
         
     ENDPROC
     
 ENDMODULE
-
-
-
