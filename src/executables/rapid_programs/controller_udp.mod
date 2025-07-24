@@ -1,4 +1,4 @@
-MODULE udp_communication_arm_ctl
+MODULE controller_udp
     VAR socketdev udp_socket;
     VAR string client_ip;
     VAR string server_ip;
