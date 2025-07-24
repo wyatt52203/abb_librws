@@ -13,6 +13,7 @@ MODULE controller
     VAR num speed_multiplier := 1500; ! Will reach targets at speed using multiplier, capped by precision rate
     VAR num precision_multiplier := 0.4; ! Max yz speed should be 250 hz * precision multiplier -> mm/s
     VAR bool calibrated;
+    
 
     ! PERS Params
     PERS bool go;
@@ -28,6 +29,10 @@ MODULE controller
     PERS num con_z;
     PERS num input_spd;
 
+    PERS bool button_move;
+    PERS num button_dir;
+    PERS num move_distance;
+
     ! TODO
     ! web/controller speed control? easier to select from options than make custom slider I think?
     ! Prob not to hard to make slider, will just sacrifice precision
@@ -38,10 +43,10 @@ MODULE controller
     ! button on controller also does reset
 
     ! REAL:
-    ! make speed implementation pretty
-    ! show position messages
-    ! bring back that old button shit
-    ! controller connected display
+    ! make speed implementation pretty X
+    ! show position messages X
+    ! bring back that old button shit X
+    ! controller connected display 
     ! Controller button if goated??
 
     
@@ -75,6 +80,22 @@ MODULE controller
         prev_z_target := current_pos.trans.z;
 
     ENDPROC
+
+    PROC EnforceBounds(INOUT num y, INOUT num z)
+        ! Enforce Y bounds [-600, 600]
+        IF y > 600 THEN
+            y := 600;
+        ELSEIF y < -600 THEN
+            y := -600;
+        ENDIF
+
+        ! Enforce Z bounds [250, 850]
+        IF z > 850 THEN
+            z := 850;
+        ELSEIF z < 250 THEN
+            z := 250;
+        ENDIF
+    ENDPROC
     
     PROC main()
 
@@ -92,11 +113,11 @@ MODULE controller
 
         y_target := prev_y_target;
         z_target := prev_z_target;
-        input_spd := 125;
+        input_spd := 400;
 
         WHILE TRUE DO
 
-            WaitTime 0.01;
+            WaitTime 0.005;
 
             IF NOT calibrated THEN
                 ! Find true y and z
@@ -110,6 +131,28 @@ MODULE controller
                     
             ENDIF
 
+            IF button_move THEN
+                TEST button_dir
+                    CASE -1:
+                        y_target := y_target + move_distance;
+                    CASE -2:
+                        y_target := y_target - move_distance;
+                    CASE -3:
+                        z_target := z_target + move_distance;
+                    CASE -4:
+                        z_target := z_target - move_distance;
+                ENDTEST
+
+                EnforceBounds y_target, z_target;
+                MoveL [[350, y_target, z_target], [1,0,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], [input_spd, 1000, 5000, 1000], z100, tool0;
+                prev_y_target := y_target;
+                prev_z_target := z_target;
+
+                button_move := FALSE;
+                calibrated := FALSE;
+
+            ENDIF
+
 
             WHILE (con_y <> 0) OR (con_z <> 0) DO
                 precision_multiplier := input_spd / 250;
@@ -120,19 +163,7 @@ MODULE controller
                 y_target := prev_y_target - dist_y;
                 z_target := prev_z_target + dist_z;
 
-                ! Enforce Y bounds
-                IF y_target > 600 THEN
-                    y_target := 600;
-                ELSEIF y_target < -600 THEN
-                    y_target := -600;
-                ENDIF
-
-                ! Enforce Z bounds [250, 850]
-                IF z_target > 850 THEN
-                    z_target := 850;
-                ELSEIF z_target < 250 THEN
-                    z_target := 250;
-                ENDIF
+                EnforceBounds y_target, z_target;
 
                 spd := speed_multiplier * Sqrt(Pow(con_y, 2) + Pow(con_z, 2));
                 speed := [spd, 1000, 5000, 1000];

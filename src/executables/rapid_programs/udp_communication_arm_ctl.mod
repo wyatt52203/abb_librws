@@ -106,7 +106,7 @@ MODULE udp_communication_arm_ctl
                                     IF mdr > 0 THEN
                                         move_distance := mdr;
                                     ENDIF
-                        ENDTEST
+                            ENDTEST
                         CASE "con":
                             ! multiply joystick value by constant speed multiplier
                             delta_y := (speed_multiplier*parsed_val);
