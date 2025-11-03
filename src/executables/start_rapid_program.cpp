@@ -6,7 +6,7 @@
 
 int main()
 {
-    std::string ip = "192.168.15.81";
+    std::string ip = "192.168.15.82";
     std::string username = "Admin";
     std::string password = "robotics";
 

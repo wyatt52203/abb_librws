@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 
     std::string task_name = "T_ROB1";  // Default task name
     // default file path for rapid programs
-    std::string original_file_path = "/home/nodered2/abb_librws1/abb_librws/src/executables/rapid_programs/";
+    std::string original_file_path = "/home/nodered2/abb_librws2/abb_librws/src/executables/rapid_programs/";
     
     if (argc >= 3)
     {
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     std::string controller_file_name = argv[1];
 
     std::string original_file_name = controller_file_name;
-    std::string ip = "192.168.15.81";
+    std::string ip = "192.168.15.82";
     std::string username = "Admin";
     std::string password = "robotics";
     std::string controller_file_path = "Home/Programs/Wizard";
