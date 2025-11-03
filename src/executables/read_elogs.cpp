@@ -11,13 +11,12 @@
 
 int main(int argc, char* argv[])
 {
-    std::string event_code_path = "/root/abb_librws/docs/event_codes/event_log_lookup.csv";
+    std::string event_code_path = "/home/nodered2/abb_librws1/abb_librws/docs/event_codes/event_log_lookup.csv";
     if (argc >= 2)
     {
         if (std::string(argv[1]) == "full")
         {
-            event_code_path = "/root/abb_librws/docs/event_codes/event_log_lookup_full.csv";
-            std::cout << "hi";
+            event_code_path = "/home/nodered2/abb_librws1/abb_librws/docs/event_codes/event_log_lookup_full.csv";
         }
     }
 
@@ -25,13 +24,6 @@ int main(int argc, char* argv[])
     std::string username = "Admin";
     std::string password = "robotics";
 
-    std::string task_name = "T_ROB1";  // Default task name
-    // default file path for rapid programs
-    std::string original_file_path = "/root/abb_librws/src/executables/rapid_programs";
-    std::string controller_file_name = "motion";
-
-    std::string original_file_name = controller_file_name;
-    std::string controller_file_path = "Home/Programs/Wizard";
     std::unordered_map<std::string, std::string> codeDescriptions;
 
 
