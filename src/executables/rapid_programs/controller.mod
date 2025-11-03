@@ -54,7 +54,7 @@ MODULE controller
         StopMove;
         ClearPath;
         StartMove;
-        MoveJ [[350, -600, 850], [1,0,0,0], [-1,0,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0 \WObj:=wobj0;
+        MoveJ [[300, -600, 850], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0 \WObj:=wobj0;
         CustomCalibrate;
 
         y_target := -600;
@@ -89,11 +89,11 @@ MODULE controller
             y := -600;
         ENDIF
 
-        ! Enforce Z bounds [250, 850]
+        ! Enforce Z bounds [100, 850]
         IF z > 850 THEN
             z := 850;
-        ELSEIF z < 250 THEN
-            z := 250;
+        ELSEIF z < 100 THEN
+            z := 100;
         ENDIF
     ENDPROC
     
@@ -144,7 +144,8 @@ MODULE controller
                 ENDTEST
 
                 EnforceBounds y_target, z_target;
-                MoveL [[350, y_target, z_target], [1,0,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], [input_spd, 1000, 5000, 1000], z100, tool0;
+                
+                MoveL [[300, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], [input_spd, 1000, 5000, 1000], z100, tool0;
                 prev_y_target := y_target;
                 prev_z_target := z_target;
 
@@ -168,7 +169,7 @@ MODULE controller
                 spd := speed_multiplier * Sqrt(Pow(con_y, 2) + Pow(con_z, 2));
                 speed := [spd, 1000, 5000, 1000];
 
-                MoveL [[350, y_target, z_target], [1,0,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, z100, tool0;
+                MoveL [[300, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, z100, tool0;
 
                 prev_y_target := y_target;
                 
