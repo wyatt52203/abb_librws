@@ -52,7 +52,7 @@ MODULE motion
                     y := rgt;
                 ENDIF
 
-                IF go MoveL [[300, y, z], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+                IF go MoveL [[300, y, z], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
 
                 IF left_to_right THEN
                     y := rgt;
@@ -60,7 +60,7 @@ MODULE motion
                     y := lft;
                 ENDIF
 
-                IF go MoveL [[300, y, z], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+                IF go MoveL [[300, y, z], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
 
                 z := z - int;
                 left_to_right := NOT left_to_right;
