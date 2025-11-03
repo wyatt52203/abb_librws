@@ -52,7 +52,7 @@ MODULE udp_receiver
         ! SocketClose udp_socket;
 
         SocketCreate udp_socket \UDP;
-        SocketBind udp_socket, "192.168.15.81", 1025;
+        SocketBind udp_socket, "192.168.15.102", 1025;
 
         TPWrite "UDP server ready.";
 

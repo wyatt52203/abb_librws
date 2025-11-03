@@ -41,7 +41,7 @@ MODULE controller_udp
         SocketClose udp_socket;
 
         ! Set connection parameters
-        client_ip := "192.168.15.76";
+        client_ip := "192.168.15.102";
         server_ip := "192.168.15.81";
         client_receiving_port := 58000;
         server_port := 1026;
