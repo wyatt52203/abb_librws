@@ -35,6 +35,7 @@ MODULE motion
         ISignalDO MyResetSignal, 1, intno2;
 
         ConfL \Off;
+        go := FALSE;
 
         WHILE TRUE DO
             ! Wait for persistent variable signal
