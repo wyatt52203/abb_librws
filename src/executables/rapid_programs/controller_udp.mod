@@ -32,13 +32,15 @@ MODULE controller_udp
     PERS num z_target;
     PERS num move_distance := 60;
     PERS num x;
-    PERS num x_broadcast;
+    PERS num prev_x_target;
+    PERS num motion_mode; ! 0 means motion in physical x/y, 1 means motion in z
     
     PROC main()
         ! Reset params
         go := FALSE;
         SetDO MyResetSignal, 0;
         x := 300;
+        motion_mode := 0;
 
         ! delete old connections
         SocketClose udp_socket;
@@ -101,6 +103,12 @@ MODULE controller_udp
                             x := parsed_val;
                             button_move := TRUE;
                             button_dir := -5;
+                        CASE "btn":
+                            IF parsed_val2 == 1 THEN
+                                motion_mode := 0;
+                            ELSEIF parsed_val == 1 THEN
+                                motion_mode := 1;
+                            ENDIF
                     ENDTEST
                 ELSE
                     response_msg := "could not parse message";
@@ -119,7 +127,7 @@ MODULE controller_udp
 
             json := "{";
             json := json + """msg"": """ + response_msg;
-            json := json + "\\n\\npos: \\nx: " + NumToStr(x_broadcast, 0);
+            json := json + "\\n\\npos: \\nx: " + NumToStr(prev_x_target, 0);
             json := json + " y: " + NumToStr(y_target, 0);
             json := json + " z: " + NumToStr(z_target, 0) + """";
             json := json + "}";

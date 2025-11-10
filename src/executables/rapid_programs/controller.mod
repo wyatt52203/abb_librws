@@ -7,6 +7,7 @@ MODULE controller
     VAR string print_msg;
     VAR num dist_y;
     VAR num dist_z;
+    VAR num dist_x;
     VAR num spd;
     VAR num cur_error;
 
@@ -26,7 +27,7 @@ MODULE controller
     PERS num z_target;
 
     PERS num x;
-    PERS num x_broadcast;
+    PERS num prev_x_target;
 
     PERS num con_y;
     PERS num con_z;
@@ -35,23 +36,7 @@ MODULE controller
     PERS bool button_move;
     PERS num button_dir;
     PERS num move_distance;
-
-
-    ! TODO
-    ! web/controller speed control? easier to select from options than make custom slider I think?
-    ! Prob not to hard to make slider, will just sacrifice precision
-    ! DPAD implementation
-    ! node that starts docker container
-    ! node that checks if controller is connected
-    ! single joystick implementation
-    ! button on controller also does reset
-
-    ! REAL:
-    ! make speed implementation pretty X
-    ! show position messages X
-    ! bring back that old button shit X
-    ! controller connected display 
-    ! Controller button if goated??
+    PERS num motion_mode; ! 0 means motion in physical x/y, 1 means motion in z
 
     
     TRAP reset_trap
@@ -82,7 +67,7 @@ MODULE controller
 
         prev_y_target := current_pos.trans.y;
         prev_z_target := current_pos.trans.z;
-        x_broadcast := current_pos.trans.x;
+        prev_x_target := current_pos.trans.x;
 
     ENDPROC
 
@@ -163,7 +148,7 @@ MODULE controller
                     CASE -4:
                         z_target := z_target - move_distance;
                     CASE -5:
-                        x_broadcast := x;
+                        prev_x_target := x;
                 ENDTEST
 
                 EnforceBounds y_target, z_target, x;
@@ -177,14 +162,33 @@ MODULE controller
 
             ENDIF
 
+            WHILE (con_z <> 0) AND (motion_mode == 1) DO
+                precision_multiplier := input_spd / 500;
 
-            WHILE (con_y <> 0) OR (con_z <> 0) DO
+                dist_x := precision_multiplier * con_z;
+
+                x := prev_x_target + dist_x;
+
+                EnforceBounds y_target, z_target, x;
+
+                spd := speed_multiplier * Sqrt(Pow(con_y, 2) + Pow(con_z, 2));
+                speed := [spd, 1000, 5000, 1000];
+
+                MoveL [[x, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, z100, tool0;
+
+                prev_x_target := x;
+
+                calibrated := FALSE;
+
+            ENDWHILE
+
+            WHILE (((con_y <> 0) OR (con_z <> 0)) AND (motion_mode == 0)) DO
                 precision_multiplier := input_spd / 250;
 
                 dist_y := precision_multiplier * con_y;
                 dist_z := precision_multiplier * con_z;
 
-                y_target := prev_y_target - dist_y;
+                y_target := prev_y_target + dist_y;
                 z_target := prev_z_target + dist_z;
 
                 EnforceBounds y_target, z_target, x;
