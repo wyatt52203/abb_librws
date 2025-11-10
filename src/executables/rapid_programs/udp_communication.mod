@@ -63,7 +63,7 @@ MODULE udp_communication
         ! Set connection parameters
         client_ip := "192.168.15.102";
         server_ip := "192.168.15.82";
-        client_receiving_port := 66000;
+        client_receiving_port := 4600;
         server_port := 1025;
 
         SocketCreate udp_socket \UDP;
