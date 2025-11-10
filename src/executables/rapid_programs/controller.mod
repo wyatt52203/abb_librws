@@ -92,8 +92,8 @@ MODULE controller
         ! Enforce Z bounds [10, 850]
         IF z > 750 THEN
             z := 750;
-        ELSEIF z < 10 THEN
-            z := 10;
+        ELSEIF z < -350 THEN
+            z := -350;
         ENDIF
     ENDPROC
     
