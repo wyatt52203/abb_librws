@@ -86,12 +86,12 @@ MODULE controller
         IF y > 600 THEN
             y := 600;
         ELSEIF y < -500 THEN
-            y := -750;
+            y := -500;
         ENDIF
 
         ! Enforce Z bounds [10, 850]
         IF z > 750 THEN
-            z := 850;
+            z := 750;
         ELSEIF z < 10 THEN
             z := 10;
         ENDIF
