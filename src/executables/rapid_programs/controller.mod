@@ -25,6 +25,9 @@ MODULE controller
     PERS num y_target;
     PERS num z_target;
 
+    PERS num x;
+    PERS num x_broadcast;
+
     PERS num con_y;
     PERS num con_z;
     PERS num input_spd;
@@ -32,6 +35,7 @@ MODULE controller
     PERS bool button_move;
     PERS num button_dir;
     PERS num move_distance;
+
 
     ! TODO
     ! web/controller speed control? easier to select from options than make custom slider I think?
@@ -78,10 +82,11 @@ MODULE controller
 
         prev_y_target := current_pos.trans.y;
         prev_z_target := current_pos.trans.z;
+        x_broadcast := current_pos.trans.x;
 
     ENDPROC
 
-    PROC EnforceBounds(INOUT num y, INOUT num z)
+    PROC EnforceBounds(INOUT num y, INOUT num z, INOUT num x)
         ! Enforce Y bounds [-500, 600]
 
         ! +750 height - change in safety config
@@ -104,6 +109,12 @@ MODULE controller
             z := 700;
         ELSEIF z < -250 THEN
             z := -250;
+        ENDIF
+
+        IF x > 320 THEN
+            x := 320;
+        ELSEIF x < 280 THEN
+            x := 280;
         ENDIF
     ENDPROC
     
@@ -155,7 +166,7 @@ MODULE controller
 
                 EnforceBounds y_target, z_target;
                 
-                MoveL [[300, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], [input_spd, 1000, 5000, 1000], z100, tool0;
+                MoveL [[x, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], [input_spd, 1000, 5000, 1000], z100, tool0;
                 prev_y_target := y_target;
                 prev_z_target := z_target;
 
@@ -179,7 +190,7 @@ MODULE controller
                 spd := speed_multiplier * Sqrt(Pow(con_y, 2) + Pow(con_z, 2));
                 speed := [spd, 1000, 5000, 1000];
 
-                MoveL [[300, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, z100, tool0;
+                MoveL [[x, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, z100, tool0;
 
                 prev_y_target := y_target;
                 
