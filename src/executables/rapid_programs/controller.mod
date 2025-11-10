@@ -83,10 +83,20 @@ MODULE controller
 
     PROC EnforceBounds(INOUT num y, INOUT num z)
         ! Enforce Y bounds [-500, 600]
-        IF y > 600 THEN
-            y := 600;
-        ELSEIF y < -500 THEN
-            y := -500;
+
+        ! +750 height - change in safety config
+        ! -250 height - soft, -350 safety config
+
+        ! left side -500 safety config 
+        ! software -450
+
+        ! right side safety 550
+        ! software 500
+
+        IF y > 450 THEN
+            y := 450;
+        ELSEIF y < -450 THEN
+            y := -450;
         ENDIF
 
         ! Enforce Z bounds [10, 850]
