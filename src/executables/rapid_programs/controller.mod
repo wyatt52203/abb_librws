@@ -111,8 +111,8 @@ MODULE controller
             z := -250;
         ENDIF
 
-        IF x > 400 THEN
-            x := 400;
+        IF x > 500 THEN
+            x := 500;
         ELSEIF x < 250 THEN
             x := 250;
         ENDIF
