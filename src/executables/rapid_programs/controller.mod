@@ -111,10 +111,10 @@ MODULE controller
             z := -250;
         ENDIF
 
-        IF x > 320 THEN
+        IF x > 350 THEN
             x := 320;
-        ELSEIF x < 280 THEN
-            x := 280;
+        ELSEIF x < 250 THEN
+            x := 250;
         ENDIF
     ENDPROC
     
