@@ -54,11 +54,11 @@ MODULE controller
         StopMove;
         ClearPath;
         StartMove;
-        MoveJ [[300, -600, 850], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0 \WObj:=wobj0;
+        MoveJ [[300, -500, 750], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v200, fine, tool0 \WObj:=wobj0;
         CustomCalibrate;
 
-        y_target := -600;
-        z_target := 850;
+        y_target := -500;
+        z_target := 750;
 
         go := FALSE;
         SetDO MyResetSignal, 0;
@@ -82,18 +82,18 @@ MODULE controller
     ENDPROC
 
     PROC EnforceBounds(INOUT num y, INOUT num z)
-        ! Enforce Y bounds [-600, 600]
+        ! Enforce Y bounds [-500, 600]
         IF y > 600 THEN
             y := 600;
-        ELSEIF y < -600 THEN
-            y := -600;
+        ELSEIF y < -500 THEN
+            y := -750;
         ENDIF
 
-        ! Enforce Z bounds [100, 850]
-        IF z > 850 THEN
+        ! Enforce Z bounds [10, 850]
+        IF z > 750 THEN
             z := 850;
-        ELSEIF z < 100 THEN
-            z := 100;
+        ELSEIF z < 10 THEN
+            z := 10;
         ENDIF
     ENDPROC
     

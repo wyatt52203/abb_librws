@@ -43,10 +43,10 @@ MODULE udp_communication
 
         spd := 800;
         int := 100;
-        lft := -600;
+        lft := -500;
         rgt := 600;
-        upr := 850;
-        lwr := 100;
+        upr := 750;
+        lwr := 10;
         acc := 100;
         jrk := 100;
         dac := 100;

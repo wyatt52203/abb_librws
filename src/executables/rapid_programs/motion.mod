@@ -92,7 +92,7 @@ MODULE motion
         StopMove;
         ClearPath;
         StartMove;
-        MoveJ [[300, lft, upr], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0;
+        MoveJ [[300, lft, upr], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v200, fine, tool0;
 
         go := FALSE;
         SetDO MyResetSignal, 0;
