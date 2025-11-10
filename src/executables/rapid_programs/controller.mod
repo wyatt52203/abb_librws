@@ -111,8 +111,8 @@ MODULE controller
             z := -250;
         ENDIF
 
-        IF x > 500 THEN
-            x := 500;
+        IF x > 450 THEN
+            x := 450;
         ELSEIF x < 250 THEN
             x := 250;
         ENDIF
@@ -162,6 +162,8 @@ MODULE controller
                         z_target := z_target + move_distance;
                     CASE -4:
                         z_target := z_target - move_distance;
+                    CASE -5:
+                        x_broadcast := x;
                 ENDTEST
 
                 EnforceBounds y_target, z_target, x;

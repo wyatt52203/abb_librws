@@ -99,6 +99,8 @@ MODULE controller_udp
                             ENDIF
                         CASE "xps":
                             x := parsed_val;
+                            button_move := TRUE;
+                            button_dir := -5;
                     ENDTEST
                 ELSE
                     response_msg := "could not parse message";
