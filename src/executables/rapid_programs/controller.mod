@@ -164,7 +164,7 @@ MODULE controller
                         z_target := z_target - move_distance;
                 ENDTEST
 
-                EnforceBounds y_target, z_target;
+                EnforceBounds y_target, z_target, x;
                 
                 MoveL [[x, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], [input_spd, 1000, 5000, 1000], z100, tool0;
                 prev_y_target := y_target;
@@ -185,7 +185,7 @@ MODULE controller
                 y_target := prev_y_target - dist_y;
                 z_target := prev_z_target + dist_z;
 
-                EnforceBounds y_target, z_target;
+                EnforceBounds y_target, z_target, x;
 
                 spd := speed_multiplier * Sqrt(Pow(con_y, 2) + Pow(con_z, 2));
                 speed := [spd, 1000, 5000, 1000];
