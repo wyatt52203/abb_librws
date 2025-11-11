@@ -35,6 +35,7 @@ MODULE udp_communication
     PERS speeddata speed;
     PERS num y;
     PERS num z;
+    PERS num x;
     
     
     
@@ -43,10 +44,11 @@ MODULE udp_communication
 
         spd := 800;
         int := 100;
-        lft := -500;
-        rgt := 600;
-        upr := 750;
-        lwr := 10;
+        lft := -450;
+        rgt := 450;
+        upr := 700;
+        lwr := -250;
+        x := 300
         acc := 100;
         jrk := 100;
         dac := 100;
@@ -116,6 +118,8 @@ MODULE udp_communication
                             upr := parsed_val;
                         CASE "lwr":
                             lwr := parsed_val;
+                        CASE "xxx":
+                            x := parsed_val;
                         CASE "acc":
                             acc := parsed_val;
                         CASE "jrk":
@@ -169,6 +173,7 @@ MODULE udp_communication
             json := json + """spd"": " + NumToStr(spd, 0) + ",";
             json := json + """int"": " + NumToStr(int, 0) + ",";
             json := json + """lft"": " + NumToStr(lft, 0) + ",";
+            json := json + """xxx"": " + NumToStr(x, 0) + ",";
             json := json + """rgt"": " + NumToStr(rgt, 0);
             json := json + "}";
             SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
