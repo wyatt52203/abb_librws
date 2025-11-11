@@ -48,7 +48,7 @@ MODULE udp_communication
         rgt := 450;
         upr := 700;
         lwr := -250;
-        x := 300
+        x := 300;
         acc := 100;
         jrk := 100;
         dac := 100;
