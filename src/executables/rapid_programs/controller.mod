@@ -162,7 +162,7 @@ MODULE controller
 
             ENDIF
 
-            WHILE (con_z <> 0) AND (motion_mode == 1) DO
+            WHILE (con_z <> 0) AND (motion_mode = 1) DO
                 precision_multiplier := input_spd / 500;
 
                 dist_x := precision_multiplier * con_z;
@@ -182,7 +182,7 @@ MODULE controller
 
             ENDWHILE
 
-            WHILE (((con_y <> 0) OR (con_z <> 0)) AND (motion_mode == 0)) DO
+            WHILE (((con_y <> 0) OR (con_z <> 0)) AND (motion_mode = 0)) DO
                 precision_multiplier := input_spd / 250;
 
                 dist_y := precision_multiplier * con_y;
