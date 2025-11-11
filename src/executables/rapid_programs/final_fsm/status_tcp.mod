@@ -1,4 +1,4 @@
-MODULE udp_communication
+MODULE status_socket
     VAR socketdev udp_socket;
     VAR string client_ip;
     VAR string server_ip;
@@ -14,47 +14,41 @@ MODULE udp_communication
     VAR bool receive_success;
     VAR string response_msg;
     VAR string json;
-    VAR string play_msg;
     VAR string prec_msg;
+    VAR string state_msg;
+    VAR bool send;
 
 
     
-    ! web params
+    ! Shared Params
     PERS num spd;
-    PERS num int;
-    PERS num lft;
-    PERS num rgt;
-    PERS num upr;
-    PERS num lwr;
     PERS num acc;
     PERS num jrk;
     PERS num dac;
     PERS bool go;
-    PERS bool play;
     PERS zonedata zone;
     PERS speeddata speed;
-    PERS num y;
-    PERS num z;
-    
-    
+
+
+    PERS num x_read;
+    PERS num y_read;
+    PERS num z_read;
+    PERS num x_target;
+    PERS num y_target;
+    PERS num z_target;
+
+    PERS num state;
+    ! STATE DEFINITION
+    ! 0 = IDLE
+    ! 1 = RUNNING
+    ! 2 = PAUSED
+    ! 3 = ABORTED
+
     
     PROC main()
         ! Reset params
-
-        spd := 800;
-        int := 100;
-        lft := -600;
-        rgt := 600;
-        upr := 850;
-        lwr := 100;
-        acc := 100;
-        jrk := 100;
-        dac := 100;
         go := FALSE;
-        play := TRUE;
-        zone := [TRUE,0,0,0,0,0,0];
-        speed := [800,1000,5000,1000];
-        SetDO MyPauseSignal, 0;
+        send := FALSE;
         SetDO MyResetSignal, 0;
 
         ! delete old connections
@@ -62,13 +56,12 @@ MODULE udp_communication
 
         ! Set connection parameters
         client_ip := "192.168.15.102";
-        server_ip := "192.168.15.81";
-        client_receiving_port := 56000;
-        server_port := 1025;
+        server_ip := "192.168.15.82";
+        client_receiving_port := 5001;
+        server_port := 1027;
 
         SocketCreate udp_socket \UDP;
         SocketBind udp_socket, server_ip, server_port;
-
 
         !receive   
         WHILE TRUE DO
@@ -85,6 +78,7 @@ MODULE udp_communication
 
                 if parse_success THEN
                     response_msg := msg;
+
                     TEST cmd
                         CASE "spd":
                             spd := parsed_val;
@@ -106,16 +100,6 @@ MODULE udp_communication
                                 CASE 200:
                                     zone := z200;
                             ENDTEST
-                        CASE "int":
-                            int := parsed_val;
-                        CASE "lft":
-                            lft := parsed_val;
-                        CASE "rgt":
-                            rgt := parsed_val;
-                        CASE "upr":
-                            upr := parsed_val;
-                        CASE "lwr":
-                            lwr := parsed_val;
                         CASE "acc":
                             acc := parsed_val;
                         CASE "jrk":
@@ -125,12 +109,15 @@ MODULE udp_communication
                         CASE "go!":
                             go := TRUE;
                         CASE "pz!":
-                            play := FALSE;
                             SetDO MyPauseSignal, 1;
                         CASE "pl!":
-                            play := TRUE;
+                            SetDO MyContinueSignal, 1;
                         CASE "rs!":
                             SetDO MyResetSignal, 1;
+                        CASE "emr":
+                            SetDO MyEmergencyStopSignal, 1;
+                        CASE "snd":
+                            send := TRUE;
                     ENDTEST
                 ELSE
                     response_msg := "could not parse message";
@@ -139,57 +126,70 @@ MODULE udp_communication
                 response_msg := "no message recieved";
             ENDIF
 
-            ! Prepare response message strings from settings
-            if play THEN
-                play_msg := "pl! 000";
-            ELSE
-                play_msg := "pz! 000";
+            IF send THEN
+                ! Prepare response message strings from settings
+                ! STATE DEFINITION
+                ! 0 = IDLE
+                ! 1 = RUNNING
+                ! 2 = PAUSED
+                ! 3 = ABORTED
+                TEST state
+                    CASE 0:
+                        state_msg := "IDLE";
+                    CASE 1:
+                        state_msg := "RUNNING";
+                    CASE 2:
+                        state_msg := "PAUSED";
+                    CASE 3:
+                        state_msg := "ABORTED";
+                ENDTEST
+
+                TEST zone
+                    CASE fine:
+                        prec_msg := """zon"": 1000";
+                    CASE z0:
+                        prec_msg := """zon"": 0";
+                    CASE z20:
+                        prec_msg := """zon"": 20";
+                    CASE z50:
+                        prec_msg := """zon"": 50";
+                    CASE z100:
+                        prec_msg := """zon"": 100";
+                    CASE z150:
+                        prec_msg := """zon"": 150";
+                    CASE z200:
+                        prec_msg := """zon"": 200";
+                ENDTEST
+                
+                ! Send response in two chunks due to 80 char size limit
+                json := "{";
+                json := json + """spd"": " + NumToStr(spd, 0) + ",";
+                json := json + """acc"": " + NumToStr(acc, 0) + ",";
+                json := json + """jrk"": " + NumToStr(jrk, 0) + ",";
+                json := json + """dac"": " + NumToStr(dac, 0) + ",";
+                json := json + prec_msg;
+                json := json + "}";
+                SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
+
+                json := "{";
+                json := json + """xrd"": " + NumToStr(x_read, 0) + ",";
+                json := json + """yrd"": " + NumToStr(y_read, 0) + ",";
+                json := json + """zrd"": " + NumToStr(z_read, 0) + ",";
+                json := json + """state"": """ + state_msg + """";
+                json := json + "}";
+                SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
+
+                json := "{";
+                json := json + """xtg"": " + NumToStr(x_target, 0) + ",";
+                json := json + """ytg"": " + NumToStr(y_target, 0) + ",";
+                json := json + """ztg"": " + NumToStr(z_target, 0) + ",";
+                json := json + """msg"": """ + response_msg + """";
+                json := json + "}";
+                SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
             ENDIF
 
-            TEST zone
-                CASE fine:
-                    prec_msg := "zon 1000";
-                CASE z0:
-                    prec_msg := "zon 0";
-                CASE z20:
-                    prec_msg := "zon 20";
-                CASE z50:
-                    prec_msg := "zon 50";
-                CASE z100:
-                    prec_msg := "zon 100";
-                CASE z150:
-                    prec_msg := "zon 150";
-                CASE z200:
-                    prec_msg := "zon 200";
-            ENDTEST
-
-
-            ! Send response in two chunks due to 80 char size limit
-            json := "{";
-            json := json + """spd"": " + NumToStr(spd, 0) + ",";
-            json := json + """int"": " + NumToStr(int, 0) + ",";
-            json := json + """lft"": " + NumToStr(lft, 0) + ",";
-            json := json + """rgt"": " + NumToStr(rgt, 0);
-            json := json + "}";
-            SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
-
-            json := "{";
-            json := json + """upr"": " + NumToStr(upr, 0) + ",";
-            json := json + """acc"": " + NumToStr(acc, 0) + ",";
-            json := json + """jrk"": " + NumToStr(jrk, 0) + ",";
-            json := json + """dac"": " + NumToStr(dac, 0) + ",";
-            json := json + """lwr"": " + NumToStr(lwr, 0);
-            json := json + "}";
-            SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
-
-            json := "{";
-            json := json + """ply"": """ + play_msg + """,";
-            json := json + """zon"": """ + prec_msg + """,";
-            json := json + """msg"": """ + response_msg + """";
-            json := json + "}";
-            SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
-
         ENDWHILE        
+   
 
         ERROR
             IF ERRNO = ERR_SOCK_TIMEOUT THEN
@@ -199,12 +199,6 @@ MODULE udp_communication
 
         SocketClose udp_socket;
         
-    ENDPROC
-
-
-    
+    ENDPROC    
     
 ENDMODULE
-
-
-
