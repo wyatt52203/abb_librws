@@ -118,7 +118,7 @@ MODULE controller_udp
             json := "{";
             json := json + """msg"": """ + response_msg;
             json := json + "\\n\\npos: \\nx: " + NumToStr(x_broadcast, 0);
-            json := json + " y: " + NumToStr(y_target, 0) + """";
+            json := json + " y: " + NumToStr(y_target, 0);
             json := json + " z: " + NumToStr(z_target, 0) + """";
             json := json + "}";
             SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
