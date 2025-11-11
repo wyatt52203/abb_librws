@@ -104,9 +104,9 @@ MODULE controller_udp
                             button_move := TRUE;
                             button_dir := -5;
                         CASE "btn":
-                            IF parsed_val2 == 1 THEN
+                            IF parsed_val2 = 1 THEN
                                 motion_mode := 0;
-                            ELSEIF parsed_val == 1 THEN
+                            ELSEIF parsed_val = 1 THEN
                                 motion_mode := 1;
                             ENDIF
                     ENDTEST
