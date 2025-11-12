@@ -211,19 +211,17 @@ MODULE status_socket
                 json := json + """jrk"": " + NumToStr(jrk, 0) + ",";
                 json := json + """dac"": " + NumToStr(dac, 0) + ",";
                 json := json + prec_msg;
-                json := json + "}";
+                json := json + ",\n";
                 SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
 
-                json := "{";
-                json := json + """xrd"": " + NumToStr(x_read, 0) + ",";
+                json := """xrd"": " + NumToStr(x_read, 0) + ",";
                 json := json + """yrd"": " + NumToStr(y_read, 0) + ",";
                 json := json + """zrd"": " + NumToStr(z_read, 0) + ",";
                 json := json + """state"": """ + state_msg + """";
-                json := json + "}";
+                json := json + ",\n";
                 SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
 
-                json := "{";
-                json := json + """xtg"": " + NumToStr(x_target, 0) + ",";
+                json := """xtg"": " + NumToStr(x_target, 0) + ",";
                 json := json + """ytg"": " + NumToStr(y_target, 0) + ",";
                 json := json + """ztg"": " + NumToStr(z_target, 0) + ",";
                 json := json + """msg"": """ + response_msg + """";
