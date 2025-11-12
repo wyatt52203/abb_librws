@@ -100,6 +100,12 @@ MODULE motion
         ConfL \Off;
         go := FALSE;
         state := 0;
+        x_target := 300;
+        y_target := -450;
+        z_target := 700;
+        acc := 100;
+        jrk := 100;
+        dac := 100;
 
         WHILE TRUE DO
             ! Update Globals?
@@ -166,7 +172,7 @@ MODULE motion
         StopMove;
         ClearPath;
         StartMove;
-        MoveL [[300, -450, 700], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0;
+        MoveL [[350, -450, 700], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0;
 
         go := FALSE;
         SetDO MyResetSignal, 0;
