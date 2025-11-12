@@ -5,6 +5,10 @@ MODULE motion
     VAR intnum intno3;
     VAR intnum intno4;
 
+    ! variables for calculation
+    VAR jointtarget jt;
+    VAR robtarget current_pos;
+
     ! global params
     PERS num spd;
     PERS num acc;
