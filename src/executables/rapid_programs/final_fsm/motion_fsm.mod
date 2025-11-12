@@ -106,7 +106,7 @@ MODULE motion
 
             ! Set Motion Parameters
             AccSet acc, jrk \FinePointRamp:=dac;
-            IF state == 0 THEN
+            IF state = 0 THEN
                 ! Set state to running while in motion
                 state := 1;
                 EnforceBounds x_target, y_target, z_target;
@@ -130,7 +130,7 @@ MODULE motion
     TRAP emergency_trap
         StopMove;
         ClearPath;
-        state := 3
+        state := 3;
     ENDTRAP
 
     TRAP pause_trap
