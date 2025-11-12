@@ -90,11 +90,11 @@ MODULE motion
         ISignalDO MyResetSignal, 1, intno2;
 
         IDelete intno3;
-        CONNECT intno3 WITH emergency_stop_trap;
+        CONNECT intno3 WITH continue_trap;
         ISignalDO MyContinueSignal, 1, intno3;
 
         IDelete intno4;
-        CONNECT intno4 WITH reset_trap;
+        CONNECT intno4 WITH emergency_trap;
         ISignalDO MyEmergencyStopSignal, 1, intno4;
 
         ConfL \Off;
