@@ -44,12 +44,47 @@ MODULE status_socket
     ! 2 = PAUSED
     ! 3 = ABORTED
 
+
+    PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z)
+        ! Enforce Y bounds [-450, 450]
+
+        ! +750 height in safety, 700 here
+        ! -250 height - soft, -350 safety config
+
+        ! left side -500 safety config 
+        ! software -450
+
+        ! right side safety 550
+        ! software 450
+
+        IF y > 450 THEN
+            y := 450;
+        ELSEIF y < -450 THEN
+            y := -450;
+        ENDIF
+
+        ! Enforce Z bounds [10, 850]
+        IF z > 700 THEN
+            z := 700;
+        ELSEIF z < -250 THEN
+            z := -250;
+        ENDIF
+
+        IF x > 450 THEN
+            x := 450;
+        ELSEIF x < 250 THEN
+            x := 250;
+        ENDIF
+    ENDPROC
     
     PROC main()
         ! Reset params
         go := FALSE;
         send := FALSE;
         SetDO MyResetSignal, 0;
+        SetDO MyEmergencyStopSignal, 0;
+        SetDO MyPauseSignal, 0;
+        SetDO MyContinueSignal, 0;
 
         ! delete old connections
         SocketClose udp_socket;
@@ -108,6 +143,12 @@ MODULE status_socket
                             dac := parsed_val;
                         CASE "go!":
                             go := TRUE;
+                        CASE "xtg":
+                            x_target := parsed_val;
+                        CASE "ytg":
+                            y_target := parsed_val;
+                        CASE "ztg":
+                            z_target := parsed_val;
                         CASE "pz!":
                             SetDO MyPauseSignal, 1;
                         CASE "pl!":
@@ -119,6 +160,8 @@ MODULE status_socket
                         CASE "snd":
                             send := TRUE;
                     ENDTEST
+
+                    EnforceBounds x_target, y_target, z_target;
                 ELSE
                     response_msg := "could not parse message";
                 ENDIF
@@ -186,6 +229,8 @@ MODULE status_socket
                 json := json + """msg"": """ + response_msg + """";
                 json := json + "}";
                 SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
+
+                send := FALSE;
             ENDIF
 
         ENDWHILE        

@@ -43,17 +43,17 @@ MODULE motion
 
     ENDPROC
 
-        PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z)
-        ! Enforce Y bounds [-500, 600]
+    PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z)
+        ! Enforce Y bounds [-450, 450]
 
-        ! +750 height - change in safety config
+        ! +750 height in safety, 700 here
         ! -250 height - soft, -350 safety config
 
         ! left side -500 safety config 
         ! software -450
 
         ! right side safety 550
-        ! software 500
+        ! software 450
 
         IF y > 450 THEN
             y := 450;
@@ -109,8 +109,8 @@ MODULE motion
             IF state == 0 THEN
                 ! Set state to running while in motion
                 state := 1;
-
-                MoveL [[300, y, z], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+                EnforceBounds x_target, y_target, z_target;
+                MoveL [[x_target, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
 
                 ! Reset state to idle after motion completion
                 state := 0;
@@ -162,7 +162,7 @@ MODULE motion
         StopMove;
         ClearPath;
         StartMove;
-        MoveJ [[300, lft, upr], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0;
+        MoveL [[300, -450, 700], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0;
 
         go := FALSE;
         SetDO MyResetSignal, 0;
