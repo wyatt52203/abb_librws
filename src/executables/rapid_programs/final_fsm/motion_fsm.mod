@@ -31,6 +31,8 @@ MODULE motion
     ! 2 = PAUSED
     ! 3 = ABORTED
     
+    PERS bool motion_complete;
+
     PROC ReadPos()
         
         ! Wait for robot to fully stop
@@ -135,6 +137,7 @@ MODULE motion
                 ! Wait for robot to fully stop, set to idle
                 WaitRob \ZeroSpeed;
 
+                motion_complete := TRUE;
                 state := 0;
                 
             ENDIF

@@ -13,6 +13,7 @@ MODULE command_tcp
     VAR bool accept_success;
     VAR bool listening;
     VAR bool receiving;
+    VAR bool awaiting_motion;
 
 
     
@@ -39,6 +40,8 @@ MODULE command_tcp
     ! 1 = RUNNING
     ! 2 = PAUSED
     ! 3 = ABORTED
+
+    PERS bool motion_complete;
 
 
     PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z)
@@ -95,6 +98,7 @@ MODULE command_tcp
 
         listening := TRUE;
         receiving := FALSE;
+        awaiting_motion := FALSE;
 
         !receive   
         WHILE TRUE DO
@@ -122,6 +126,13 @@ MODULE command_tcp
 
                     if parse_success THEN
                         TEST cmd
+                            CASE "go!":
+                                IF state = 0 THEN
+                                    go := TRUE;
+                                    awaiting_motion := TRUE;
+                                    receiving := FALSE;
+                                    motion_complete := FALSE;
+                                ENDIF
                             CASE "spd":
                                 spd := parsed_val;
                                 speed := [spd, 1000, 5000, 1000];
@@ -159,6 +170,13 @@ MODULE command_tcp
                         EnforceBounds x_target, y_target, z_target;
                     ENDIF
                 ENDIF
+            ENDIF
+
+            IF awaiting_motion AND motion_complete THEN
+                SocketSend client_socket \Str := "Complete";
+                awaiting_motion := FALSE;
+                motion_complete := FALSE;
+                receiving := TRUE;
             ENDIF
 
         ENDWHILE        

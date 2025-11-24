@@ -7,20 +7,8 @@ MODULE control_tcp
     VAR string cmd;
     VAR bool receive_success;
     VAR bool accept_success;
-    VAR string response_msg;
     VAR bool listening;
     VAR bool receiving;
-
-    
-    ! Shared Params
-    PERS bool go;
-
-    PERS num state;
-    ! STATE DEFINITION
-    ! 0 = IDLE
-    ! 1 = RUNNING
-    ! 2 = PAUSED
-    ! 3 = ABORTED
     
     PROC main()
         ! Reset params
@@ -65,13 +53,7 @@ MODULE control_tcp
                 IF receive_success THEN
                     cmd := StrPart(msg, 1, 3);
 
-                    response_msg := msg;
-
                     TEST cmd
-                        CASE "go!":
-                            IF state = 0 THEN
-                                go := TRUE;
-                            ENDIF
                         CASE "pz!":
                             SetDO MyPauseSignal, 1;
                         CASE "pl!":
@@ -82,8 +64,6 @@ MODULE control_tcp
                             SetDO MyEmergencyStopSignal, 1;
                     ENDTEST
 
-                ELSE
-                    response_msg := "no message recieved";
                 ENDIF
             ENDIF
 
@@ -104,7 +84,6 @@ MODULE control_tcp
             IF ERRNO = ERR_SOCK_CLOSED THEN
                 ExitCycle;
             ENDIF
-
 
         SocketClose server_socket;
         SocketClose client_socket;
