@@ -109,7 +109,7 @@ MODULE command_tcp
         !receive   
         WHILE TRUE DO
 
-            IF listening DO
+            IF listening THEN
                 accept_success := TRUE;
                 SocketAccept server_socket, client_socket;
                 IF accept_success THEN
@@ -117,7 +117,7 @@ MODULE command_tcp
                     receiving := TRUE;
             ENDIF
 
-            IF receiving DO
+            IF receiving THEN
                 receive_success := TRUE;
                 SocketReceive server_socket \Str := msg, \Time := 10;
                 
