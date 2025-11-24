@@ -100,6 +100,7 @@ MODULE command_tcp
         server_port := 1027;
 
         SocketCreate server_socket;
+        SocketCreate client_socket;
         SocketBind server_socket, server_ip, server_port;
         SocketListen server_socket;
 
