@@ -12,7 +12,6 @@ MODULE control_tcp
     
     PROC main()
         ! Reset params
-        go := FALSE;
         SetDO MyResetSignal, 0;
         SetDO MyEmergencyStopSignal, 0;
         SetDO MyPauseSignal, 0;

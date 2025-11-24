@@ -79,10 +79,6 @@ MODULE command_tcp
     PROC main()
         ! Reset params
         go := FALSE;
-        SetDO MyResetSignal, 0;
-        SetDO MyEmergencyStopSignal, 0;
-        SetDO MyPauseSignal, 0;
-        SetDO MyContinueSignal, 0;
 
         ! delete old connections
         SocketClose server_socket;
