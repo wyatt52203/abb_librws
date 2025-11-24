@@ -108,6 +108,7 @@ MODULE motion
         dac := 100;
         spd := 800;
         speed := [800, 1000, 5000, 1000];
+        zone := fine;
 
         WHILE TRUE DO
             ! Update Globals?
@@ -118,12 +119,12 @@ MODULE motion
                 IF go THEN
                     ! Set state to running while in motion
                     go := FALSE;
+                    state := 1;
 
                     ! Set Motion Parameters
                     AccSet acc, jrk \FinePointRamp:=dac;
                     EnforceBounds x_target, y_target, z_target;
                     
-                    state := 1;
                     MoveL [[x_target, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
                 ENDIF
             
@@ -156,22 +157,20 @@ MODULE motion
 
     TRAP pause_trap
         SetDO MyPauseSignal, 0;
-        IF state = 1 THEN    
+        IF state <> 2 THEN    
             StopMove;
-            ClearPath;
+            StorePath;
             go := FALSE;
             state := 2;
-            TRYNEXT;
         ENDIF
     ENDTRAP
 
     TRAP continue_trap
         SetDO MyContinueSignal, 0;
         IF state = 2 THEN
-            ! set to idle, and go is true, to initiate a move to target followed by state running
+            RestoPath;
             StartMove;
-            go := TRUE;
-            state := 0;
+            state := 1;
         ENDIF
     ENDTRAP
 
