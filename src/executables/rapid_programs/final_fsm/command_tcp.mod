@@ -121,9 +121,9 @@ MODULE command_tcp
 
             IF receiving THEN
                 receive_success := TRUE;
-                SocketReceive server_socket \Str := msg, \Time := 10;
+                SocketReceive client_socket \Str := msg, \Time := 10;
                 
-                !recieve_sucess gets set to false if socketReceiveFrom error handler is called
+                !recieve_sucess gets set to false if socketReceive error handler is called
                 if receive_success THEN
                     cmd := StrPart(msg, 1, 3);
                     str_length := StrLen(msg);
