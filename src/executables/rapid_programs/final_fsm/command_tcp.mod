@@ -13,7 +13,6 @@ MODULE command_tcp
     VAR bool accept_success;
     VAR bool listening;
     VAR bool receiving;
-    VAR bool awaiting_motion;
 
 
     
@@ -41,6 +40,7 @@ MODULE command_tcp
     ! 2 = PAUSED
     ! 3 = ABORTED
 
+    PERS bool awaiting_motion;
     PERS bool motion_complete;
 
 
@@ -172,6 +172,9 @@ MODULE command_tcp
                 SocketSend client_socket \Str := "Complete";
                 awaiting_motion := FALSE;
                 motion_complete := FALSE;
+                receiving := TRUE;
+            ELSEIF awaiting_motion AND state = 0 THEN
+                awaiting_motion := FALSE;
                 receiving := TRUE;
             ENDIF
 
