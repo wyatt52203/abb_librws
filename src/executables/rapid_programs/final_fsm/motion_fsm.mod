@@ -135,7 +135,7 @@ MODULE motion
                 WaitRob \ZeroSpeed;
 
                 state := 0;
-            
+                
             ENDIF
             
             ! Nothing to do in states 2 (paused) and 3 (estopped)
@@ -155,8 +155,8 @@ MODULE motion
     ENDTRAP
 
     TRAP pause_trap
-        IF state <> 2 THEN
-            SetDO MyPauseSignal, 0;
+        SetDO MyPauseSignal, 0;
+        IF state <> 2 THEN    
             StopMove;
             StorePath;
             go := FALSE;
