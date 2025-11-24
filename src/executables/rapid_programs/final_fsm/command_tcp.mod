@@ -1,11 +1,8 @@
 MODULE command_tcp
     VAR socketdev server_socket;
     VAR socketdev client_socket;
-    VAR string client_ip;
     VAR string server_ip;
     VAR num server_port;
-    VAR num client_sending_port;
-    VAR num client_receiving_port;
     VAR string msg;
     VAR string cmd;
     VAR string value;
@@ -14,11 +11,6 @@ MODULE command_tcp
     VAR bool parse_success;
     VAR bool receive_success;
     VAR bool accept_success;
-    VAR string response_msg;
-    VAR string json;
-    VAR string prec_msg;
-    VAR string state_msg;
-    VAR bool send;
     VAR bool listening;
     VAR bool receiving;
 
@@ -84,7 +76,6 @@ MODULE command_tcp
     PROC main()
         ! Reset params
         go := FALSE;
-        send := FALSE;
         SetDO MyResetSignal, 0;
         SetDO MyEmergencyStopSignal, 0;
         SetDO MyPauseSignal, 0;
@@ -95,10 +86,8 @@ MODULE command_tcp
         SocketClose client_socket;
 
         ! Set connection parameters
-        client_ip := "192.168.15.102";
         server_ip := "192.168.15.82";
-        client_receiving_port := 5001;
-        server_port := 1027;
+        server_port := 2000;
 
         SocketCreate server_socket;
         SocketBind server_socket, server_ip, server_port;
@@ -121,7 +110,7 @@ MODULE command_tcp
 
             IF receiving THEN
                 receive_success := TRUE;
-                SocketReceive client_socket \Str := msg, \Time := 10;
+                SocketReceive client_socket \Str := msg;
                 
                 !recieve_sucess gets set to false if socketReceive error handler is called
                 if receive_success THEN
@@ -132,8 +121,6 @@ MODULE command_tcp
                     parse_success := StrToVal(value, parsed_val);
 
                     if parse_success THEN
-                        response_msg := msg;
-
                         TEST cmd
                             CASE "spd":
                                 spd := parsed_val;
@@ -161,96 +148,16 @@ MODULE command_tcp
                                 jrk := parsed_val;
                             CASE "dac":
                                 dac := parsed_val;
-                            CASE "go!":
-                                IF state = 0 THEN
-                                    go := TRUE;
-                                ENDIF
                             CASE "xtg":
                                 x_target := parsed_val;
                             CASE "ytg":
                                 y_target := parsed_val;
                             CASE "ztg":
                                 z_target := parsed_val;
-                            CASE "pz!":
-                                SetDO MyPauseSignal, 1;
-                            CASE "pl!":
-                                SetDO MyContinueSignal, 1;
-                            CASE "rs!":
-                                SetDO MyResetSignal, 1;
-                            CASE "emr":
-                                SetDO MyEmergencyStopSignal, 1;
-                            CASE "snd":
-                                send := TRUE;
                         ENDTEST
 
                         EnforceBounds x_target, y_target, z_target;
-                    ELSE
-                        response_msg := "could not parse message";
                     ENDIF
-                ELSE
-                    response_msg := "no message recieved";
-                ENDIF
-
-                IF send THEN
-                    ! Prepare response message strings from settings
-                    ! STATE DEFINITION
-                    ! 0 = IDLE
-                    ! 1 = RUNNING
-                    ! 2 = PAUSED
-                    ! 3 = ABORTED
-                    TEST state
-                        CASE 0:
-                            state_msg := "IDLE";
-                        CASE 1:
-                            state_msg := "RUNNING";
-                        CASE 2:
-                            state_msg := "PAUSED";
-                        CASE 3:
-                            state_msg := "ABORTED";
-                    ENDTEST
-
-                    TEST zone
-                        CASE fine:
-                            prec_msg := """zon"": 1000";
-                        CASE z0:
-                            prec_msg := """zon"": 0";
-                        CASE z20:
-                            prec_msg := """zon"": 20";
-                        CASE z50:
-                            prec_msg := """zon"": 50";
-                        CASE z100:
-                            prec_msg := """zon"": 100";
-                        CASE z150:
-                            prec_msg := """zon"": 150";
-                        CASE z200:
-                            prec_msg := """zon"": 200";
-                    ENDTEST
-                    
-                    ! Send response in two chunks due to 80 char size limit
-                    json := "{";
-                    json := json + """spd"": " + NumToStr(spd, 0) + ",";
-                    json := json + """acc"": " + NumToStr(acc, 0) + ",";
-                    json := json + """jrk"": " + NumToStr(jrk, 0) + ",";
-                    json := json + """dac"": " + NumToStr(dac, 0) + ",";
-                    json := json + prec_msg;
-                    json := json + ",";
-                    SocketSend client_socket \Str := json;
-
-                    json := """xrd"": " + NumToStr(x_read, 0) + ",";
-                    json := json + """yrd"": " + NumToStr(y_read, 0) + ",";
-                    json := json + """zrd"": " + NumToStr(z_read, 0) + ",";
-                    json := json + """state"": """ + state_msg + """";
-                    json := json + ",";
-                    SocketSend client_socket \Str := json;
-
-                    json := """xtg"": " + NumToStr(x_target, 0) + ",";
-                    json := json + """ytg"": " + NumToStr(y_target, 0) + ",";
-                    json := json + """ztg"": " + NumToStr(z_target, 0) + ",";
-                    json := json + """msg"": """ + response_msg + """";
-                    json := json + "}";
-                    SocketSend client_socket \Str := json;
-
-                    send := FALSE;
                 ENDIF
             ENDIF
 
