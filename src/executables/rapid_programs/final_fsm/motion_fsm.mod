@@ -155,11 +155,13 @@ MODULE motion
     ENDTRAP
 
     TRAP pause_trap
-        SetDO MyPauseSignal, 0;
-        StopMove;
-        StorePath;
-        go := FALSE;
-        state := 2;
+        IF state <> 2 THEN
+            SetDO MyPauseSignal, 0;
+            StopMove;
+            StorePath;
+            go := FALSE;
+            state := 2;
+        ENDIF
     ENDTRAP
 
     TRAP continue_trap
