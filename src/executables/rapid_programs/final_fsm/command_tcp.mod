@@ -115,6 +115,7 @@ MODULE command_tcp
                 IF accept_success THEN
                     listening := FALSE;
                     receiving := TRUE;
+                ENDIF
             ENDIF
 
             IF receiving THEN
