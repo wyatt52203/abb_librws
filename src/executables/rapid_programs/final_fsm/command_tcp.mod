@@ -92,6 +92,7 @@ MODULE command_tcp
 
         ! delete old connections
         SocketClose server_socket;
+        SocketClose client_socket;
 
         ! Set connection parameters
         client_ip := "192.168.15.102";
