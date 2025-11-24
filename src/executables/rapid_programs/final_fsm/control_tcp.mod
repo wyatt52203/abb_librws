@@ -1,4 +1,4 @@
-MODULE command_tcp
+MODULE control_tcp
     VAR socketdev server_socket;
     VAR socketdev client_socket;
     VAR string server_ip;
@@ -25,7 +25,6 @@ MODULE command_tcp
     PROC main()
         ! Reset params
         go := FALSE;
-        send := FALSE;
         SetDO MyResetSignal, 0;
         SetDO MyEmergencyStopSignal, 0;
         SetDO MyPauseSignal, 0;
@@ -85,11 +84,6 @@ MODULE command_tcp
 
                 ELSE
                     response_msg := "no message recieved";
-                ENDIF
-
-                IF send THEN
-
-                    send := FALSE;
                 ENDIF
             ENDIF
 

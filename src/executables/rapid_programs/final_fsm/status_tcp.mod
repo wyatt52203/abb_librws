@@ -1,4 +1,4 @@
-MODULE command_tcp
+MODULE status_tcp
     VAR socketdev server_socket;
     VAR socketdev client_socket;
     VAR string server_ip;
