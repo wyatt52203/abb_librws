@@ -106,6 +106,7 @@ MODULE motion
         acc := 100;
         jrk := 100;
         dac := 100;
+        speed := [800, 1000, 5000, 1000];
 
         WHILE TRUE DO
             ! Update Globals?
