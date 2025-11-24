@@ -106,6 +106,7 @@ MODULE motion
         acc := 100;
         jrk := 100;
         dac := 100;
+        spd := 800;
         speed := [800, 1000, 5000, 1000];
 
         WHILE TRUE DO
@@ -113,22 +114,29 @@ MODULE motion
             ReadPos;
 
             ! Wait for persistent variable signal
-            WaitUntil go;
-
-            ! Set Motion Parameters
-            AccSet acc, jrk \FinePointRamp:=dac;
-            IF state = 0 THEN
-                ! Set state to running while in motion
-                state := 1;
-                EnforceBounds x_target, y_target, z_target;
-                MoveL [[x_target, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
-
-                ! Reset state to idle after motion completion
-                state := 0;
+            IF go THEN
+                ! Set Motion Parameters
+                AccSet acc, jrk \FinePointRamp:=dac;
+                IF state = 0 THEN
+                    ! Set state to running while in motion
+                    state := 1;
+                    EnforceBounds x_target, y_target, z_target;
+                    MoveL [[x_target, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+                    
+                ! Reset go to wait for another signal
+                go := FALSE;
             ENDIF
 
-            ! Reset go to wait for another signal
-            go := FALSE;
+            ! If in running state
+            IF state = 1 THEN
+                ! Wait for robot to fully stop, set to idle
+                WaitRob \ZeroSpeed;
+
+                state := 0;
+            
+            ENDIF
+            
+
 
             
         ENDWHILE        
@@ -139,44 +147,35 @@ MODULE motion
     ENDPROC
 
     TRAP emergency_trap
+        SetDO MyEmergencyStopSignal, 0;
         StopMove;
         ClearPath;
         state := 3;
     ENDTRAP
 
     TRAP pause_trap
+        SetDO MyPauseSignal, 0;
         StopMove;
         StorePath;
         go := FALSE;
         state := 2;
-        
-        ! WaitUntil play;
-        ! SetDO MyPauseSignal, 0;
-
-        ! RestoPath;
-        ! StartMove;
     ENDTRAP
 
     TRAP continue_trap
-        ! StopMove;
-        ! StorePath;
-        
-        ! WaitUntil play;
-        ! SetDO MyPauseSignal, 0;
-
-        RestoPath;
-        StartMove;
-        state := 1;
+        SetDO MyContinueSignal, 0;
+        IF state = 2 THEN
+            RestoPath;
+            StartMove;
+            state := 1;
+        ENDIF
     ENDTRAP
 
     TRAP reset_trap
+        SetDO MyResetSignal, 0;
+        
         StopMove;
         ClearPath;
         StartMove;
-        MoveL [[350, -450, 700], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0;
-
-        go := FALSE;
-        SetDO MyResetSignal, 0;
 
         ExitCycle;
     ENDTRAP
