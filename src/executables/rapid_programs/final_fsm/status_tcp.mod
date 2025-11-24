@@ -127,20 +127,20 @@ MODULE status_tcp
                     json := json + """jrk"": " + NumToStr(jrk, 0) + ",";
                     json := json + """dac"": " + NumToStr(dac, 0) + ",";
                     json := json + prec_msg;
-                    json := json + ",\\n";
+                    json := json + ",";
                     SocketSend client_socket \Str := json;
 
                     json := """xrd"": " + NumToStr(x_read, 0) + ",";
                     json := json + """yrd"": " + NumToStr(y_read, 0) + ",";
                     json := json + """zrd"": " + NumToStr(z_read, 0) + ",";
                     json := json + """state"": """ + state_msg + """";
-                    json := json + ",\\n";
+                    json := json + ",";
                     SocketSend client_socket \Str := json;
 
                     json := """xtg"": " + NumToStr(x_target, 0) + ",";
                     json := json + """ytg"": " + NumToStr(y_target, 0) + ",";
                     json := json + """ztg"": " + NumToStr(z_target, 0);
-                    json := json + "}\\n";
+                    json := json + "}";
                     SocketSend client_socket \Str := json;
 
                     send := FALSE;
