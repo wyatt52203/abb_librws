@@ -140,7 +140,7 @@ MODULE status_tcp
                     json := """xtg"": " + NumToStr(x_target, 0) + ",";
                     json := json + """ytg"": " + NumToStr(y_target, 0) + ",";
                     json := json + """ztg"": " + NumToStr(z_target, 0);
-                    json := json + "}";
+                    json := json + "}\n";
                     SocketSend client_socket \Str := json;
 
                     send := FALSE;
