@@ -118,12 +118,12 @@ MODULE motion
                 IF go THEN
                     ! Set state to running while in motion
                     go := FALSE;
-                    state := 1;
 
                     ! Set Motion Parameters
                     AccSet acc, jrk \FinePointRamp:=dac;
                     EnforceBounds x_target, y_target, z_target;
                     
+                    state := 1;
                     MoveL [[x_target, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
                 ENDIF
             
@@ -156,11 +156,12 @@ MODULE motion
 
     TRAP pause_trap
         SetDO MyPauseSignal, 0;
-        IF state <> 2 THEN    
+        IF state = 1 THEN    
             StopMove;
             ClearPath;
             go := FALSE;
             state := 2;
+            TRYNEXT;
         ENDIF
     ENDTRAP
 
