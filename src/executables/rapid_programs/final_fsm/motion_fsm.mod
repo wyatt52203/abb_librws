@@ -113,18 +113,20 @@ MODULE motion
             ! Update Globals?
             ReadPos;
 
-            ! Wait for persistent variable signal
-            IF go THEN
-                ! Set Motion Parameters
-                AccSet acc, jrk \FinePointRamp:=dac;
-                IF state = 0 THEN
+            IF state = 0 THEN
+
+                IF go THEN
                     ! Set state to running while in motion
+                    go := FALSE;
                     state := 1;
+
+                    ! Set Motion Parameters
+                    AccSet acc, jrk \FinePointRamp:=dac;
                     EnforceBounds x_target, y_target, z_target;
-                    MoveL [[x_target, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
                     
-                ! Reset go to wait for another signal
-                go := FALSE;
+                    MoveL [[x_target, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+                ENDIF
+            
             ENDIF
 
             ! If in running state
@@ -136,8 +138,7 @@ MODULE motion
             
             ENDIF
             
-
-
+            ! Nothing to do in states 2 (paused) and 3 (estopped)
             
         ENDWHILE        
 
@@ -176,6 +177,7 @@ MODULE motion
         StopMove;
         ClearPath;
         StartMove;
+        state := 0; ! should happen anyways because of exitcycle, but to be sure
 
         ExitCycle;
     ENDTRAP
