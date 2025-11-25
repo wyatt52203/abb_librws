@@ -116,6 +116,7 @@ MODULE control_tcp
                 ENDIF
             ENDIF
 
+            VAR socketstatus test_status := SocketGetStatus(ctrl_client_socket);
             ctrl_channel_health := SOCKET_CONNECTED = SocketGetStatus(ctrl_client_socket) AND SOCKET_CONNECTED = SocketGetStatus(ctrl_server_socket);
 
         ENDWHILE        
