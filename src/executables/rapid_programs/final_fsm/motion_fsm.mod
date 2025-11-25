@@ -10,21 +10,21 @@ MODULE motion
     VAR robtarget current_pos;
 
     ! global params
-    PERS num spd;
-    PERS num acc;
-    PERS num jrk;
-    PERS num dac;
     PERS bool go;
-    PERS zonedata zone;
-    PERS speeddata speed;
+    PERS num spd := 800;
+    PERS num acc := 100;
+    PERS num jrk := 100;
+    PERS num dac := 100;
+    PERS zonedata zone := fine;
+    PERS speeddata speed := [800, 1000, 5000, 1000];
+    PERS num x_target := 300;
+    PERS num y_target := -450;
+    PERS num z_target := 700;
     PERS num x_read;
     PERS num y_read;
     PERS num z_read;
-    PERS num x_target;
-    PERS num y_target;
-    PERS num z_target;
 
-    PERS num state;
+    PERS num state := 0;
     ! STATE DEFINITION
     ! 0 = IDLE
     ! 1 = RUNNING
@@ -101,16 +101,6 @@ MODULE motion
 
         ConfL \Off;
         go := FALSE;
-        state := 0;
-        x_target := 300;
-        y_target := -450;
-        z_target := 700;
-        acc := 100;
-        jrk := 100;
-        dac := 100;
-        spd := 800;
-        speed := [800, 1000, 5000, 1000];
-        zone := fine;
 
         WHILE TRUE DO
             ! Update Globals?
@@ -179,10 +169,6 @@ MODULE motion
 
     TRAP reset_trap
         SetDO MyResetSignal, 0;
-        
-        StopMove;
-        ClearPath;
-        StartMove;
         state := 0; ! should happen anyways because of exitcycle, but to be sure
 
         ExitCycle;

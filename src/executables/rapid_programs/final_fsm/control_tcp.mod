@@ -9,6 +9,16 @@ MODULE control_tcp
     VAR bool accept_success;
     VAR bool listening;
     VAR bool receiving;
+
+    PERS num spd;
+    PERS num acc;
+    PERS num jrk;
+    PERS num dac;
+    PERS zonedata zone;
+    PERS speeddata speed;
+    PERS num x_target;
+    PERS num y_target;
+    PERS num z_target;
     
     PROC main()
         ! Reset params
@@ -58,6 +68,19 @@ MODULE control_tcp
                         CASE "pl!":
                             SetDO MyContinueSignal, 1;
                         CASE "rs!":
+                            SetDO MyResetSignal, 1;
+                        CASE "rsd":
+                            PERS num spd := 800;
+                            PERS num acc := 100;
+                            PERS num jrk := 100;
+                            PERS num dac := 100;
+                            PERS zonedata zone := fine;
+                            PERS speeddata speed := [800, 1000, 5000, 1000];
+                            PERS num x_target := 300;
+                            PERS num y_target := -450;
+                            PERS num z_target := 700;
+
+                            
                             SetDO MyResetSignal, 1;
                         CASE "emr":
                             SetDO MyEmergencyStopSignal, 1;
