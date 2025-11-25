@@ -1,6 +1,6 @@
 MODULE status_tcp
-    PERS socketdev status_server_socket;
-    PERS socketdev status_client_socket;
+    VAR socketdev status_server_socket;
+    VAR socketdev status_client_socket;
     VAR string server_ip;
     VAR num server_port;
     VAR string msg;
@@ -42,6 +42,7 @@ MODULE status_tcp
     ! 3 = ABORTED
 
     PERS bool fsm_channels_live;
+    PERS bool status_channel_health;
 
     PROC main()
         ! Reset params
@@ -61,93 +62,102 @@ MODULE status_tcp
 
         listening := TRUE;
         receiving := FALSE;
+        status_channel_health := FALSE;
 
         !receive   
         WHILE TRUE DO
-            WaitUntil fsm_channels_live;
-
-            IF listening THEN
-                accept_success := TRUE;
-                SocketAccept status_server_socket, status_client_socket;
-                IF accept_success THEN
-                    listening := FALSE;
-                    receiving := TRUE;
-                ENDIF
-            ENDIF
-
-            IF receiving THEN
-                receive_success := TRUE;
-                SocketReceive status_client_socket \Str := msg;
-                
-                !recieve_sucess gets set to false if socketReceive error handler is called
-                if receive_success THEN
-                    cmd := StrPart(msg, 1, 3);
-
-                    if cmd = "snd" THEN
-                        send := TRUE;
+            IF fsm_channels_live THEN
+                IF listening THEN
+                    accept_success := TRUE;
+                    SocketAccept status_server_socket, status_client_socket;
+                    IF accept_success THEN
+                        listening := FALSE;
+                        receiving := TRUE;
                     ENDIF
                 ENDIF
 
-                IF send THEN
-                    ! Prepare response message strings from settings
-                    ! STATE DEFINITION
-                    ! 0 = IDLE
-                    ! 1 = RUNNING
-                    ! 2 = PAUSED
-                    ! 3 = ABORTED
-                    TEST state
-                        CASE 0:
-                            state_msg := "IDLE";
-                        CASE 1:
-                            state_msg := "RUNNING";
-                        CASE 2:
-                            state_msg := "PAUSED";
-                        CASE 3:
-                            state_msg := "ABORTED";
-                    ENDTEST
-
-                    TEST zone
-                        CASE fine:
-                            prec_msg := """zon"": 1000";
-                        CASE z0:
-                            prec_msg := """zon"": 0";
-                        CASE z20:
-                            prec_msg := """zon"": 20";
-                        CASE z50:
-                            prec_msg := """zon"": 50";
-                        CASE z100:
-                            prec_msg := """zon"": 100";
-                        CASE z150:
-                            prec_msg := """zon"": 150";
-                        CASE z200:
-                            prec_msg := """zon"": 200";
-                    ENDTEST
+                IF receiving THEN
+                    receive_success := TRUE;
+                    SocketReceive status_client_socket \Str := msg;
                     
-                    ! Send response in two chunks due to 80 char size limit
-                    json := "{";
-                    json := json + """spd"": " + NumToStr(spd, 0) + ",";
-                    json := json + """acc"": " + NumToStr(acc, 0) + ",";
-                    json := json + """jrk"": " + NumToStr(jrk, 0) + ",";
-                    json := json + """dac"": " + NumToStr(dac, 0) + ",";
-                    json := json + prec_msg;
-                    json := json + ",";
-                    SocketSend status_client_socket \Str := json;
+                    !recieve_sucess gets set to false if socketReceive error handler is called
+                    if receive_success THEN
+                        cmd := StrPart(msg, 1, 3);
 
-                    json := """xrd"": " + NumToStr(x_read, 0) + ",";
-                    json := json + """yrd"": " + NumToStr(y_read, 0) + ",";
-                    json := json + """zrd"": " + NumToStr(z_read, 0) + ",";
-                    json := json + """state"": """ + state_msg + """";
-                    json := json + ",";
-                    SocketSend status_client_socket \Str := json;
+                        if cmd = "snd" THEN
+                            send := TRUE;
+                        ENDIF
+                    ENDIF
 
-                    json := """xtg"": " + NumToStr(x_target, 0) + ",";
-                    json := json + """ytg"": " + NumToStr(y_target, 0) + ",";
-                    json := json + """ztg"": " + NumToStr(z_target, 0);
-                    json := json + "}";
-                    SocketSend status_client_socket \Str := json;
+                    IF send THEN
+                        ! Prepare response message strings from settings
+                        ! STATE DEFINITION
+                        ! 0 = IDLE
+                        ! 1 = RUNNING
+                        ! 2 = PAUSED
+                        ! 3 = ABORTED
+                        TEST state
+                            CASE 0:
+                                state_msg := "IDLE";
+                            CASE 1:
+                                state_msg := "RUNNING";
+                            CASE 2:
+                                state_msg := "PAUSED";
+                            CASE 3:
+                                state_msg := "ABORTED";
+                        ENDTEST
 
-                    send := FALSE;
-                ENDIF
+                        TEST zone
+                            CASE fine:
+                                prec_msg := """zon"": 1000";
+                            CASE z0:
+                                prec_msg := """zon"": 0";
+                            CASE z20:
+                                prec_msg := """zon"": 20";
+                            CASE z50:
+                                prec_msg := """zon"": 50";
+                            CASE z100:
+                                prec_msg := """zon"": 100";
+                            CASE z150:
+                                prec_msg := """zon"": 150";
+                            CASE z200:
+                                prec_msg := """zon"": 200";
+                        ENDTEST
+                        
+                        ! Send response in two chunks due to 80 char size limit
+                        json := "{";
+                        json := json + """spd"": " + NumToStr(spd, 0) + ",";
+                        json := json + """acc"": " + NumToStr(acc, 0) + ",";
+                        json := json + """jrk"": " + NumToStr(jrk, 0) + ",";
+                        json := json + """dac"": " + NumToStr(dac, 0) + ",";
+                        json := json + prec_msg;
+                        json := json + ",";
+                        SocketSend status_client_socket \Str := json;
+
+                        json := """xrd"": " + NumToStr(x_read, 0) + ",";
+                        json := json + """yrd"": " + NumToStr(y_read, 0) + ",";
+                        json := json + """zrd"": " + NumToStr(z_read, 0) + ",";
+                        json := json + """state"": """ + state_msg + """";
+                        json := json + ",";
+                        SocketSend status_client_socket \Str := json;
+
+                        json := """xtg"": " + NumToStr(x_target, 0) + ",";
+                        json := json + """ytg"": " + NumToStr(y_target, 0) + ",";
+                        json := json + """ztg"": " + NumToStr(z_target, 0);
+                        json := json + "}";
+                        SocketSend status_client_socket \Str := json;
+
+                        send := FALSE;
+                    ENDIF ! sending response
+
+                ENDIF ! if inside receiving
+                    
+            ENDIF ! if channel should be live
+
+            IF SOCKET_CONNECTED = SocketGetStatus(status_client_socket) AND SOCKET_CONNECTED = SocketGetStatus(status_server_socket) THEN
+                status_channel_health := TRUE;
+            ELSE
+                status_channel_health := FALSE;
             ENDIF
 
         ENDWHILE        

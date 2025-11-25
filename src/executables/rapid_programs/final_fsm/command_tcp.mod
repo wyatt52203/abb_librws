@@ -1,6 +1,6 @@
 MODULE command_tcp
-    PERS socketdev cmd_server_socket;
-    PERS socketdev cmd_client_socket;
+    VAR socketdev cmd_server_socket;
+    VAR socketdev cmd_client_socket;
     VAR string server_ip;
     VAR num server_port;
     VAR string msg;
@@ -43,6 +43,7 @@ MODULE command_tcp
     PERS bool awaiting_motion;
     PERS bool motion_complete;
     PERS bool fsm_channels_live;
+    PERS bool cmd_channel_health;
 
 
     PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z)
@@ -96,89 +97,97 @@ MODULE command_tcp
         listening := TRUE;
         receiving := FALSE;
         awaiting_motion := FALSE;
+        cmd_channel_health := FALSE;
 
         !receive   
         WHILE TRUE DO
-            WaitUntil fsm_channels_live;
+            IF fsm_channels_live THEN
+                IF listening THEN
+                    accept_success := TRUE;
+                    SocketAccept cmd_server_socket, cmd_client_socket;
+                    IF accept_success THEN
+                        listening := FALSE;
+                        receiving := TRUE;
+                    ENDIF
+                ENDIF
 
-            IF listening THEN
-                accept_success := TRUE;
-                SocketAccept cmd_server_socket, cmd_client_socket;
-                IF accept_success THEN
-                    listening := FALSE;
+                IF receiving THEN
+                    receive_success := TRUE;
+                    SocketReceive cmd_client_socket \Str := msg;
+                    
+                    !recieve_sucess gets set to false if socketReceive error handler is called
+                    if receive_success THEN
+                        cmd := StrPart(msg, 1, 3);
+                        str_length := StrLen(msg);
+                        ! Extracts (str_length - 4) total characters, starting at 5
+                        value := StrPart(msg, 5, (str_length - 4));
+                        parse_success := StrToVal(value, parsed_val);
+
+                        if parse_success THEN
+                            TEST cmd
+                                CASE "go!":
+                                    IF state = 0 THEN
+                                        go := TRUE;
+                                        awaiting_motion := TRUE;
+                                        receiving := FALSE;
+                                        motion_complete := FALSE;
+                                    ENDIF
+                                CASE "spd":
+                                    spd := parsed_val;
+                                    speed := [spd, 1000, 5000, 1000];
+                                CASE "zon":
+                                    TEST parsed_val
+                                        CASE 1000:
+                                            zone := fine;
+                                        CASE 0:
+                                            zone := z0;
+                                        CASE 20:
+                                            zone := z20;
+                                        CASE 50:
+                                            zone := z50;
+                                        CASE 100:
+                                            zone := z100;
+                                        CASE 150:
+                                            zone := z150;
+                                        CASE 200:
+                                            zone := z200;
+                                    ENDTEST
+                                CASE "acc":
+                                    acc := parsed_val;
+                                CASE "jrk":
+                                    jrk := parsed_val;
+                                CASE "dac":
+                                    dac := parsed_val;
+                                CASE "xtg":
+                                    x_target := parsed_val;
+                                CASE "ytg":
+                                    y_target := parsed_val;
+                                CASE "ztg":
+                                    z_target := parsed_val;
+                            ENDTEST
+
+                            EnforceBounds x_target, y_target, z_target;
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+                IF awaiting_motion AND motion_complete THEN
+                    SocketSend cmd_client_socket \Str := "Complete";
+                    awaiting_motion := FALSE;
+                    motion_complete := FALSE;
+                    receiving := TRUE;
+                ELSEIF awaiting_motion AND state = 0 THEN
+                    awaiting_motion := FALSE;
                     receiving := TRUE;
                 ENDIF
             ENDIF
 
-            IF receiving THEN
-                receive_success := TRUE;
-                SocketReceive cmd_client_socket \Str := msg;
-                
-                !recieve_sucess gets set to false if socketReceive error handler is called
-                if receive_success THEN
-                    cmd := StrPart(msg, 1, 3);
-                    str_length := StrLen(msg);
-                    ! Extracts (str_length - 4) total characters, starting at 5
-                    value := StrPart(msg, 5, (str_length - 4));
-                    parse_success := StrToVal(value, parsed_val);
+            IF SOCKET_CONNECTED = SocketGetStatus(ctrl_client_socket) AND SOCKET_CONNECTED = SocketGetStatus(ctrl_server_socket) THEN
+                ctrl_channel_health := TRUE;
+            ELSE
+                ctrl_channel_health := FALSE;
+            ENDIF 
 
-                    if parse_success THEN
-                        TEST cmd
-                            CASE "go!":
-                                IF state = 0 THEN
-                                    go := TRUE;
-                                    awaiting_motion := TRUE;
-                                    receiving := FALSE;
-                                    motion_complete := FALSE;
-                                ENDIF
-                            CASE "spd":
-                                spd := parsed_val;
-                                speed := [spd, 1000, 5000, 1000];
-                            CASE "zon":
-                                TEST parsed_val
-                                    CASE 1000:
-                                        zone := fine;
-                                    CASE 0:
-                                        zone := z0;
-                                    CASE 20:
-                                        zone := z20;
-                                    CASE 50:
-                                        zone := z50;
-                                    CASE 100:
-                                        zone := z100;
-                                    CASE 150:
-                                        zone := z150;
-                                    CASE 200:
-                                        zone := z200;
-                                ENDTEST
-                            CASE "acc":
-                                acc := parsed_val;
-                            CASE "jrk":
-                                jrk := parsed_val;
-                            CASE "dac":
-                                dac := parsed_val;
-                            CASE "xtg":
-                                x_target := parsed_val;
-                            CASE "ytg":
-                                y_target := parsed_val;
-                            CASE "ztg":
-                                z_target := parsed_val;
-                        ENDTEST
-
-                        EnforceBounds x_target, y_target, z_target;
-                    ENDIF
-                ENDIF
-            ENDIF
-
-            IF awaiting_motion AND motion_complete THEN
-                SocketSend cmd_client_socket \Str := "Complete";
-                awaiting_motion := FALSE;
-                motion_complete := FALSE;
-                receiving := TRUE;
-            ELSEIF awaiting_motion AND state = 0 THEN
-                awaiting_motion := FALSE;
-                receiving := TRUE;
-            ENDIF
 
         ENDWHILE        
    
