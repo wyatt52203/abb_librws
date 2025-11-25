@@ -106,9 +106,10 @@ MODULE command_tcp
                     accept_success := TRUE;
                     SocketAccept cmd_server_socket, cmd_client_socket;
                     IF accept_success THEN
-                        cmd_channel_health := ((SOCKET_CONNECTED = SocketGetStatus(cmd_client_socket)) AND (SOCKET_CONNECTED = SocketGetStatus(cmd_server_socket)));
+                        cmd_channel_health := (SOCKET_CONNECTED = SocketGetStatus(cmd_client_socket));
                         listening := FALSE;
                         receiving := TRUE;
+                        SocketClose cmd_server_socket;
                     ENDIF
                 ENDIF
 
@@ -183,7 +184,7 @@ MODULE command_tcp
                 ENDIF
             ENDIF
 
-            cmd_channel_health := ((SOCKET_CONNECTED = SocketGetStatus(cmd_client_socket)) AND (SOCKET_CONNECTED = SocketGetStatus(cmd_server_socket)));
+            cmd_channel_health := (SOCKET_CONNECTED = SocketGetStatus(cmd_client_socket));
 
 
         ENDWHILE        

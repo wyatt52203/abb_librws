@@ -27,9 +27,6 @@ MODULE control_tcp
     PERS bool status_channel_health;
     PERS bool cmd_channel_health;
 
-    VAR socketstatus tst1;
-    VAR socketstatus tst2;
-
     FUNC bool socket_status_check()
         RETURN ctrl_channel_health AND cmd_channel_health AND status_channel_health;
     ENDFUNC
@@ -61,6 +58,7 @@ MODULE control_tcp
                         ctrl_channel_health := (SOCKET_CONNECTED = SocketGetStatus(ctrl_client_socket));
                         listening := FALSE;
                         receiving := TRUE;
+                        SocketClose ctrl_server_socket;
                     ENDIF
                 ENDIF
 
@@ -120,9 +118,6 @@ MODULE control_tcp
                 ENDIF
             ENDIF
             
-
-            tst1 := SocketGetStatus(ctrl_client_socket);
-            tst2 := SocketGetStatus(ctrl_server_socket);
             ctrl_channel_health := (SOCKET_CONNECTED = SocketGetStatus(ctrl_client_socket));
 
         ENDWHILE        
@@ -142,9 +137,6 @@ MODULE control_tcp
             IF ERRNO = ERR_SOCK_CLOSED THEN
                 ExitCycle;
             ENDIF
-
-        SocketClose ctrl_server_socket;
-        SocketClose ctrl_client_socket;
         
     ENDPROC    
     

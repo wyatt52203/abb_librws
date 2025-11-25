@@ -71,9 +71,10 @@ MODULE status_tcp
                     accept_success := TRUE;
                     SocketAccept status_server_socket, status_client_socket;
                     IF accept_success THEN
-                        status_channel_health := ((SOCKET_CONNECTED = SocketGetStatus(status_client_socket)) AND (SOCKET_CONNECTED = SocketGetStatus(status_server_socket)));
+                        status_channel_health := (SOCKET_CONNECTED = SocketGetStatus(status_client_socket));
                         listening := FALSE;
                         receiving := TRUE;
+                        SocketClose status_server_socket;
                     ENDIF
                 ENDIF
 
@@ -155,7 +156,7 @@ MODULE status_tcp
                     
             ENDIF ! if channel should be live
 
-            status_channel_health := ((SOCKET_CONNECTED = SocketGetStatus(status_client_socket)) AND (SOCKET_CONNECTED = SocketGetStatus(status_server_socket)));
+            status_channel_health := (SOCKET_CONNECTED = SocketGetStatus(status_client_socket));
 
         ENDWHILE        
    
@@ -174,10 +175,6 @@ MODULE status_tcp
             IF ERRNO = ERR_SOCK_CLOSED THEN
                 ExitCycle;
             ENDIF
-
-
-        SocketClose status_server_socket;
-        SocketClose status_client_socket;
         
     ENDPROC    
     
