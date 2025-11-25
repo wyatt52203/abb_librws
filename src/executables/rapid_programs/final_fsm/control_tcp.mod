@@ -19,6 +19,7 @@ MODULE control_tcp
     PERS num x_target;
     PERS num y_target;
     PERS num z_target;
+    PERS num state;
 
     PERS bool fsm_channels_live;
     VAR bool ctrl_channel_health;
@@ -115,11 +116,7 @@ MODULE control_tcp
                 ENDIF
             ENDIF
 
-            IF SOCKET_CONNECTED = SocketGetStatus(ctrl_client_socket) AND SOCKET_CONNECTED = SocketGetStatus(ctrl_server_socket) THEN
-                ctrl_channel_health := TRUE;
-            ELSE
-                ctrl_channel_health := FALSE;
-            ENDIF
+            ctrl_channel_health := SOCKET_CONNECTED = SocketGetStatus(ctrl_client_socket) AND SOCKET_CONNECTED = SocketGetStatus(ctrl_server_socket);
 
         ENDWHILE        
    

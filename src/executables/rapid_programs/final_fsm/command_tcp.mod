@@ -182,11 +182,7 @@ MODULE command_tcp
                 ENDIF
             ENDIF
 
-            IF SOCKET_CONNECTED = SocketGetStatus(ctrl_client_socket) AND SOCKET_CONNECTED = SocketGetStatus(ctrl_server_socket) THEN
-                ctrl_channel_health := TRUE;
-            ELSE
-                ctrl_channel_health := FALSE;
-            ENDIF 
+            cmd_channel_health := SOCKET_CONNECTED = SocketGetStatus(cmd_client_socket) AND SOCKET_CONNECTED = SocketGetStatus(cmd_server_socket);
 
 
         ENDWHILE        

@@ -154,11 +154,7 @@ MODULE status_tcp
                     
             ENDIF ! if channel should be live
 
-            IF SOCKET_CONNECTED = SocketGetStatus(status_client_socket) AND SOCKET_CONNECTED = SocketGetStatus(status_server_socket) THEN
-                status_channel_health := TRUE;
-            ELSE
-                status_channel_health := FALSE;
-            ENDIF
+            status_channel_health := SOCKET_CONNECTED = SocketGetStatus(status_client_socket) AND SOCKET_CONNECTED = SocketGetStatus(status_server_socket);
 
         ENDWHILE        
    
