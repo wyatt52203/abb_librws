@@ -64,7 +64,7 @@ MODULE udp_communication
 
         ! Set connection parameters
         client_ip := "192.168.15.102";
-        server_ip := "192.168.15.82";
+        server_ip := GetSysInfo(\LanIp);
         client_receiving_port := 4600;
         server_port := 1025;
 
