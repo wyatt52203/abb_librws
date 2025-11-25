@@ -1,6 +1,6 @@
 MODULE command_tcp
-    VAR socketdev server_socket;
-    VAR socketdev client_socket;
+    PERS socketdev cmd_server_socket;
+    PERS socketdev cmd_client_socket;
     VAR string server_ip;
     VAR num server_port;
     VAR string msg;
@@ -82,16 +82,16 @@ MODULE command_tcp
         go := FALSE;
 
         ! delete old connections
-        SocketClose server_socket;
-        SocketClose client_socket;
+        SocketClose cmd_server_socket;
+        SocketClose cmd_client_socket;
 
         ! Set connection parameters
         server_ip := GetSysInfo(\LanIp);
         server_port := 2000;
 
-        SocketCreate server_socket;
-        SocketBind server_socket, server_ip, server_port;
-        SocketListen server_socket;
+        SocketCreate cmd_server_socket;
+        SocketBind cmd_server_socket, server_ip, server_port;
+        SocketListen cmd_server_socket;
 
         listening := TRUE;
         receiving := FALSE;
@@ -100,10 +100,10 @@ MODULE command_tcp
         !receive   
         WHILE TRUE DO
             WaitUntil fsm_channels_live;
-            
+
             IF listening THEN
                 accept_success := TRUE;
-                SocketAccept server_socket, client_socket;
+                SocketAccept cmd_server_socket, cmd_client_socket;
                 IF accept_success THEN
                     listening := FALSE;
                     receiving := TRUE;
@@ -112,7 +112,7 @@ MODULE command_tcp
 
             IF receiving THEN
                 receive_success := TRUE;
-                SocketReceive client_socket \Str := msg;
+                SocketReceive cmd_client_socket \Str := msg;
                 
                 !recieve_sucess gets set to false if socketReceive error handler is called
                 if receive_success THEN
@@ -171,7 +171,7 @@ MODULE command_tcp
             ENDIF
 
             IF awaiting_motion AND motion_complete THEN
-                SocketSend client_socket \Str := "Complete";
+                SocketSend cmd_client_socket \Str := "Complete";
                 awaiting_motion := FALSE;
                 motion_complete := FALSE;
                 receiving := TRUE;
@@ -199,8 +199,8 @@ MODULE command_tcp
             ENDIF
 
 
-        SocketClose server_socket;
-        SocketClose client_socket;
+        SocketClose cmd_server_socket;
+        SocketClose cmd_client_socket;
         
     ENDPROC    
     

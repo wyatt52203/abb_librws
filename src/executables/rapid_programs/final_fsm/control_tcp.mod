@@ -1,6 +1,6 @@
 MODULE control_tcp
-    VAR socketdev server_socket;
-    VAR socketdev client_socket;
+    PERS socketdev ctrl_server_socket;
+    PERS socketdev ctrl_client_socket;
     VAR string server_ip;
     VAR num server_port;
     VAR string msg;
@@ -21,19 +21,38 @@ MODULE control_tcp
     PERS num z_target;
 
     PERS bool fsm_channels_live;
-    
+
+    PERS socketdev status_client_socket;
+    PERS socketdev status_server_socket;
+    PERS socketdev cmd_client_socket;
+    PERS socketdev cmd_server_socket;
+
+    FUNC socket_status_check()
+        VAR socketdev all_sockets{6} := [ctrl_client_socket, ctrl_server_socket, status_client_socket, status_server_socket, cmd_client_socket, cmd_server_socket];
+
+        FOR idx FROM 1 to dim(all_sockets, 1) DO
+            IF SOCKET_CONNECTED <> SocketGetStatus(all_sockets{idx}) THEN
+                RETURN FALSE;
+
+            ENDIF
+
+        ENDFOR
+
+        RETURN TRUE; 
+    ENDFUNC
+
     PROC main()
         ! delete old connections
-        SocketClose server_socket;
-        SocketClose client_socket;
+        SocketClose ctrl_server_socket;
+        SocketClose ctrl_client_socket;
 
         ! Set connection parameters
         server_ip := GetSysInfo(\LanIp);
         server_port := 2002;
 
-        SocketCreate server_socket;
-        SocketBind server_socket, server_ip, server_port;
-        SocketListen server_socket;
+        SocketCreate ctrl_server_socket;
+        SocketBind ctrl_server_socket, server_ip, server_port;
+        SocketListen ctrl_server_socket;
 
         listening := TRUE;
         receiving := FALSE;
@@ -44,7 +63,7 @@ MODULE control_tcp
 
             IF listening THEN
                 accept_success := TRUE;
-                SocketAccept server_socket, client_socket;
+                SocketAccept ctrl_server_socket, ctrl_client_socket;
                 IF accept_success THEN
                     listening := FALSE;
                     receiving := TRUE;
@@ -53,7 +72,7 @@ MODULE control_tcp
 
             IF receiving THEN
                 receive_success := TRUE;
-                SocketReceive client_socket \Str := msg;
+                SocketReceive ctrl_client_socket \Str := msg;
                 
                 !recieve_sucess gets set to false if socketReceive error handler is called
                 IF receive_success THEN
@@ -64,20 +83,41 @@ MODULE control_tcp
                             SetDO MyPauseSignal, 1;
                         CASE "pl!":
                             SetDO MyContinueSignal, 1;
-                        CASE "rs!":
-                            SetDO MyResetSignal, 1;
-                        CASE "rsd":
-                            spd := 800;
-                            acc := 100;
-                            jrk := 100;
-                            dac := 100;
-                            zone := fine;
-                            speed := [800, 1000, 5000, 1000];
-                            x_target := 300;
-                            y_target := -450;
-                            z_target := 700;
+                        CASE "rss":
+                            IF state = 3 AND socket_status_check THEN
+                                state := 0;
+                                spd := 800;
+                                acc := 100;
+                                jrk := 100;
+                                dac := 100;
+                                zone := fine;
+                                speed := [800, 1000, 5000, 1000];
+                                x_target := 300;
+                                y_target := -450;
+                                z_target := 700;
+                                state := 0;
 
-                            SetDO MyResetSignal, 1;
+                                SetDO MyResetSignal, 1;
+                            ENDIF
+                        CASE "rsp":
+                            IF state = 2 OR state = 0 THEN
+                                spd := 800;
+                                acc := 100;
+                                jrk := 100;
+                                dac := 100;
+                                zone := fine;
+                                speed := [800, 1000, 5000, 1000];
+                                x_target := 300;
+                                y_target := -450;
+                                z_target := 700;
+                                state := 0;
+                                SetDO MyResetSignal, 1;
+                            ENDIF
+                        CASE "rs!":
+                            IF state = 2 OR state = 0 THEN
+                                state := 0;
+                                SetDO MyResetSignal, 1;
+                            ENDIF
                         CASE "emr":
                             SetDO MyEmergencyStopSignal, 1;
                     ENDTEST
@@ -103,8 +143,8 @@ MODULE control_tcp
                 ExitCycle;
             ENDIF
 
-        SocketClose server_socket;
-        SocketClose client_socket;
+        SocketClose ctrl_server_socket;
+        SocketClose ctrl_client_socket;
         
     ENDPROC    
     

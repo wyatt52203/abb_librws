@@ -180,7 +180,6 @@ MODULE motion
 
     TRAP reset_trap
         SetDO MyResetSignal, 0;
-        state := 0; ! should happen anyways because of exitcycle, but to be sure
 
         ExitCycle;
     ENDTRAP

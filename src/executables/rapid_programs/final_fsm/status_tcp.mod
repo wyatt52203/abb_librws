@@ -1,6 +1,6 @@
 MODULE status_tcp
-    VAR socketdev server_socket;
-    VAR socketdev client_socket;
+    PERS socketdev status_server_socket;
+    PERS socketdev status_client_socket;
     VAR string server_ip;
     VAR num server_port;
     VAR string msg;
@@ -48,16 +48,16 @@ MODULE status_tcp
         send := FALSE;
 
         ! delete old connections
-        SocketClose server_socket;
-        SocketClose client_socket;
+        SocketClose status_server_socket;
+        SocketClose status_client_socket;
 
         ! Set connection parameters
         server_ip := GetSysInfo(\LanIp);
         server_port := 2001;
 
-        SocketCreate server_socket;
-        SocketBind server_socket, server_ip, server_port;
-        SocketListen server_socket;
+        SocketCreate status_server_socket;
+        SocketBind status_server_socket, server_ip, server_port;
+        SocketListen status_server_socket;
 
         listening := TRUE;
         receiving := FALSE;
@@ -65,10 +65,10 @@ MODULE status_tcp
         !receive   
         WHILE TRUE DO
             WaitUntil fsm_channels_live;
-            
+
             IF listening THEN
                 accept_success := TRUE;
-                SocketAccept server_socket, client_socket;
+                SocketAccept status_server_socket, status_client_socket;
                 IF accept_success THEN
                     listening := FALSE;
                     receiving := TRUE;
@@ -77,7 +77,7 @@ MODULE status_tcp
 
             IF receiving THEN
                 receive_success := TRUE;
-                SocketReceive client_socket \Str := msg;
+                SocketReceive status_client_socket \Str := msg;
                 
                 !recieve_sucess gets set to false if socketReceive error handler is called
                 if receive_success THEN
@@ -131,20 +131,20 @@ MODULE status_tcp
                     json := json + """dac"": " + NumToStr(dac, 0) + ",";
                     json := json + prec_msg;
                     json := json + ",";
-                    SocketSend client_socket \Str := json;
+                    SocketSend status_client_socket \Str := json;
 
                     json := """xrd"": " + NumToStr(x_read, 0) + ",";
                     json := json + """yrd"": " + NumToStr(y_read, 0) + ",";
                     json := json + """zrd"": " + NumToStr(z_read, 0) + ",";
                     json := json + """state"": """ + state_msg + """";
                     json := json + ",";
-                    SocketSend client_socket \Str := json;
+                    SocketSend status_client_socket \Str := json;
 
                     json := """xtg"": " + NumToStr(x_target, 0) + ",";
                     json := json + """ytg"": " + NumToStr(y_target, 0) + ",";
                     json := json + """ztg"": " + NumToStr(z_target, 0);
                     json := json + "}";
-                    SocketSend client_socket \Str := json;
+                    SocketSend status_client_socket \Str := json;
 
                     send := FALSE;
                 ENDIF
@@ -169,8 +169,8 @@ MODULE status_tcp
             ENDIF
 
 
-        SocketClose server_socket;
-        SocketClose client_socket;
+        SocketClose status_server_socket;
+        SocketClose status_client_socket;
         
     ENDPROC    
     
