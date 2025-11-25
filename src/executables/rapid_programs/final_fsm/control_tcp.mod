@@ -9,6 +9,7 @@ MODULE control_tcp
     VAR bool accept_success;
     VAR bool listening;
     VAR bool receiving;
+    VAR bool acknowledging;
 
     PERS num spd;
     PERS num acc;
