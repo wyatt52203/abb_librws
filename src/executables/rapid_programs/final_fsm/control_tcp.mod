@@ -26,9 +26,6 @@ MODULE control_tcp
 
     PERS bool status_channel_health;
     PERS bool cmd_channel_health;
-    VAR socketstatus test_status;
-    VAR bool test_eval1;
-    VAR bool test_eval2;
 
     FUNC bool socket_status_check()
         RETURN ctrl_channel_health AND cmd_channel_health AND status_channel_health;
@@ -58,7 +55,7 @@ MODULE control_tcp
                     accept_success := TRUE;
                     SocketAccept ctrl_server_socket, ctrl_client_socket;
                     IF accept_success THEN
-                        ctrl_channel_health := 2 = SocketGetStatus(ctrl_client_socket) AND 2 = SocketGetStatus(ctrl_server_socket);
+                        ctrl_channel_health := ((SOCKET_CONNECTED = SocketGetStatus(ctrl_client_socket)) AND SOCKET_CONNECTED = SocketGetStatus(ctrl_server_socket));
                         listening := FALSE;
                         receiving := TRUE;
                     ENDIF
@@ -120,11 +117,7 @@ MODULE control_tcp
                 ENDIF
             ENDIF
 
-            test_status := SocketGetStatus(ctrl_client_socket);
-            test_eval1 := 2 = test_status;
-            test_eval2 := SOCKET_CONNECTED = test_status;
-            
-            ctrl_channel_health := 2 = SocketGetStatus(ctrl_client_socket) AND 2 = SocketGetStatus(ctrl_server_socket);
+            ctrl_channel_health := ((SOCKET_CONNECTED = SocketGetStatus(ctrl_client_socket)) AND SOCKET_CONNECTED = SocketGetStatus(ctrl_server_socket));
 
         ENDWHILE        
    
