@@ -110,8 +110,8 @@ MODULE motion
         ConfL \Off;
         go := FALSE;
         
-        udp_channel_live := TRUE;
-        fsm_channels_live := FALSE;
+        udp_channel_live := FALSE;
+        fsm_channels_live := TRUE;
 
         WHILE TRUE DO
             ! Update Globals from robot
