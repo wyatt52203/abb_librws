@@ -70,16 +70,16 @@ MODULE control_tcp
                         CASE "rs!":
                             SetDO MyResetSignal, 1;
                         CASE "rsd":
-                            num spd := 800;
-                            num acc := 100;
-                            num jrk := 100;
-                            num dac := 100;
-                            zonedata zone := fine;
-                            speeddata speed := [800, 1000, 5000, 1000];
-                            num x_target := 300;
-                            num y_target := -450;
-                            num z_target := 700;
-                            
+                            spd := 800;
+                            acc := 100;
+                            jrk := 100;
+                            dac := 100;
+                            zone := fine;
+                            speed := [800, 1000, 5000, 1000];
+                            x_target := 300;
+                            y_target := -450;
+                            z_target := 700;
+
                             SetDO MyResetSignal, 1;
                         CASE "emr":
                             SetDO MyEmergencyStopSignal, 1;
