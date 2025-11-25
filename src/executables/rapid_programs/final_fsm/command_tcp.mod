@@ -162,7 +162,9 @@ MODULE command_tcp
                             CASE "dac":
                                 dac := parsed_val;
                             CASE "go!":
-                                go := TRUE;
+                                IF state = 0 THEN
+                                    go := TRUE;
+                                ENDIF
                             CASE "xtg":
                                 x_target := parsed_val;
                             CASE "ytg":
@@ -266,8 +268,13 @@ MODULE command_tcp
                 ENDIF
             ENDIF
 
+            IF ERRNO = ERR_SOCK_CLOSED THEN
+                ExitCycle;
+            ENDIF
+
 
         SocketClose server_socket;
+        SocketClose client_socket;
         
     ENDPROC    
     

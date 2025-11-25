@@ -158,7 +158,7 @@ MODULE motion
         SetDO MyPauseSignal, 0;
         IF state <> 2 THEN    
             StopMove;
-            StorePath;
+            ClearPath;
             go := FALSE;
             state := 2;
         ENDIF
@@ -167,9 +167,10 @@ MODULE motion
     TRAP continue_trap
         SetDO MyContinueSignal, 0;
         IF state = 2 THEN
-            RestoPath;
+            ! set to idle, and go is true, to initiate a move to target followed by state running
             StartMove;
-            state := 1;
+            go := TRUE;
+            state := 0;
         ENDIF
     ENDTRAP
 
