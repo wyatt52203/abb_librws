@@ -74,7 +74,7 @@ MODULE control_tcp
                             CASE "pl!":
                                 SetDO MyContinueSignal, 1;
                             CASE "rss":
-                                IF state = 3 AND socket_status_check THEN
+                                IF state = 3 AND socket_status_check() THEN
                                     state := 0;
                                     spd := 800;
                                     acc := 100;
