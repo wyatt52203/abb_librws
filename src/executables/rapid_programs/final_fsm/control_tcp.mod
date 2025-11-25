@@ -32,7 +32,7 @@ MODULE control_tcp
         SocketClose client_socket;
 
         ! Set connection parameters
-        server_ip := "192.168.15.82";
+        server_ip := GetSysInfo(\LanIp);
         server_port := 2002;
 
         SocketCreate server_socket;
@@ -80,7 +80,7 @@ MODULE control_tcp
                             PERS num y_target := -450;
                             PERS num z_target := 700;
 
-                            
+
                             SetDO MyResetSignal, 1;
                         CASE "emr":
                             SetDO MyEmergencyStopSignal, 1;

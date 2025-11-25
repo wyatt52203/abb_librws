@@ -85,7 +85,7 @@ MODULE command_tcp
         SocketClose client_socket;
 
         ! Set connection parameters
-        server_ip := "192.168.15.82";
+        server_ip := GetSysInfo(\LanIp);
         server_port := 2000;
 
         SocketCreate server_socket;
