@@ -15,7 +15,7 @@ MODULE motion
     PERS num acc := 100;
     PERS num jrk := 100;
     PERS num dac := 100;
-    PERS zonedata zone := fine;
+    PERS zonedata zone := [TRUE, 0, 0, 0, 0, 0, 0];
     PERS speeddata speed := [800, 1000, 5000, 1000];
     PERS num x_target := 300;
     PERS num y_target := -450;
