@@ -24,6 +24,7 @@ MODULE motion
     PERS num y_read;
     PERS num z_read;
 
+    PERS bool udp_channel_live;
     PERS bool fsm_channels_live;
 
     PERS num state := 0;
