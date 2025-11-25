@@ -34,11 +34,13 @@ MODULE controller_udp
     PERS num x;
     PERS num prev_x_target;
     PERS num motion_mode; ! 0 means motion in physical x/y, 1 means motion in z
+
+    PERS bool udp_channel_live;
     
     PROC main()
         ! Reset params
         go := FALSE;
-        SetDO MyResetSignal, 0;
+        
         x := 300;
         motion_mode := 0;
 
@@ -56,6 +58,8 @@ MODULE controller_udp
 
         !receive   
         WHILE TRUE DO
+            WaitUntil udp_channel_live;
+
             receive_success := TRUE;
             SocketReceiveFrom udp_socket \Str := msg, client_ip, client_sending_port \Time := 20;
             

@@ -36,8 +36,9 @@ MODULE udp_communication
     PERS num y;
     PERS num z;
     PERS num x;
-    
-    
+
+
+    PERS bool udp_channel_live;    
     
     PROC main()
         ! Reset params
@@ -56,8 +57,6 @@ MODULE udp_communication
         play := TRUE;
         zone := [TRUE,0,0,0,0,0,0];
         speed := [800,1000,5000,1000];
-        SetDO MyPauseSignal, 0;
-        SetDO MyResetSignal, 0;
 
         ! delete old connections
         SocketClose udp_socket;
@@ -74,6 +73,8 @@ MODULE udp_communication
 
         !receive   
         WHILE TRUE DO
+            WaitUntil udp_channel_live;
+
             receive_success := TRUE;
             SocketReceiveFrom udp_socket \Str := msg, client_ip, client_sending_port \Time := 10;
             

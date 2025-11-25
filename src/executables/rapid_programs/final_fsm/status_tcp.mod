@@ -41,6 +41,8 @@ MODULE status_tcp
     ! 2 = PAUSED
     ! 3 = ABORTED
 
+    PERS bool fsm_channels_live;
+
     PROC main()
         ! Reset params
         send := FALSE;
@@ -62,7 +64,8 @@ MODULE status_tcp
 
         !receive   
         WHILE TRUE DO
-
+            WaitUntil fsm_channels_live;
+            
             IF listening THEN
                 accept_success := TRUE;
                 SocketAccept server_socket, client_socket;

@@ -22,10 +22,15 @@ MODULE motion
     PERS num y;
     PERS num z;
     PERS num x;
+
+    PERS bool fsm_channels_live;
+    PERS bool udp_channel_live;
     
     
     
     PROC main()
+        SetDO MyPauseSignal, 0;
+        SetDO MyResetSignal, 0;
 
         IDelete intno1;
         CONNECT intno1 WITH wait_trap;
@@ -37,6 +42,10 @@ MODULE motion
 
         ConfL \Off;
         go := FALSE;
+        udp_channel_live := TRUE;
+        fsm_channels_live := FALSE;
+
+
 
         WHILE TRUE DO
             ! Wait for persistent variable signal

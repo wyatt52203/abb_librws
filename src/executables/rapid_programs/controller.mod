@@ -38,6 +38,9 @@ MODULE controller
     PERS num move_distance;
     PERS num motion_mode; ! 0 means motion in physical x/y, 1 means motion in z
 
+    PERS bool fsm_channels_live;
+    PERS bool udp_channel_live;
+
     
     TRAP reset_trap
         StopMove;
@@ -105,6 +108,8 @@ MODULE controller
     
     PROC main()
 
+        SetDO MyResetSignal, 0;
+
         IDelete intno2;
         CONNECT intno2 WITH reset_trap;
         ISignalDO MyResetSignal, 1, intno2;
@@ -120,6 +125,11 @@ MODULE controller
         y_target := prev_y_target;
         z_target := prev_z_target;
         input_spd := 400;
+
+        
+
+        udp_channel_live := TRUE;
+        fsm_channels_live := FALSE;
 
         WHILE TRUE DO
 

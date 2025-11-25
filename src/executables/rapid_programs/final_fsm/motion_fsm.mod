@@ -24,6 +24,8 @@ MODULE motion
     PERS num y_read;
     PERS num z_read;
 
+    PERS bool fsm_channels_live;
+
     PERS num state := 0;
     ! STATE DEFINITION
     ! 0 = IDLE
@@ -82,6 +84,11 @@ MODULE motion
     ENDPROC
     
     PROC main()
+        ! Reset interrupts
+        SetDO MyResetSignal, 0;
+        SetDO MyEmergencyStopSignal, 0;
+        SetDO MyPauseSignal, 0;
+        SetDO MyContinueSignal, 0;
 
         IDelete intno1;
         CONNECT intno1 WITH pause_trap;
@@ -101,9 +108,12 @@ MODULE motion
 
         ConfL \Off;
         go := FALSE;
+        
+        udp_channel_live := TRUE;
+        fsm_channels_live := FALSE;
 
         WHILE TRUE DO
-            ! Update Globals?
+            ! Update Globals from robot
             ReadPos;
 
             IF state = 0 THEN

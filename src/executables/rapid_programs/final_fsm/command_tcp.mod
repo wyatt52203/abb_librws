@@ -42,6 +42,7 @@ MODULE command_tcp
 
     PERS bool awaiting_motion;
     PERS bool motion_complete;
+    PERS bool fsm_channels_live;
 
 
     PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z)
@@ -98,7 +99,8 @@ MODULE command_tcp
 
         !receive   
         WHILE TRUE DO
-
+            WaitUntil fsm_channels_live;
+            
             IF listening THEN
                 accept_success := TRUE;
                 SocketAccept server_socket, client_socket;

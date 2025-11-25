@@ -19,14 +19,10 @@ MODULE control_tcp
     PERS num x_target;
     PERS num y_target;
     PERS num z_target;
+
+    PERS bool fsm_channels_live;
     
     PROC main()
-        ! Reset params
-        SetDO MyResetSignal, 0;
-        SetDO MyEmergencyStopSignal, 0;
-        SetDO MyPauseSignal, 0;
-        SetDO MyContinueSignal, 0;
-
         ! delete old connections
         SocketClose server_socket;
         SocketClose client_socket;
@@ -44,6 +40,7 @@ MODULE control_tcp
 
         !receive   
         WHILE TRUE DO
+            WaitUntil fsm_channels_live;
 
             IF listening THEN
                 accept_success := TRUE;
