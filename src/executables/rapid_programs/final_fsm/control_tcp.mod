@@ -56,6 +56,7 @@ MODULE control_tcp
                     accept_success := TRUE;
                     SocketAccept ctrl_server_socket, ctrl_client_socket;
                     IF accept_success THEN
+                        ctrl_channel_health := 2 = SocketGetStatus(ctrl_client_socket) AND 2 = SocketGetStatus(ctrl_server_socket);
                         listening := FALSE;
                         receiving := TRUE;
                     ENDIF
@@ -118,7 +119,7 @@ MODULE control_tcp
             ENDIF
 
             test_status := SocketGetStatus(ctrl_client_socket);
-            ctrl_channel_health := SOCKET_CONNECTED = SocketGetStatus(ctrl_client_socket) AND SOCKET_CONNECTED = SocketGetStatus(ctrl_server_socket);
+            ctrl_channel_health := 2 = SocketGetStatus(ctrl_client_socket) AND 2 = SocketGetStatus(ctrl_server_socket);
 
         ENDWHILE        
    
