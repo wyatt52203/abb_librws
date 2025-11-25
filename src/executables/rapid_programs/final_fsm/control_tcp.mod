@@ -26,6 +26,7 @@ MODULE control_tcp
 
     PERS bool status_channel_health;
     PERS bool cmd_channel_health;
+    VAR socketstatus test_status;
 
     FUNC bool socket_status_check()
         RETURN ctrl_channel_health AND cmd_channel_health AND status_channel_health;
@@ -116,7 +117,7 @@ MODULE control_tcp
                 ENDIF
             ENDIF
 
-            VAR socketstatus test_status := SocketGetStatus(ctrl_client_socket);
+            test_status := SocketGetStatus(ctrl_client_socket);
             ctrl_channel_health := SOCKET_CONNECTED = SocketGetStatus(ctrl_client_socket) AND SOCKET_CONNECTED = SocketGetStatus(ctrl_server_socket);
 
         ENDWHILE        
