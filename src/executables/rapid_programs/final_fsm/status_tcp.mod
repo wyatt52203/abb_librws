@@ -14,6 +14,7 @@ MODULE status_tcp
     VAR bool send;
     VAR bool listening;
     VAR bool receiving;
+    VAR bool acknowledging;
 
 
     
@@ -86,6 +87,10 @@ MODULE status_tcp
                     if receive_success THEN
                         cmd := StrPart(msg, 1, 3);
 
+                        acknowledging := TRUE;
+                        SocketSend status_client_socket \Str := "ack";
+                        acknowledging := FALSE;
+
                         if cmd = "snd" THEN
                             send := TRUE;
                         ENDIF
@@ -149,6 +154,13 @@ MODULE status_tcp
                         json := json + "}";
                         SocketSend status_client_socket \Str := json;
 
+                        acknowledging := TRUE;    
+                        SocketReceive status_client_socket \Str := msg;
+                        IF msg <> "ack" THEN
+                            ExitCycle;
+                        ENDIF
+                        acknowledging := FALSE;
+
                         send := FALSE;
                     ENDIF ! sending response
 
@@ -163,7 +175,10 @@ MODULE status_tcp
 
         ERROR
             IF ERRNO = ERR_SOCK_TIMEOUT THEN
-                IF listening THEN
+                IF acknowledging THEN
+                    ! Acknowledgment failed on timeout- handle here
+                    ExitCycle;
+                ELSEIF listening THEN
                     accept_success := FALSE;
                     TRYNEXT;
                 ELSEIF receiving THEN

@@ -13,6 +13,7 @@ MODULE command_tcp
     VAR bool accept_success;
     VAR bool listening;
     VAR bool receiving;
+    VAR bool acknowledging;
 
 
     
@@ -119,6 +120,11 @@ MODULE command_tcp
                     
                     !recieve_sucess gets set to false if socketReceive error handler is called
                     if receive_success THEN
+
+                        acknowledging := TRUE;
+                        SocketSend cmd_client_socket \Str := "ack";
+                        acknowledging := FALSE;
+
                         cmd := StrPart(msg, 1, 3);
                         str_length := StrLen(msg);
                         ! Extracts (str_length - 4) total characters, starting at 5
@@ -178,6 +184,14 @@ MODULE command_tcp
                     awaiting_motion := FALSE;
                     motion_complete := FALSE;
                     receiving := TRUE;
+
+                    acknowledging := TRUE;    
+                    SocketReceive cmd_client_socket \Str := msg;
+                    IF msg <> "ack" THEN
+                        ExitCycle;
+                    ENDIF
+                    acknowledging := FALSE;
+
                 ELSEIF awaiting_motion AND state = 0 THEN
                     awaiting_motion := FALSE;
                     receiving := TRUE;
@@ -192,7 +206,10 @@ MODULE command_tcp
 
         ERROR
             IF ERRNO = ERR_SOCK_TIMEOUT THEN
-                IF listening THEN
+                IF acknowledging THEN
+                    ! Acknowledgment failed on timeout- handle here
+                    ExitCycle;
+                ELSEIF listening THEN
                     accept_success := FALSE;
                     TRYNEXT;
                 ELSEIF receiving THEN

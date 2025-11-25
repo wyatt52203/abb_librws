@@ -68,6 +68,7 @@ MODULE control_tcp
                     
                     !recieve_sucess gets set to false if socketReceive error handler is called
                     IF receive_success THEN
+
                         cmd := StrPart(msg, 1, 3);
 
                         TEST cmd
@@ -114,6 +115,9 @@ MODULE control_tcp
                                 SetDO MyEmergencyStopSignal, 1;
                         ENDTEST
 
+                        acknowledging := TRUE;
+                        SocketSend ctrl_client_socket \Str := "ack";
+                        acknowledging := FALSE;
                     ENDIF
                 ENDIF
             ENDIF
@@ -125,7 +129,10 @@ MODULE control_tcp
 
         ERROR
             IF ERRNO = ERR_SOCK_TIMEOUT THEN
-                IF listening THEN
+                IF acknowledging THEN
+                    ! Acknowledgment failed on timeout- handle here
+                    ExitCycle;
+                ELSEIF listening THEN
                     accept_success := FALSE;
                     TRYNEXT;
                 ELSEIF receiving THEN
