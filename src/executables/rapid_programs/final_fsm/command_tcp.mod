@@ -116,7 +116,7 @@ MODULE command_tcp
 
                 IF receiving THEN
                     receive_success := TRUE;
-                    SocketReceive cmd_client_socket \Str := msg;
+                    SocketReceive cmd_client_socket \Str := msg \Time := 180;
                     
                     !recieve_sucess gets set to false if socketReceive error handler is called
                     if receive_success THEN
@@ -186,7 +186,7 @@ MODULE command_tcp
                     receiving := TRUE;
 
                     acknowledging := TRUE;    
-                    SocketReceive cmd_client_socket \Str := msg;
+                    SocketReceive cmd_client_socket \Str := msg \Time := 10;
                     IF msg <> "ack" THEN
                         ExitCycle;
                     ENDIF
@@ -213,8 +213,9 @@ MODULE command_tcp
                     accept_success := FALSE;
                     TRYNEXT;
                 ELSEIF receiving THEN
-                    receive_success := FALSE;
-                    TRYNEXT;
+                    ExitCycle;
+                    ! receive_success := FALSE;
+                    ! TRYNEXT;
                 ENDIF
             ENDIF
 

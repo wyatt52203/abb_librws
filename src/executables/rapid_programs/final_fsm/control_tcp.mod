@@ -65,7 +65,7 @@ MODULE control_tcp
 
                 IF receiving THEN
                     receive_success := TRUE;
-                    SocketReceive ctrl_client_socket \Str := msg;
+                    SocketReceive ctrl_client_socket \Str := msg \Time := 180;
                     
                     !recieve_sucess gets set to false if socketReceive error handler is called
                     IF receive_success THEN
@@ -137,8 +137,9 @@ MODULE control_tcp
                     accept_success := FALSE;
                     TRYNEXT;
                 ELSEIF receiving THEN
-                    receive_success := FALSE;
-                    TRYNEXT;
+                    ExitCycle;
+                    !receive_success := FALSE;
+                    !TRYNEXT;
                 ENDIF
             ENDIF
 

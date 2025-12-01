@@ -81,7 +81,7 @@ MODULE status_tcp
 
                 IF receiving THEN
                     receive_success := TRUE;
-                    SocketReceive status_client_socket \Str := msg;
+                    SocketReceive status_client_socket \Str := msg \Time := 180;
                     
                     !recieve_sucess gets set to false if socketReceive error handler is called
                     if receive_success THEN
@@ -155,9 +155,8 @@ MODULE status_tcp
                         SocketSend status_client_socket \Str := json;
 
                         acknowledging := TRUE;    
-                        SocketReceive status_client_socket \Str := msg;
+                        SocketReceive status_client_socket \Str := msg \Time := 10;
                         IF msg <> "ack" THEN
-                        TPWrite("not ack!");
                             ExitCycle;
                         ENDIF
                         acknowledging := FALSE;
@@ -183,8 +182,9 @@ MODULE status_tcp
                     accept_success := FALSE;
                     TRYNEXT;
                 ELSEIF receiving THEN
-                    receive_success := FALSE;
-                    TRYNEXT;
+                    ExitCycle;
+                    !receive_success := FALSE;
+                    !TRYNEXT;
                 ENDIF
             ENDIF
 
