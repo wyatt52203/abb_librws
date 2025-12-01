@@ -157,7 +157,7 @@ MODULE status_tcp
                         acknowledging := TRUE;    
                         SocketReceive status_client_socket \Str := msg;
                         IF msg <> "ack" THEN
-                        TPWrite("not ack!")
+                        TPWrite("not ack!");
                             ExitCycle;
                         ENDIF
                         acknowledging := FALSE;
