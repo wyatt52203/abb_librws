@@ -180,6 +180,10 @@ MODULE motion
 
     TRAP reset_trap
         SetDO MyResetSignal, 0;
+        
+        StopMove;
+        ClearPath;
+        StartMove;
 
         ExitCycle;
     ENDTRAP
