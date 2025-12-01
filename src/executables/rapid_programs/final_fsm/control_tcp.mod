@@ -29,7 +29,7 @@ MODULE control_tcp
     PERS bool cmd_channel_health;
 
     FUNC bool socket_status_check()
-        RETURN ctrl_channel_health AND cmd_channel_health AND status_channel_health;
+        RETURN ((ctrl_channel_health AND cmd_channel_health) AND status_channel_health);
     ENDFUNC
 
     PROC main()
@@ -65,7 +65,7 @@ MODULE control_tcp
 
                 IF receiving THEN
                     receive_success := TRUE;
-                    SocketReceive ctrl_client_socket \Str := msg \Time := 180;
+                    SocketReceive ctrl_client_socket \Str := msg \Time := 30;
                     
                     !recieve_sucess gets set to false if socketReceive error handler is called
                     IF receive_success THEN

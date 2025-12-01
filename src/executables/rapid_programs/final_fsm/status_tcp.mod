@@ -81,7 +81,7 @@ MODULE status_tcp
 
                 IF receiving THEN
                     receive_success := TRUE;
-                    SocketReceive status_client_socket \Str := msg \Time := 180;
+                    SocketReceive status_client_socket \Str := msg \Time := 30;
                     
                     !recieve_sucess gets set to false if socketReceive error handler is called
                     if receive_success THEN
@@ -155,7 +155,7 @@ MODULE status_tcp
                         SocketSend status_client_socket \Str := json;
 
                         acknowledging := TRUE;    
-                        SocketReceive status_client_socket \Str := msg \Time := 10;
+                        SocketReceive status_client_socket \Str := msg \Time := 5;
                         IF msg <> "ack" THEN
                             ExitCycle;
                         ENDIF
