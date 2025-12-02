@@ -11,15 +11,15 @@ MODULE motion
 
     ! global params
     PERS bool go;
-    PERS num spd := 800;
-    PERS num acc := 100;
-    PERS num jrk := 100;
-    PERS num dac := 100;
-    PERS zonedata zone := [TRUE, 0, 0, 0, 0, 0, 0];
-    PERS speeddata speed := [800, 1000, 5000, 1000];
-    PERS num x_target := 300;
-    PERS num y_target := -450;
-    PERS num z_target := 700;
+    PERS num spd;
+    PERS num acc;
+    PERS num jrk;
+    PERS num dac;
+    PERS zonedata zone;
+    PERS speeddata speed;
+    PERS num x_target;
+    PERS num y_target;
+    PERS num z_target;
     PERS num x_read;
     PERS num y_read;
     PERS num z_read;
@@ -35,6 +35,8 @@ MODULE motion
     ! 3 = ABORTED
     
     PERS bool motion_complete;
+
+    PERS bool reset_params := TRUE;
 
     PROC ReadPos()
         
@@ -113,6 +115,20 @@ MODULE motion
         udp_channel_live := FALSE;
         fsm_channels_live := TRUE;
 
+        IF reset_params THEN
+            spd := 800;
+            acc := 100;
+            jrk := 100;
+            dac := 100;
+            zone := [TRUE, 0, 0, 0, 0, 0, 0];
+            speed := [800, 1000, 5000, 1000];
+            x_target := 300;
+            y_target := -450;
+            z_target := 700;
+        ENDIF
+
+        reset_params := TRUE;        
+
         WHILE TRUE DO
             ! Update Globals from robot
             ReadPos;
@@ -154,14 +170,16 @@ MODULE motion
 
     TRAP emergency_trap
         SetDO MyEmergencyStopSignal, 0;
-        StopMove;
-        ClearPath;
-        state := 3;
+        if state <> 3 THEN
+            StopMove;
+            ClearPath;
+            state := 3;
+        ENDIF
     ENDTRAP
 
     TRAP pause_trap
         SetDO MyPauseSignal, 0;
-        IF state <> 2 THEN    
+        IF (state <> 2 and state <> 3) THEN    
             StopMove;
             StorePath;
             go := FALSE;
@@ -180,12 +198,13 @@ MODULE motion
 
     TRAP reset_trap
         SetDO MyResetSignal, 0;
-        
-        StopMove;
-        ClearPath;
-        StartMove;
+        IF state <> 3 THEN
+            StopMove;
+            ClearPath;
+            StartMove;
 
-        ExitCycle;
+            ExitCycle;
+        ENDIF
     ENDTRAP
 
     

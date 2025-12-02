@@ -21,6 +21,7 @@ MODULE control_tcp
     PERS num y_target;
     PERS num z_target;
     PERS num state;
+    PERS bool reset_params;
 
     PERS bool fsm_channels_live;
     VAR bool ctrl_channel_health;
@@ -80,36 +81,20 @@ MODULE control_tcp
                             CASE "rss":
                                 IF state = 3 AND socket_status_check() THEN
                                     state := 0;
-                                    spd := 800;
-                                    acc := 100;
-                                    jrk := 100;
-                                    dac := 100;
-                                    zone := fine;
-                                    speed := [800, 1000, 5000, 1000];
-                                    x_target := 300;
-                                    y_target := -450;
-                                    z_target := 700;
-                                    state := 0;
+                                    reset_params := TRUE;
 
                                     SetDO MyResetSignal, 1;
                                 ENDIF
                             CASE "rsp":
                                 IF state = 2 OR state = 0 THEN
-                                    spd := 800;
-                                    acc := 100;
-                                    jrk := 100;
-                                    dac := 100;
-                                    zone := fine;
-                                    speed := [800, 1000, 5000, 1000];
-                                    x_target := 300;
-                                    y_target := -450;
-                                    z_target := 700;
                                     state := 0;
+                                    reset_params := TRUE;
                                     SetDO MyResetSignal, 1;
                                 ENDIF
                             CASE "rs!":
                                 IF state = 2 OR state = 0 THEN
                                     state := 0;
+                                    reset_params := FALSE;
                                     SetDO MyResetSignal, 1;
                                 ENDIF
                             CASE "emr":
