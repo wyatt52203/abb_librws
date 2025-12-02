@@ -70,8 +70,8 @@ MODULE control_tcp
                     
                     !recieve_sucess gets set to false if socketReceive error handler is called
                     IF receive_success THEN
-                        TPWrite msg;
                         cmd := StrPart(msg, 1, 3);
+                        TPWrite cmd;
 
                         TEST cmd
                             CASE "pz!":
@@ -103,6 +103,7 @@ MODULE control_tcp
 
                         acknowledging := TRUE;
                         SocketSend ctrl_client_socket \Str := "ack";
+                        TPWrite "sent";
                         acknowledging := FALSE;
                     ENDIF
                 ENDIF
