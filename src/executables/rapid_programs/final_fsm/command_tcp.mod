@@ -192,7 +192,7 @@ MODULE command_tcp
                     ENDIF
                     acknowledging := FALSE;
 
-                ELSEIF awaiting_motion AND state = 0 THEN
+                ELSEIF awaiting_motion AND (state = 0 OR state = 3) THEN
                     awaiting_motion := FALSE;
                     receiving := TRUE;
                 ENDIF
