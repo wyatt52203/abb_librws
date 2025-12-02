@@ -213,9 +213,10 @@ MODULE command_tcp
                     accept_success := FALSE;
                     TRYNEXT;
                 ELSEIF receiving THEN
-                    ! ExitCycle;
-                    receive_success := FALSE;
-                    TRYNEXT;
+                    ExitCycle;
+                    ! ! Retrying socket receive after failure is hanging for some strange reason
+                    ! receive_success := FALSE;
+                    ! TRYNEXT;
                 ENDIF
             ENDIF
 

@@ -182,9 +182,9 @@ MODULE status_tcp
                     accept_success := FALSE;
                     TRYNEXT;
                 ELSEIF receiving THEN
-                    ! ExitCycle;
-                    receive_success := FALSE;
-                    TRYNEXT;
+                    ExitCycle;
+                    ! receive_success := FALSE;
+                    ! TRYNEXT;
                 ENDIF
             ENDIF
 
