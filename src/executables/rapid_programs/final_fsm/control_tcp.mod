@@ -102,7 +102,7 @@ MODULE control_tcp
                         ENDTEST
 
                         acknowledging := TRUE;
-                        SocketSend ctrl_client_socket \Str := "ack";
+                        SocketSend ctrl_client_socket \Str := "{""status"":""OKAY""}";
                         TPWrite "sent";
                         acknowledging := FALSE;
                     ENDIF
