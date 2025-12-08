@@ -122,7 +122,7 @@ MODULE command_tcp
                     if receive_success THEN
 
                         acknowledging := TRUE;
-                        SocketSend cmd_client_socket \Str := "ack";
+                        SocketSend cmd_client_socket \Str := "{""status"":""OKAY""}";
                         acknowledging := FALSE;
 
                         cmd := StrPart(msg, 1, 3);
@@ -180,17 +180,17 @@ MODULE command_tcp
                 ENDIF
 
                 IF awaiting_motion AND motion_complete THEN
-                    SocketSend cmd_client_socket \Str := "Complete";
+                    SocketSend cmd_client_socket \Str := "{""status"":""OKAY"", ""complete"":""TRUE""}";
                     awaiting_motion := FALSE;
                     motion_complete := FALSE;
                     receiving := TRUE;
 
-                    acknowledging := TRUE;    
-                    SocketReceive cmd_client_socket \Str := msg \Time := 5;
-                    IF msg <> "ack" THEN
-                        ExitCycle;
-                    ENDIF
-                    acknowledging := FALSE;
+                    ! acknowledging := TRUE;    
+                    ! SocketReceive cmd_client_socket \Str := msg \Time := 5;
+                    ! IF msg <> "ack" THEN
+                    !     ExitCycle;
+                    ! ENDIF
+                    ! acknowledging := FALSE;
 
                 ELSEIF awaiting_motion AND (state = 0 OR state = 3) THEN
                     awaiting_motion := FALSE;
