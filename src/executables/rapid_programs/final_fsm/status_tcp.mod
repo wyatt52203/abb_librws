@@ -65,6 +65,8 @@ MODULE status_tcp
         receiving := FALSE;
         status_channel_health := FALSE;
 
+        TPWrite "Starting prog";
+
         !receive   
         WHILE TRUE DO
             IF fsm_channels_live THEN
@@ -157,6 +159,7 @@ MODULE status_tcp
                         SocketSend status_client_socket \Str := json;
 
                         acknowledging := TRUE;    
+                        TPWrite "receiving ack";
                         SocketReceive status_client_socket \Str := msg \Time := 5;
                         TPWrite msg;
                         IF msg <> "ack" THEN
