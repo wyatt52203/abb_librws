@@ -158,6 +158,7 @@ MODULE status_tcp
 
                         acknowledging := TRUE;    
                         SocketReceive status_client_socket \Str := msg \Time := 5;
+                        TPWrite msg;
                         IF msg <> "ack" THEN
                             ExitCycle;
                         ENDIF
