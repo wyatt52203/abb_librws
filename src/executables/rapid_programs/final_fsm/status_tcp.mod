@@ -81,7 +81,7 @@ MODULE status_tcp
 
                 IF receiving THEN
                     receive_success := TRUE;
-                    SocketReceive status_client_socket \Str := msg \Time := 30;
+                    SocketReceive status_client_socket \Str := msg \Time := 10;
                     
                     !recieve_sucess gets set to false if socketReceive error handler is called
                     if receive_success THEN

@@ -45,6 +45,7 @@ MODULE command_tcp
     PERS bool motion_complete;
     PERS bool fsm_channels_live;
     PERS bool cmd_channel_health;
+    PERS bool status_channel_health;
 
 
     PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z, INOUT num a, INOUT num d, INOUT num s, INOUT num j)
@@ -140,7 +141,7 @@ MODULE command_tcp
                     ENDIF
                 ENDIF
 
-                IF receiving THEN
+                IF receiving AND status_channel_health THEN
                     receive_success := TRUE;
                     SocketReceive cmd_client_socket \Str := msg \Time := 30;
                     

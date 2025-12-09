@@ -148,7 +148,7 @@ MODULE motion
 
     TRAP pause_trap
         SetDO MyPauseSignal, 0;
-        IF (state <> 2 and state <> 3) THEN    
+        IF (state <> 2 AND state <> 3) THEN    
             StopMove;
             StorePath;
             go := FALSE;
