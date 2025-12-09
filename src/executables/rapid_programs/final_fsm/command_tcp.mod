@@ -190,7 +190,7 @@ MODULE command_tcp
                     IF msg <> "ack" THEN
                         ExitCycle;
                     ENDIF
-                    SocketSend status_client_socket \Str := "{""status"":""OKAY""}";
+                    SocketSend cmd_client_socket \Str := "{""status"":""OKAY""}";
                     acknowledging := FALSE;
 
                 ELSEIF awaiting_motion AND (state = 0 OR state = 3) THEN
