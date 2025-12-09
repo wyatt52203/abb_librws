@@ -151,16 +151,17 @@ MODULE status_tcp
                         json := """xtg"": " + NumToStr(x_target, 0) + ",";
                         json := json + """ytg"": " + NumToStr(y_target, 0) + ",";
                         json := json + """ztg"": " + NumToStr(z_target, 0) + ",";
-                        json := json + """status"":""OKAY""";
+                        json := json + """status"":""OKAY"",";
+                        json := json + """request_ack"":""TRUE""";
                         json := json + "}";
                         SocketSend status_client_socket \Str := json;
 
-                        ! acknowledging := TRUE;    
-                        ! SocketReceive status_client_socket \Str := msg \Time := 5;
-                        ! IF msg <> "ack" THEN
-                        !     ExitCycle;
-                        ! ENDIF
-                        ! acknowledging := FALSE;
+                        acknowledging := TRUE;    
+                        SocketReceive status_client_socket \Str := msg \Time := 5;
+                        IF msg <> "ack" THEN
+                            ExitCycle;
+                        ENDIF
+                        acknowledging := FALSE;
 
                         send := FALSE;
                     ENDIF ! sending response
