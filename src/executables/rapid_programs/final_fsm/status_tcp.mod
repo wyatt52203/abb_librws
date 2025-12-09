@@ -87,9 +87,9 @@ MODULE status_tcp
                     if receive_success THEN
                         cmd := StrPart(msg, 1, 3);
 
-                        acknowledging := TRUE;
-                        SocketSend status_client_socket \Str := "{""status"":""OKAY""}";
-                        acknowledging := FALSE;
+                        ! acknowledging := TRUE;
+                        ! SocketSend status_client_socket \Str := "{""status"":""OKAY""}";
+                        ! acknowledging := FALSE;
 
                         if cmd = "snd" THEN
                             send := TRUE;
