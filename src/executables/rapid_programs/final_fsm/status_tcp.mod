@@ -158,13 +158,12 @@ MODULE status_tcp
                         json := json + "}";
                         SocketSend status_client_socket \Str := json;
 
-                        acknowledging := TRUE;    
-                        TPWrite "receiving ack";
+                        acknowledging := TRUE;
                         SocketReceive status_client_socket \Str := msg \Time := 5;
-                        TPWrite msg;
                         IF msg <> "ack" THEN
                             ExitCycle;
                         ENDIF
+                        SocketSend status_client_socket \Str := "{""status"":""OKAY""}";
                         acknowledging := FALSE;
 
                         send := FALSE;
@@ -180,7 +179,6 @@ MODULE status_tcp
    
 
         ERROR
-            TPWrite ERRNO;
             IF ERRNO = ERR_SOCK_TIMEOUT THEN
                 IF acknowledging THEN
                     ! Acknowledgment failed on timeout- handle here
