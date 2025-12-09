@@ -180,6 +180,7 @@ MODULE status_tcp
    
 
         ERROR
+        TPWrite ERRNO;
             IF ERRNO = ERR_SOCK_TIMEOUT THEN
                 IF acknowledging THEN
                     ! Acknowledgment failed on timeout- handle here
