@@ -185,13 +185,13 @@ MODULE command_tcp
                     motion_complete := FALSE;
                     receiving := TRUE;
 
-                    acknowledging := TRUE;    
-                    SocketReceive cmd_client_socket \Str := msg \Time := 5;
-                    IF msg <> "ack" THEN
-                        ExitCycle;
-                    ENDIF
-                    SocketSend cmd_client_socket \Str := "{""status"":""OKAY""}";
-                    acknowledging := FALSE;
+                    ! acknowledging := TRUE;    
+                    ! SocketReceive cmd_client_socket \Str := msg \Time := 5;
+                    ! IF msg <> "ack" THEN
+                    !     ExitCycle;
+                    ! ENDIF
+                    ! SocketSend cmd_client_socket \Str := "{""status"":""OKAY""}";
+                    ! acknowledging := FALSE;
 
                 ELSEIF awaiting_motion AND (state = 0 OR state = 3) THEN
                     awaiting_motion := FALSE;

@@ -158,13 +158,13 @@ MODULE status_tcp
                         json := json + "}";
                         SocketSend status_client_socket \Str := json;
 
-                        acknowledging := TRUE;
-                        SocketReceive status_client_socket \Str := msg \Time := 5;
-                        IF msg <> "ack" THEN
-                            ExitCycle;
-                        ENDIF
-                        SocketSend status_client_socket \Str := "{""status"":""OKAY""}";
-                        acknowledging := FALSE;
+                        ! acknowledging := TRUE;
+                        ! SocketReceive status_client_socket \Str := msg \Time := 5;
+                        ! IF msg <> "ack" THEN
+                        !     ExitCycle;
+                        ! ENDIF
+                        ! SocketSend status_client_socket \Str := "{""status"":""OKAY""}";
+                        ! acknowledging := FALSE;
 
                         send := FALSE;
                     ENDIF ! sending response
