@@ -117,9 +117,9 @@ MODULE motion
 
         IF reset_params THEN
             spd := 800;
-            acc := 100;
+            acc := 5;
             jrk := 100;
-            dac := 100;
+            dac := 5;
             zone := [TRUE, 0, 0, 0, 0, 0, 0];
             speed := [800, 1000, 5000, 1000];
             x_target := 300;
@@ -141,7 +141,8 @@ MODULE motion
                     state := 1;
 
                     ! Set Motion Parameters
-                    AccSet acc, jrk \FinePointRamp:=dac;
+                    ! AccSet acc, jrk \FinePointRamp:=dac;
+                    PathAccLim TRUE\AccMax := acc, TRUE\DecelMax := dac;
                     EnforceBounds x_target, y_target, z_target;
                     
                     MoveL [[x_target, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
