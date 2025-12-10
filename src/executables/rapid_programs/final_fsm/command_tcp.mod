@@ -47,7 +47,7 @@ MODULE command_tcp
     PERS bool cmd_channel_health;
 
 
-    PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z, INOUT num a, INOUT num d)
+    PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z, INOUT num a, INOUT num d, INOUT num s, INOUT num j)
         ! Enforce Y bounds [-450, 450]
 
         ! +750 height in safety, 700 here
@@ -89,6 +89,18 @@ MODULE command_tcp
             d := 10000;
         ELSEIF d < 100 THEN
             d := 100;
+        ENDIF
+
+        IF s > 2200 THEN
+            s := 2200;
+        ELSEIF s < 25 THEN
+            s := 25;
+        ENDIF
+
+        IF j > 100 THEN
+            j := 100;
+        ELSEIF j < 1 THEN
+            j := 1;
         ENDIF
 
     ENDPROC
@@ -188,7 +200,8 @@ MODULE command_tcp
                                     z_target := parsed_val;
                             ENDTEST
 
-                            EnforceBounds x_target, y_target, z_target, acc, dac;
+                            EnforceBounds x_target, y_target, z_target, acc, dac, spd;
+                            speed := [spd, 1000, 5000, 1000]
                         ENDIF
                     ENDIF
                 ENDIF
