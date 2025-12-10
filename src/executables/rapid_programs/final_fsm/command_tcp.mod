@@ -188,7 +188,7 @@ MODULE command_tcp
                                     z_target := parsed_val;
                             ENDTEST
 
-                            EnforceBounds x_target, y_target, z_target;
+                            EnforceBounds x_target, y_target, z_target, acc, dac;
                         ENDIF
                     ENDIF
                 ENDIF
