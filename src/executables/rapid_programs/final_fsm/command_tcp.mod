@@ -200,8 +200,8 @@ MODULE command_tcp
                                     z_target := parsed_val;
                             ENDTEST
 
-                            EnforceBounds x_target, y_target, z_target, acc, dac, spd;
-                            speed := [spd, 1000, 5000, 1000]
+                            EnforceBounds x_target, y_target, z_target, acc, dac, spd, jrk;
+                            speed := [spd, 1000, 5000, 1000];
                         ENDIF
                     ENDIF
                 ENDIF
