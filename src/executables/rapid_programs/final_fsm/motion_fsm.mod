@@ -54,7 +54,7 @@ MODULE motion
 
     ENDPROC
 
-    PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z)
+    PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z, INOUT num a, INOUT num d)
         ! Enforce Y bounds [-450, 450]
 
         ! +750 height in safety, 700 here
@@ -84,6 +84,20 @@ MODULE motion
         ELSEIF x < 250 THEN
             x := 250;
         ENDIF
+
+        ! error occurs when acceleration/deceleration < 100 mm/s, default max is 10 m/s
+        IF a > 10000 THEN
+            a := 10000;
+        ELSEIF a < 100 THEN
+            a := 100;
+        ENDIF
+
+        IF d > 10000 THEN
+            d := 10000;
+        ELSEIF d < 100 THEN
+            d := 100;
+        ENDIF
+
     ENDPROC
     
     PROC main()
@@ -117,9 +131,9 @@ MODULE motion
 
         IF reset_params THEN
             spd := 800;
-            acc := 5;
+            acc := 10000;
             jrk := 100;
-            dac := 5;
+            dac := 10000;
             zone := [TRUE, 0, 0, 0, 0, 0, 0];
             speed := [800, 1000, 5000, 1000];
             x_target := 300;
@@ -142,8 +156,8 @@ MODULE motion
 
                     ! Set Motion Parameters
                     ! AccSet acc, jrk \FinePointRamp:=dac;
+                    EnforceBounds x_target, y_target, z_target, acc, dac;
                     PathAccLim TRUE\AccMax := (acc/1000), TRUE\DecelMax := (dac/1000);
-                    EnforceBounds x_target, y_target, z_target;
                     
                     MoveL [[x_target, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
                 ENDIF

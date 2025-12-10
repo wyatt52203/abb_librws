@@ -47,7 +47,7 @@ MODULE command_tcp
     PERS bool cmd_channel_health;
 
 
-    PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z)
+    PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z, INOUT num a, INOUT num d)
         ! Enforce Y bounds [-450, 450]
 
         ! +750 height in safety, 700 here
@@ -77,6 +77,20 @@ MODULE command_tcp
         ELSEIF x < 250 THEN
             x := 250;
         ENDIF
+
+        ! error occurs when acceleration/deceleration < 100 mm/s, default max is 10 m/s
+        IF a > 10000 THEN
+            a := 10000;
+        ELSEIF a < 100 THEN
+            a := 100;
+        ENDIF
+
+        IF d > 10000 THEN
+            d := 10000;
+        ELSEIF d < 100 THEN
+            d := 100;
+        ENDIF
+
     ENDPROC
     
     PROC main()
