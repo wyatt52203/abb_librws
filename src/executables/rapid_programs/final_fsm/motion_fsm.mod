@@ -142,7 +142,7 @@ MODULE motion
 
                     ! Set Motion Parameters
                     ! AccSet acc, jrk \FinePointRamp:=dac;
-                    PathAccLim TRUE\AccMax := acc, TRUE\DecelMax := dac;
+                    PathAccLim TRUE\AccMax := (acc/1000), TRUE\DecelMax := (dac/1000);
                     EnforceBounds x_target, y_target, z_target;
                     
                     MoveL [[x_target, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;

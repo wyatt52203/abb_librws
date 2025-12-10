@@ -65,8 +65,6 @@ MODULE status_tcp
         receiving := FALSE;
         status_channel_health := FALSE;
 
-        TPWrite "Starting prog";
-
         !receive   
         WHILE TRUE DO
             IF fsm_channels_live THEN
