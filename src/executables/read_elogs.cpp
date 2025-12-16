@@ -11,7 +11,10 @@
 
 int main(int argc, char* argv[])
 {
+    // Defaults
     std::string event_code_path = "/home/nodered2/abb_librws2/abb_librws/docs/event_codes/event_log_lookup.csv";
+    std::string ip = "192.168.15.82";
+
     if (argc >= 2)
     {
         if (std::string(argv[1]) == "full")
@@ -20,7 +23,11 @@ int main(int argc, char* argv[])
         }
     }
 
-    std::string ip = "192.168.15.82";
+    if (argc >= 3)
+    {
+      ip = argv[2];
+    }
+
     std::string username = "Admin";
     std::string password = "robotics";
 
