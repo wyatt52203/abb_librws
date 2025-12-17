@@ -1,0 +1,262 @@
+MODULE command_tcp
+    VAR socketdev cmd_server_socket;
+    VAR socketdev cmd_client_socket;
+    VAR string server_ip;
+    VAR num server_port;
+    VAR string msg;
+    VAR string cmd;
+    VAR string value;
+    VAR num str_length;
+    VAR num parsed_val;
+    VAR bool parse_success;
+    VAR bool receive_success;
+    VAR bool accept_success;
+    VAR bool listening;
+    VAR bool receiving;
+    VAR bool acknowledging;
+
+
+    
+    ! Shared Params
+    PERS num spd;
+    PERS num acc;
+    PERS num jrk;
+    PERS num dac;
+    PERS bool go;
+    PERS zonedata zone;
+    PERS speeddata speed;
+
+
+    PERS num x_read;
+    PERS num y_read;
+    PERS num z_read;
+    PERS num x_target;
+    PERS num y_target;
+    PERS num z_target;
+
+    PERS num state;
+    ! STATE DEFINITION
+    ! 0 = IDLE
+    ! 1 = RUNNING
+    ! 2 = PAUSED
+    ! 3 = ABORTED
+
+    PERS bool awaiting_motion;
+    PERS bool motion_complete;
+    PERS bool fsm_channels_live;
+    PERS bool cmd_channel_health;
+    PERS bool status_channel_health;
+
+
+    PROC EnforceBounds(INOUT num x, INOUT num y, INOUT num z, INOUT num a, INOUT num d, INOUT num s, INOUT num j)
+        ! Enforce Y bounds [-450, 450]
+
+        ! +750 height in safety, 700 here
+        ! -250 height - soft, -350 safety config
+
+        ! left side -500 safety config 
+        ! software -450
+
+        ! right side safety 550
+        ! software 450
+
+        IF y > 450 THEN
+            y := 450;
+        ELSEIF y < -450 THEN
+            y := -450;
+        ENDIF
+
+        ! Enforce Z bounds [10, 850]
+        IF z > 700 THEN
+            z := 700;
+        ELSEIF z < -250 THEN
+            z := -250;
+        ENDIF
+
+        IF x > 450 THEN
+            x := 450;
+        ELSEIF x < 250 THEN
+            x := 250;
+        ENDIF
+
+        ! error occurs when acceleration/deceleration < 100 mm/s, default max is 10 m/s
+        IF a > 10000 THEN
+            a := 10000;
+        ELSEIF a < 100 THEN
+            a := 100;
+        ENDIF
+
+        IF d > 10000 THEN
+            d := 10000;
+        ELSEIF d < 100 THEN
+            d := 100;
+        ENDIF
+
+        IF s > 2200 THEN
+            s := 2200;
+        ELSEIF s < 25 THEN
+            s := 25;
+        ENDIF
+
+        IF j > 100 THEN
+            j := 100;
+        ELSEIF j < 1 THEN
+            j := 1;
+        ENDIF
+
+    ENDPROC
+    
+    PROC main()
+        ! Reset params
+        go := FALSE;
+
+        ! delete old connections
+        SocketClose cmd_server_socket;
+        SocketClose cmd_client_socket;
+
+        ! Set connection parameters
+        server_ip := GetSysInfo(\LanIp);
+        server_port := 2000;
+
+        SocketCreate cmd_server_socket;
+        SocketBind cmd_server_socket, server_ip, server_port;
+        SocketListen cmd_server_socket;
+
+        listening := TRUE;
+        receiving := FALSE;
+        awaiting_motion := FALSE;
+        cmd_channel_health := FALSE;
+
+        !receive   
+        WHILE TRUE DO
+            IF fsm_channels_live THEN
+                IF listening THEN
+                    accept_success := TRUE;
+                    SocketAccept cmd_server_socket, cmd_client_socket;
+                    IF accept_success THEN
+                        cmd_channel_health := (SOCKET_CONNECTED = SocketGetStatus(cmd_client_socket));
+                        listening := FALSE;
+                        receiving := TRUE;
+                        SocketClose cmd_server_socket;
+                    ENDIF
+                ENDIF
+
+                IF receiving AND status_channel_health THEN
+                    receive_success := TRUE;
+                    SocketReceive cmd_client_socket \Str := msg \Time := 30;
+                    
+                    !recieve_sucess gets set to false if socketReceive error handler is called
+                    if receive_success THEN
+
+                        acknowledging := TRUE;
+                        SocketSend cmd_client_socket \Str := "{""status"":""OKAY""}";
+                        acknowledging := FALSE;
+
+                        cmd := StrPart(msg, 1, 3);
+                        str_length := StrLen(msg);
+                        ! Extracts (str_length - 4) total characters, starting at 5
+                        value := StrPart(msg, 5, (str_length - 4));
+                        parse_success := StrToVal(value, parsed_val);
+
+                        if parse_success THEN
+                            TEST cmd
+                                CASE "go!":
+                                    IF state = 0 THEN
+                                        go := TRUE;
+                                        awaiting_motion := TRUE;
+                                        receiving := FALSE;
+                                        motion_complete := FALSE;
+                                    ENDIF
+                                CASE "spd":
+                                    spd := parsed_val;
+                                    speed := [spd, 1000, 5000, 1000];
+                                CASE "zon":
+                                    TEST parsed_val
+                                        CASE 1000:
+                                            zone := fine;
+                                        CASE 0:
+                                            zone := z0;
+                                        CASE 20:
+                                            zone := z20;
+                                        CASE 50:
+                                            zone := z50;
+                                        CASE 100:
+                                            zone := z100;
+                                        CASE 150:
+                                            zone := z150;
+                                        CASE 200:
+                                            zone := z200;
+                                    ENDTEST
+                                CASE "acc":
+                                    acc := parsed_val;
+                                CASE "jrk":
+                                    jrk := parsed_val;
+                                CASE "dac":
+                                    dac := parsed_val;
+                                CASE "xtg":
+                                    x_target := parsed_val;
+                                CASE "ytg":
+                                    y_target := parsed_val;
+                                CASE "ztg":
+                                    z_target := parsed_val;
+                            ENDTEST
+
+                            EnforceBounds x_target, y_target, z_target, acc, dac, spd, jrk;
+                            speed := [spd, 1000, 5000, 1000];
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+                IF awaiting_motion AND motion_complete THEN
+                    SocketSend cmd_client_socket \Str := "{""status"":""OKAY"",""complete"":""TRUE"",""request_ack"":""TRUE""}";
+                    awaiting_motion := FALSE;
+                    motion_complete := FALSE;
+                    receiving := TRUE;
+
+                    ! acknowledging := TRUE;    
+                    ! SocketReceive cmd_client_socket \Str := msg \Time := 5;
+                    ! IF msg <> "ack" THEN
+                    !     ExitCycle;
+                    ! ENDIF
+                    ! SocketSend cmd_client_socket \Str := "{""status"":""OKAY""}";
+                    ! acknowledging := FALSE;
+
+                ELSEIF awaiting_motion AND (state = 0 OR state = 3) THEN
+                    awaiting_motion := FALSE;
+                    receiving := TRUE;
+                ENDIF
+            ENDIF
+
+            cmd_channel_health := (SOCKET_CONNECTED = SocketGetStatus(cmd_client_socket));
+
+
+        ENDWHILE        
+   
+
+        ERROR
+            IF ERRNO = ERR_SOCK_TIMEOUT THEN
+                IF acknowledging THEN
+                    ! Acknowledgment failed on timeout- handle here
+                    ExitCycle;
+                ELSEIF listening THEN
+                    accept_success := FALSE;
+                    TRYNEXT;
+                ELSEIF receiving THEN
+                    ExitCycle;
+                    ! ! Retrying socket receive after failure is hanging for some strange reason
+                    ! receive_success := FALSE;
+                    ! TRYNEXT;
+                ENDIF
+            ENDIF
+
+            IF ERRNO = ERR_SOCK_CLOSED THEN
+                ExitCycle;
+            ENDIF
+
+
+        SocketClose cmd_server_socket;
+        SocketClose cmd_client_socket;
+        
+    ENDPROC    
+    
+ENDMODULE

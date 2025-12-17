@@ -7,6 +7,7 @@ MODULE controller
     VAR string print_msg;
     VAR num dist_y;
     VAR num dist_z;
+    VAR num dist_x;
     VAR num spd;
     VAR num cur_error;
 
@@ -25,6 +26,9 @@ MODULE controller
     PERS num y_target;
     PERS num z_target;
 
+    PERS num x;
+    PERS num prev_x_target;
+
     PERS num con_y;
     PERS num con_z;
     PERS num input_spd;
@@ -32,33 +36,21 @@ MODULE controller
     PERS bool button_move;
     PERS num button_dir;
     PERS num move_distance;
+    PERS num motion_mode; ! 0 means motion in physical x/y, 1 means motion in z
 
-    ! TODO
-    ! web/controller speed control? easier to select from options than make custom slider I think?
-    ! Prob not to hard to make slider, will just sacrifice precision
-    ! DPAD implementation
-    ! node that starts docker container
-    ! node that checks if controller is connected
-    ! single joystick implementation
-    ! button on controller also does reset
-
-    ! REAL:
-    ! make speed implementation pretty X
-    ! show position messages X
-    ! bring back that old button shit X
-    ! controller connected display 
-    ! Controller button if goated??
+    PERS bool fsm_channels_live;
+    PERS bool udp_channel_live;
 
     
     TRAP reset_trap
         StopMove;
         ClearPath;
         StartMove;
-        MoveJ [[300, -600, 850], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0 \WObj:=wobj0;
+        MoveL [[300, -450, 700], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v200, fine, tool0 \WObj:=wobj0;
         CustomCalibrate;
 
-        y_target := -600;
-        z_target := 850;
+        y_target := -450;
+        z_target := 700;
 
         go := FALSE;
         SetDO MyResetSignal, 0;
@@ -78,26 +70,45 @@ MODULE controller
 
         prev_y_target := current_pos.trans.y;
         prev_z_target := current_pos.trans.z;
+        prev_x_target := current_pos.trans.x;
 
     ENDPROC
 
-    PROC EnforceBounds(INOUT num y, INOUT num z)
-        ! Enforce Y bounds [-600, 600]
-        IF y > 600 THEN
-            y := 600;
-        ELSEIF y < -600 THEN
-            y := -600;
+    PROC EnforceBounds(INOUT num y, INOUT num z, INOUT num x)
+        ! Enforce Y bounds [-500, 600]
+
+        ! +750 height - change in safety config
+        ! -250 height - soft, -350 safety config
+
+        ! left side -500 safety config 
+        ! software -450
+
+        ! right side safety 550
+        ! software 500
+
+        IF y > 450 THEN
+            y := 450;
+        ELSEIF y < -450 THEN
+            y := -450;
         ENDIF
 
-        ! Enforce Z bounds [100, 850]
-        IF z > 850 THEN
-            z := 850;
-        ELSEIF z < 100 THEN
-            z := 100;
+        ! Enforce Z bounds [10, 850]
+        IF z > 700 THEN
+            z := 700;
+        ELSEIF z < -250 THEN
+            z := -250;
+        ENDIF
+
+        IF x > 450 THEN
+            x := 450;
+        ELSEIF x < 250 THEN
+            x := 250;
         ENDIF
     ENDPROC
     
     PROC main()
+
+        SetDO MyResetSignal, 0;
 
         IDelete intno2;
         CONNECT intno2 WITH reset_trap;
@@ -114,6 +125,11 @@ MODULE controller
         y_target := prev_y_target;
         z_target := prev_z_target;
         input_spd := 400;
+
+        
+
+        udp_channel_live := TRUE;
+        fsm_channels_live := FALSE;
 
         WHILE TRUE DO
 
@@ -141,11 +157,13 @@ MODULE controller
                         z_target := z_target + move_distance;
                     CASE -4:
                         z_target := z_target - move_distance;
+                    CASE -5:
+                        prev_x_target := x;
                 ENDTEST
 
-                EnforceBounds y_target, z_target;
+                EnforceBounds y_target, z_target, x;
                 
-                MoveL [[300, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], [input_spd, 1000, 5000, 1000], z100, tool0;
+                MoveL [[x, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], [input_spd, 1000, 5000, 1000], z100, tool0;
                 prev_y_target := y_target;
                 prev_z_target := z_target;
 
@@ -154,22 +172,41 @@ MODULE controller
 
             ENDIF
 
+            WHILE (con_z <> 0) AND (motion_mode = 1) DO
+                precision_multiplier := input_spd / 500;
 
-            WHILE (con_y <> 0) OR (con_z <> 0) DO
+                dist_x := precision_multiplier * con_z;
+
+                x := prev_x_target + dist_x;
+
+                EnforceBounds y_target, z_target, x;
+
+                spd := speed_multiplier * Sqrt(Pow(con_y, 2) + Pow(con_z, 2));
+                speed := [spd, 1000, 5000, 1000];
+
+                MoveL [[x, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, z100, tool0;
+
+                prev_x_target := x;
+
+                calibrated := FALSE;
+
+            ENDWHILE
+
+            WHILE (((con_y <> 0) OR (con_z <> 0)) AND (motion_mode = 0)) DO
                 precision_multiplier := input_spd / 250;
 
                 dist_y := precision_multiplier * con_y;
                 dist_z := precision_multiplier * con_z;
 
-                y_target := prev_y_target - dist_y;
+                y_target := prev_y_target + dist_y;
                 z_target := prev_z_target + dist_z;
 
-                EnforceBounds y_target, z_target;
+                EnforceBounds y_target, z_target, x;
 
                 spd := speed_multiplier * Sqrt(Pow(con_y, 2) + Pow(con_z, 2));
                 speed := [spd, 1000, 5000, 1000];
 
-                MoveL [[300, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, z100, tool0;
+                MoveL [[x, y_target, z_target], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, z100, tool0;
 
                 prev_y_target := y_target;
                 

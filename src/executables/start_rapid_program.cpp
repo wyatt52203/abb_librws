@@ -4,11 +4,16 @@
 #include <thread>
 #include <chrono>
 
-int main()
+int main(int argc, char* argv[])
 {
-    std::string ip = "192.168.15.81";
+    std::string ip = "192.168.15.82";
     std::string username = "Admin";
     std::string password = "robotics";
+
+    if (argc >= 2)
+    {
+      ip = argv[1];
+    }
 
     // Can only connect locally through MGMT, required to change operating mode
     bool attempt_local_connect = false;

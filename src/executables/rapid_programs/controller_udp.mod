@@ -31,19 +31,26 @@ MODULE controller_udp
     PERS num y_target;
     PERS num z_target;
     PERS num move_distance := 60;
+    PERS num x;
+    PERS num prev_x_target;
+    PERS num motion_mode; ! 0 means motion in physical x/y, 1 means motion in z
+
+    PERS bool udp_channel_live;
     
     PROC main()
         ! Reset params
         go := FALSE;
-        SetDO MyResetSignal, 0;
+        
+        x := 300;
+        motion_mode := 0;
 
         ! delete old connections
         SocketClose udp_socket;
 
         ! Set connection parameters
         client_ip := "192.168.15.102";
-        server_ip := "192.168.15.81";
-        client_receiving_port := 58000;
+        server_ip := GetSysInfo(\LanIp);
+        client_receiving_port := 4800;
         server_port := 1026;
 
         SocketCreate udp_socket \UDP;
@@ -51,6 +58,8 @@ MODULE controller_udp
 
         !receive   
         WHILE TRUE DO
+            WaitUntil udp_channel_live;
+
             receive_success := TRUE;
             SocketReceiveFrom udp_socket \Str := msg, client_ip, client_sending_port \Time := 20;
             
@@ -94,6 +103,16 @@ MODULE controller_udp
                             ELSE
                                 button_move := TRUE;
                             ENDIF
+                        CASE "xps":
+                            x := parsed_val;
+                            button_move := TRUE;
+                            button_dir := -5;
+                        CASE "btn":
+                            IF parsed_val2 = 1 THEN
+                                motion_mode := 0;
+                            ELSEIF parsed_val = 1 THEN
+                                motion_mode := 1;
+                            ENDIF
                     ENDTEST
                 ELSE
                     response_msg := "could not parse message";
@@ -105,13 +124,15 @@ MODULE controller_udp
             WaitTime 0.00001;
             json := "{";
             json := json + """spd"": " + NumToStr(input_spd, 0) + ",";
-            json := json + """mdr"": " + NumToStr(move_distance, 0);
+            json := json + """mdr"": " + NumToStr(move_distance, 0) + ",";
+            json := json + """xps"": " + NumToStr(x, 0);
             json := json + "}";
             SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;
 
             json := "{";
             json := json + """msg"": """ + response_msg;
-            json := json + "\\n\\npos: \\ny: " + NumToStr(y_target, 0);
+            json := json + "\\n\\npos: \\nx: " + NumToStr(prev_x_target, 0);
+            json := json + " y: " + NumToStr(y_target, 0);
             json := json + " z: " + NumToStr(z_target, 0) + """";
             json := json + "}";
             SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;

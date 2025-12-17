@@ -35,18 +35,21 @@ MODULE udp_communication
     PERS speeddata speed;
     PERS num y;
     PERS num z;
-    
-    
+    PERS num x;
+
+
+    PERS bool udp_channel_live;    
     
     PROC main()
         ! Reset params
 
         spd := 800;
         int := 100;
-        lft := -600;
-        rgt := 600;
-        upr := 850;
-        lwr := 100;
+        lft := -450;
+        rgt := 450;
+        upr := 700;
+        lwr := -250;
+        x := 300;
         acc := 100;
         jrk := 100;
         dac := 100;
@@ -54,16 +57,14 @@ MODULE udp_communication
         play := TRUE;
         zone := [TRUE,0,0,0,0,0,0];
         speed := [800,1000,5000,1000];
-        SetDO MyPauseSignal, 0;
-        SetDO MyResetSignal, 0;
 
         ! delete old connections
         SocketClose udp_socket;
 
         ! Set connection parameters
         client_ip := "192.168.15.102";
-        server_ip := "192.168.15.81";
-        client_receiving_port := 56000;
+        server_ip := GetSysInfo(\LanIp);
+        client_receiving_port := 4600;
         server_port := 1025;
 
         SocketCreate udp_socket \UDP;
@@ -72,6 +73,8 @@ MODULE udp_communication
 
         !receive   
         WHILE TRUE DO
+            WaitUntil udp_channel_live;
+
             receive_success := TRUE;
             SocketReceiveFrom udp_socket \Str := msg, client_ip, client_sending_port \Time := 10;
             
@@ -116,6 +119,8 @@ MODULE udp_communication
                             upr := parsed_val;
                         CASE "lwr":
                             lwr := parsed_val;
+                        CASE "xxx":
+                            x := parsed_val;
                         CASE "acc":
                             acc := parsed_val;
                         CASE "jrk":
@@ -169,6 +174,7 @@ MODULE udp_communication
             json := json + """spd"": " + NumToStr(spd, 0) + ",";
             json := json + """int"": " + NumToStr(int, 0) + ",";
             json := json + """lft"": " + NumToStr(lft, 0) + ",";
+            json := json + """xxx"": " + NumToStr(x, 0) + ",";
             json := json + """rgt"": " + NumToStr(rgt, 0);
             json := json + "}";
             SocketSendTo udp_socket, client_ip, client_receiving_port \Str := json;

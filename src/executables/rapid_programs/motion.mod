@@ -21,10 +21,16 @@ MODULE motion
     PERS speeddata speed;
     PERS num y;
     PERS num z;
+    PERS num x;
+
+    PERS bool fsm_channels_live;
+    PERS bool udp_channel_live;
     
     
     
     PROC main()
+        SetDO MyPauseSignal, 0;
+        SetDO MyResetSignal, 0;
 
         IDelete intno1;
         CONNECT intno1 WITH wait_trap;
@@ -36,6 +42,10 @@ MODULE motion
 
         ConfL \Off;
         go := FALSE;
+        udp_channel_live := TRUE;
+        fsm_channels_live := FALSE;
+
+
 
         WHILE TRUE DO
             ! Wait for persistent variable signal
@@ -53,7 +63,7 @@ MODULE motion
                     y := rgt;
                 ENDIF
 
-                IF go MoveL [[300, y, z], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+                IF go MoveL [[x, y, z], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
 
                 IF left_to_right THEN
                     y := rgt;
@@ -61,7 +71,7 @@ MODULE motion
                     y := lft;
                 ENDIF
 
-                IF go MoveL [[300, y, z], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
+                IF go MoveL [[x, y, z], [0,1,0,0], [-3,-3,-3,-3], [9E9,9E9,9E9,9E9,9E9,9E9]], speed, zone, tool0;
 
                 z := z - int;
                 left_to_right := NOT left_to_right;
@@ -92,7 +102,7 @@ MODULE motion
         StopMove;
         ClearPath;
         StartMove;
-        MoveJ [[300, lft, upr], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v400, fine, tool0;
+        MoveL [[x, lft, upr], [0,1,0,0], [-1,-1,0,1], [9E9,9E9,9E9,9E9,9E9,9E9]], v200, fine, tool0;
 
         go := FALSE;
         SetDO MyResetSignal, 0;
